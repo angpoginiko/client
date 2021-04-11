@@ -1,13 +1,47 @@
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 type Props = {
   children?: ReactNode
   title?: string
+	auth?: boolean
 }
 
-const Layout = ({ children, title = 'This is the default title' }: Props) => (
+const Layout = ({ children, title = 'This is the default title', auth }: Props) => {
+	const Router = useRouter();
+
+	const onLogout = async () =>{ 
+		await fetch("api/profile/logout",{
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include"
+		})
+		await Router.push("/login")
+	}
+
+	const loginButton = (
+		<>
+			<Link href="/register">
+          <a>Register</a>
+      </Link> |{' '}
+			<Link href="/login">
+          <a>Login</a>
+      </Link> |
+		</>
+	);
+
+	const logoutButton = (
+		<>
+			<a onClick={onLogout} href="#">Logout</a>
+			|{' '}
+		</>
+	)
+	
+	return(
   <div>
     <Head>
       <title>{title}</title>
@@ -20,22 +54,11 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
           <a>Home</a>
         </Link>{' '}
         |{' '}
-        <Link href="/about">
-          <a>About</a>
-        </Link>{' '}
-        |{' '}
-        <Link href="/users">
-          <a>Users List</a>
-        </Link>{' '}
-        | <a href="/api/users">Users API</a>
+        {auth ? logoutButton: loginButton}
       </nav>
     </header>
     {children}
-    <footer>
-      <hr />
-      <span>I'm here to stay (Footer)</span>
-    </footer>
   </div>
-)
+)}
 
 export default Layout
