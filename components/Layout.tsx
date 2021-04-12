@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { MdShoppingCart } from "react-icons/md";
-
+import Head from 'next/head';
 import {
 	Avatar,
   Box,
@@ -87,9 +87,9 @@ const Layout = ({ children, title = 'Home', auth }: Props) => {
 	
 	return(
 		<>
-		<head>
+		<Head>
 			<title>{title}</title>
-		</head>
+		</Head>
 		<Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
 			<Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
 				<HStack spacing={8} alignItems={'center'}>
