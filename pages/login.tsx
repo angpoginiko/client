@@ -12,6 +12,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+	Input,
 } from '@chakra-ui/react';
 
 type FormData = {
@@ -52,11 +53,11 @@ const Login : React.FC = () => {
           <Stack spacing={4}>
             <FormControl id="username">
               <FormLabel>Username</FormLabel>
-              <input name="username" ref={register} />
+              <Input name="username" ref={register} />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
-              <input name="password" ref={register} type="password"/>
+              <Input name="password" ref={register} type="password"/>
             </FormControl>
             <Stack spacing={10}>
 						<Stack
