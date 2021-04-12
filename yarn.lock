@@ -232,6 +232,21 @@
   dependencies:
     "@chakra-ui/utils" "1.5.0"
 
+"@chakra-ui/icon@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icon/-/icon-1.1.5.tgz#f37abe47fd176a4c291d2037df2d6ed480622c09"
+  integrity sha512-VCzR1L3CJlAxp0IilqCdsF9O/Nncp9Sb2ndQvnQcfbo0GEgQmsH2CBQnmlwnClBQGYhwi6srP9GErYg8ah9LQw==
+  dependencies:
+    "@chakra-ui/utils" "1.5.1"
+
+"@chakra-ui/icons@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/icons/-/icons-1.0.9.tgz#3551805b156c4a69b324fce22504ca5288da72e4"
+  integrity sha512-taZ7IPwDZ1aZcR+dgvT3ZcVjCULNLAa5wmQHLd9KChIZRo3EL37YSUsOroY4ju+8zvC3aX2F0Ui/VGVNFor36A==
+  dependencies:
+    "@chakra-ui/icon" "1.1.5"
+    "@types/react" "^17.0.0"
+
 "@chakra-ui/image@1.0.10":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@chakra-ui/image/-/image-1.0.10.tgz#ace03938d28690bdf805d89aac06535f2b5fb30b"
@@ -591,6 +606,15 @@
     css-box-model "1.2.1"
     lodash.mergewith "4.6.2"
 
+"@chakra-ui/utils@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@chakra-ui/utils/-/utils-1.5.1.tgz#a01fd14f6d948a13c2644cfa844f410299135ffc"
+  integrity sha512-J8P9wA96Kaxu4oHh+8s1rEL2VABWK/io8sBck19eOXKfVXJ55KyVwGZTrsVID0No43b7WzJx6n/xsMKkn39Peg==
+  dependencies:
+    "@types/lodash.mergewith" "4.6.6"
+    css-box-model "1.2.1"
+    lodash.mergewith "4.6.2"
+
 "@chakra-ui/visually-hidden@1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@chakra-ui/visually-hidden/-/visually-hidden-1.0.7.tgz#991a2987aca8591b5d3b4f5c0198ce2735cc521f"
@@ -878,7 +902,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.2":
+"@types/react@*", "@types/react@^17.0.0", "@types/react@^17.0.2":
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.3.tgz#ba6e215368501ac3826951eef2904574c262cc79"
   integrity sha512-wYOUxIgs2HZZ0ACNiIayItyluADNbONl7kt8lkLjVK8IitMH5QMyAh75Fwhmo37r1m7L2JaFj03sIfxBVDvRAg==
@@ -2701,6 +2725,11 @@ react-hook-form@^6.15.5:
   version "6.15.5"
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-6.15.5.tgz#c2578f9ce6a6df7b33015587d40cd880dc13e2db"
   integrity sha512-so2jEPYKdVk1olMo+HQ9D9n1hVzaPPFO4wsjgSeZ964R7q7CHsYRbVF0PGBi83FcycA5482WHflasdwLIUVENg==
+
+react-icons@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.2.0.tgz#6dda80c8a8f338ff96a1851424d63083282630d0"
+  integrity sha512-rmzEDFt+AVXRzD7zDE21gcxyBizD/3NqjbX6cmViAgdqfJ2UiLer8927/QhhrXQV7dEj/1EGuOTPp7JnLYVJKQ==
 
 react-is@16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
