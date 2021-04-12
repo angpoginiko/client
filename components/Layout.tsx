@@ -26,7 +26,7 @@ type Props = {
 	auth?: boolean
 }
 
-const Layout = ({ children, title = 'This is the default title', auth }: Props) => {
+const Layout = ({ children, title = 'Home', auth }: Props) => {
 	const Router = useRouter();
 
 	const onLogout = async () =>{ 
@@ -37,9 +37,8 @@ const Layout = ({ children, title = 'This is the default title', auth }: Props) 
 			},
 			credentials: "include"
 		})
-		await Router.push("/login")
+		await Router.push("/")
 	}
-
 	const loginButton = (
 		<>
 			<Button

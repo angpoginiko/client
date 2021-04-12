@@ -22,6 +22,7 @@ const Register : React.FC = () => {
 	}
 
 	return(
+		<>
 		<Layout>
 			<h3>Register</h3>
 				<form onSubmit={handleSubmit(onSubmit)}>
@@ -42,6 +43,7 @@ const Register : React.FC = () => {
 					<input type="submit" />
 				</form>
 		</Layout>
+		</>
 	);
 }
 
