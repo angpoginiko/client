@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
 	Input,
+	FormErrorMessage,
 } from '@chakra-ui/react';
 
 type FormData = {
@@ -22,7 +23,7 @@ type FormData = {
 
 
 const Login : React.FC = () => {
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit, errors } = useForm();
 	const router = useRouter();
 
 	const onSubmit = async (formData: FormData) => {
@@ -51,13 +52,15 @@ const Login : React.FC = () => {
           p={8}>
 				<form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
-            <FormControl id="username">
+            <FormControl id="username" isInvalid={errors.username && errors.username.type === "required"}>
               <FormLabel>Username</FormLabel>
-              <Input name="username" ref={register} />
+              <Input name="username" ref={register({required:true})}/>
+							<FormErrorMessage>Username Required</FormErrorMessage>
             </FormControl>
-            <FormControl id="password">
+            <FormControl id="password" isInvalid={errors.password && errors.password.type === "required"}>
               <FormLabel>Password</FormLabel>
-              <Input name="password" ref={register} type="password"/>
+              <Input name="password" ref={register({required:true})} type="password"/>
+							<FormErrorMessage>Password Required</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
 						<Stack

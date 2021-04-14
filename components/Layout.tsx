@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { MdShoppingCart } from "react-icons/md";
 import Head from 'next/head';
@@ -23,11 +23,24 @@ import {
 type Props = {
   children?: ReactNode
   title?: string
-	auth?: boolean
 }
 
-const Layout = ({ children, title = 'Home', auth }: Props) => {
+
+const Layout = ({ children, title = 'Home' }: Props) => {
 	const Router = useRouter();
+	const [auth, setAuth] = useState(false);
+	useEffect(() => {
+		(
+			async () =>{
+				const response = await fetch("/api/profile/retrieve");
+				if(response.ok){
+					await response.json();
+					setAuth(true);
+				} 
+		}
+		)();
+	});
+
 
 	const onLogout = async () =>{ 
 		await fetch("api/profile/logout",{
@@ -38,7 +51,10 @@ const Layout = ({ children, title = 'Home', auth }: Props) => {
 			credentials: "include"
 		})
 		await Router.push("/")
+		setAuth(false);
 	}
+
+
 	const loginButton = (
 		<>
 			<Button

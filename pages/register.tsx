@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form'
 import Layout from '../components/Layout';
 import { Profile } from '../interfaces/index'
@@ -14,11 +14,12 @@ import {
   Text,
   useColorModeValue,
 	Input,
+	FormErrorMessage,
 } from '@chakra-ui/react';
 
 
 const Register : React.FC = () => {
-	const { register, handleSubmit } = useForm();
+	const { register, handleSubmit, errors } = useForm();
 	const Router = useRouter();
 	const onSubmit = async (formData: Profile) => {
 		const response = await fetch("/api/profile/register", {
@@ -31,7 +32,7 @@ const Register : React.FC = () => {
 		await response.json();
 		Router.push("/login");
 	}
-
+	const password = useRef({});
 	return(
 		<>
 		<Layout title="Register">
@@ -46,33 +47,43 @@ const Register : React.FC = () => {
           p={8}>
 				<form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
-            <FormControl id="name">
+            <FormControl id="name" isInvalid={errors.name && errors.username.type === "required"}>
               <FormLabel>Name</FormLabel>
-              <Input name="name" ref={register} />
+              <Input name="name" ref={register({required:true})} />
+							<FormErrorMessage>Name Required</FormErrorMessage>
             </FormControl>
-						<FormControl id="username">
+
+						<FormControl id="username" isInvalid={errors.username && errors.username.type === "required"}>
               <FormLabel>Username</FormLabel>
-              <Input name="username" ref={register} />
+              <Input name="username" ref={register({required:true})} />
+							<FormErrorMessage>Username Required</FormErrorMessage>
             </FormControl>
-						<FormControl id="email">
+
+						<FormControl id="email" isInvalid={errors.email && errors.email.type === "required"}>
               <FormLabel>Email</FormLabel>
-              <Input name="email" ref={register} type="email"/>
+              <Input name="email" ref={register({required:true})} type="email"/>
+							<FormErrorMessage>Email Required</FormErrorMessage>
             </FormControl>
-            <FormControl id="password">
+
+            <FormControl id="password" isInvalid={errors.password && errors.password.type === "required"}>
               <FormLabel>Password</FormLabel>
-              <Input name="password" ref={register} type="password"/>
+              <Input name="password" ref={register({required:true})} type="password"/>
+							<FormErrorMessage>Password Required</FormErrorMessage>
             </FormControl>
-						<FormControl id="repeatpassword">
+
+						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword && errors.repeatpassword.message}>
               <FormLabel>Repeat Password</FormLabel>
-              <Input name="repeatpassword" ref={register} type="password"/>
+              <Input name="repeatpassword" ref={register({ validate: value => value === password.current || "The passwords do not match"})} type="password"/>
+							<FormErrorMessage>{errors.repeatpassword?.message}</FormErrorMessage>
             </FormControl>
+
             <Stack spacing={10}>
 						<Stack
                 direction={{ base: 'column', sm: 'row' }}
                 align={'start'}
                 justify={'space-between'}>
 								<Text color={'gray.600'}>
-									Don't have an account? <Link color={'blue.400'} href="/register">Register</Link>
+									Already have an account? <Link color={'blue.400'} href="/login">Sign in</Link>
 								</Text>
 						</Stack>
               <Button

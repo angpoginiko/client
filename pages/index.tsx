@@ -12,7 +12,7 @@ import {
 
 export default function CallToActionWithAnnotation() {
 	const [message, setMessage] = useState("")
-	const [auth, setAuth] = useState(false)
+	const [auth, setAuth] = useState(false);
 	useEffect(() => {
 		(
 			async () =>{
@@ -35,7 +35,7 @@ export default function CallToActionWithAnnotation() {
           rel="stylesheet"
         />
       </Head>
-			<Layout auth={auth}>
+			<Layout>
       <Container maxW={'3xl'}>
         <Stack
           as={Box}
@@ -74,7 +74,9 @@ export default function CallToActionWithAnnotation() {
               px={6}
               _hover={{
                 bg: 'green.500',
-              }}>
+              }}
+							href={"/login"}
+							>
               Get Started
             </Button>
           </Stack>
