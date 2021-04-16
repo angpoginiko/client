@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import Head from 'next/head';
 import {
@@ -10,23 +9,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 
-export default function CallToActionWithAnnotation() {
-	const [message, setMessage] = useState("")
-	const [auth, setAuth] = useState(false);
-	useEffect(() => {
-		(
-			async () =>{
-				const response = await fetch("/api/profile/retrieve");
-				if(response.ok){
-					const content = await response.json();
-					setMessage(`Hi ${content.name}`);
-					setAuth(true);
-				} else{
-					setMessage("")
-				}
-		}
-		)();
-	});
+export default function IndexPage() {
   return (
     <>
       <Head>
@@ -48,7 +31,6 @@ export default function CallToActionWithAnnotation() {
             lineHeight={'110%'}>
             Welcome <br />
             <Text as={'span'} color={'green.400'}>
-						{message}
             </Text>
           </Heading>
           <Text color={'gray.500'}>

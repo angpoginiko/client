@@ -36,7 +36,9 @@ const Layout = ({ children, title = 'Home' }: Props) => {
 				if(response.ok){
 					await response.json();
 					setAuth(true);
-				} 
+				}else{
+					return;
+				}
 		}
 		)();
 	});
@@ -92,8 +94,8 @@ const Layout = ({ children, title = 'Home' }: Props) => {
 					/>
 				</MenuButton>
 				<MenuList>
-					<MenuItem>Link 1</MenuItem>
-					<MenuItem>Link 2</MenuItem>
+					<MenuItem><Link href="#">Profile</Link></MenuItem>
+					<MenuItem><Link href="/points">Rewards</Link></MenuItem>
 					<MenuDivider />
 					<MenuItem><Link onClick={onLogout}>Logout</Link></MenuItem>
 				</MenuList>
@@ -140,7 +142,7 @@ const Layout = ({ children, title = 'Home' }: Props) => {
 			</Flex>
 		</Box>
 
-		<Box p={4}>{children}</Box>
+		{children}
 	</>
 )}
 

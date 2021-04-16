@@ -32,7 +32,7 @@ const Register : React.FC = () => {
 		await response.json();
 		Router.push("/login");
 	}
-	const password = useRef({});
+	const password = useRef();
 	return(
 		<>
 		<Layout title="Register">
