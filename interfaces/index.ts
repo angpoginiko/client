@@ -24,9 +24,16 @@ export type Token =
 	exp: number
 }
 
-export type Point {
+export type Point = {
 	_id: string,
   points: number,
 	dateAdded: Date,
   expiryDate: Date
+}
+
+export type ProductType = {
+	productName: string,
+	unitPrice: number,
+	productType: string,
+	quantity: number,
 }

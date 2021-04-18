@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { MdShoppingCart } from "react-icons/md";
+import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
 import Head from 'next/head';
 import {
 	Avatar,
@@ -16,9 +16,15 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-	Icon
+	Icon,
+	useDisclosure
 } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
+import ModalComp from './ModalComp';
 
+const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
+	ssr: false,
+});
 
 type Props = {
   children?: ReactNode
@@ -27,6 +33,7 @@ type Props = {
 
 
 const Layout = ({ children, title = 'Home' }: Props) => {
+	const { onOpen, isOpen, onClose } = useDisclosure();
 	const Router = useRouter();
 	const [auth, setAuth] = useState(false);
 	useEffect(() => {
@@ -135,7 +142,9 @@ const Layout = ({ children, title = 'Home' }: Props) => {
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
-						<a href="#"><Icon as={MdShoppingCart} /></a>
+						<Button href="#"><Icon as={MdShoppingCart} w={4} h={4}/></Button>
+						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
+						<ModalComp isModalOpen={isOpen} onModalClose={onClose}><ProductQRScanner /></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>

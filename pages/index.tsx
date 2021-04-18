@@ -8,6 +8,11 @@ import {
   Button,
   Stack,
 } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
+
+const QRGenerator = dynamic(() => import('../components/QRGenerator'), {
+	ssr: false,
+});
 
 export default function IndexPage() {
   return (
@@ -57,7 +62,7 @@ export default function IndexPage() {
               _hover={{
                 bg: 'green.500',
               }}
-							href={"/login"}
+							href="/login"
 							>
               Get Started
             </Button>
