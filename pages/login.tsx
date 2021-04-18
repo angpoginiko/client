@@ -15,6 +15,9 @@ import {
 	Input,
 	FormErrorMessage,
 } from '@chakra-ui/react';
+import { NextPageContext } from 'next';
+import { server } from '../config';
+import { formAuth } from './api/formAuth';
 
 type FormData = {
   username: string;
@@ -22,7 +25,7 @@ type FormData = {
 };
 
 
-const Login : React.FC = () => {
+export default function Login (){
 	const { register, handleSubmit, errors } = useForm();
 	const router = useRouter();
 
@@ -91,4 +94,7 @@ const Login : React.FC = () => {
 	);
 }
 
-export default Login;
+Login.getInitialProps = async (ctx: NextPageContext) => {
+  const json = await formAuth(`${server}/api/profile/retrieve`, ctx);
+	return {json};
+}
