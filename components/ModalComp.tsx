@@ -14,15 +14,16 @@ interface ModalCompProps {
 	children: React.ReactNode,
 	isModalOpen: boolean;
 	onModalClose: () => void;
+	title: string; 
 }
 
-export default function ModalComp({children, isModalOpen, onModalClose} : ModalCompProps) {
+export default function ModalComp({children, isModalOpen, onModalClose, title} : ModalCompProps) {
   return (
     <>
       <Modal isOpen={isModalOpen} onClose={onModalClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
 					{children}

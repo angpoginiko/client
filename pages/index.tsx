@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
-const QRGenerator = dynamic(() => import('../components/QRGenerator'), {
+const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
 	ssr: false,
 });
 
@@ -67,9 +67,10 @@ export default function IndexPage() {
               Get Started
             </Button>
           </Stack>
+					<ProductQRScanner />
         </Stack>
       </Container>
-			</Layout>
+		</Layout>
     </>
   );
 }

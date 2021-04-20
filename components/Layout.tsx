@@ -144,7 +144,7 @@ const Layout = ({ children, title = 'Home' }: Props) => {
 					spacing={6}>
 						<Button href="#"><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen} onModalClose={onClose}><ProductQRScanner /></ModalComp>
+						<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Scan Item"><ProductQRScanner /></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>

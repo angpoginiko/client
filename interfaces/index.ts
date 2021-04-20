@@ -32,8 +32,9 @@ export type Point = {
 }
 
 export type ProductType = {
-	productName: string,
-	unitPrice: number,
-	productType: string,
+	_id?: string,
+	productName?: string,
+	unitPrice?: number,
+	productType?: string,
 	quantity: number,
 }
