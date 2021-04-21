@@ -40,12 +40,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		const id = customer.ops[0]._id;
 
 		await db.collection("cart").insertOne({
-			product : {},
+			product : [],
 			customerId: id
 		});
 
 		await db.collection("purchaseHistory").insertOne({
-			purchases : {},
+			purchases : [],
 			customerId: id
 		});
 		res.status(201).send(customer);
