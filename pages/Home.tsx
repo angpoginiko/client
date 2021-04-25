@@ -9,10 +9,10 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
-import { formAuth } from './api/formAuth';
+import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
 
-export default function IndexPage({ user }: any) {
+export default function AuthIndexPage({ user } : any) {
   return (
     <>
       <Head>
@@ -72,7 +72,7 @@ export default function IndexPage({ user }: any) {
   );
 }
 
-IndexPage.getInitialProps = async (ctx: NextPageContext) => {
-  const json = await formAuth(`${server}/api/profile/retrieve`, ctx);
-	return {json};
+AuthIndexPage.getInitialProps = async (ctx: NextPageContext) => {
+  const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
+	return {user: json};
 }

@@ -39,7 +39,7 @@ export default function Login (){
 			body: JSON.stringify({profile: formData}),
 		})
 		await response.json();
-		await router.push("/");
+		await router.push("/Home");
 	}
 	return(
 		<>

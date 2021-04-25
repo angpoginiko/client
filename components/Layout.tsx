@@ -29,26 +29,14 @@ const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'),
 type Props = {
   children?: ReactNode
   title?: string
+	authentication?: string
 }
 
 
-const Layout = ({ children, title = 'Home' }: Props) => {
+const Layout = ({ children, title = 'Home', authentication }: Props) => {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const Router = useRouter();
-	const [auth, setAuth] = useState(false);
-	useEffect(() => {
-		(
-			async () =>{
-				const response = await fetch("/api/profile/retrieve");
-				if(response.ok){
-					await response.json();
-					setAuth(true);
-				}else{
-					return;
-				}
-		}
-		)();
-	});
+	const [auth, setAuth] = useState(!!authentication);
 
 
 	const onLogout = async () =>{ 
@@ -142,9 +130,9 @@ const Layout = ({ children, title = 'Home' }: Props) => {
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
-						<Button href="#"><Icon as={MdShoppingCart} w={4} h={4}/></Button>
+						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Scan Item"><ProductQRScanner /></ModalComp>
+						<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Scan Item"><ProductQRScanner customerId={authentication}/></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>

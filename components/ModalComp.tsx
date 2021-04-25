@@ -6,8 +6,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-	useDisclosure,
-	Button,
 } from "@chakra-ui/react"
 
 interface ModalCompProps {
@@ -30,9 +28,6 @@ export default function ModalComp({children, isModalOpen, onModalClose, title} :
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onModalClose}>
-              Close
-            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

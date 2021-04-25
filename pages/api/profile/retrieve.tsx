@@ -19,10 +19,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			});
 		}
 		const id = new ObjectId(decoded.id);
-		const user = await db.collection("customers").findOne( {"_id": id});
-		const {password, ...data} = await user.profile;
-		
-		res.status(200).send(data);
+		res.status(200).send(id);
 	} catch(err) {
 		res.status(401).send({message: "youre not logged"});
 	}

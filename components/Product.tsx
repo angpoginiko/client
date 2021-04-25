@@ -10,7 +10,7 @@ import {
 	Icon,
 	useDisclosure, 
 } from '@chakra-ui/react';
-import { ProductType } from '../interfaces';
+import { CartProduct, ProductType } from '../interfaces';
 import { MdAddBox,  MdRemove} from "react-icons/md";
 import React, { useState } from 'react';
 import ModalComp from './ModalComp';
@@ -22,10 +22,12 @@ const IMAGE =
 interface ProductProps {
 	product: ProductType | undefined
 	closeProduct: () => void
+	customerId: string | undefined
 }
 
 
-export default function ProductPage({product, closeProduct} : ProductProps) {
+export default function ProductPage({product, closeProduct, customerId} : ProductProps) {
+	console.log(customerId)
 	const [quantity, setQuantity] = useState(1);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -41,14 +43,15 @@ export default function ProductPage({product, closeProduct} : ProductProps) {
 		}
 	}
 
-	const addProduct = async (product: ProductType) => {
-		const response = await fetch ("/api/cart/addCart", {
-			method: "POST",
+	const addProduct = async (product: CartProduct) => {
+		console.log(product)
+		const response = await fetch (`/api/cart/${customerId}`, {
+			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			credentials: 'include',
-			body: JSON.stringify({product}),
+			body: JSON.stringify(product),
 		})
 		await response.json();
 		onOpen();
@@ -117,7 +120,7 @@ export default function ProductPage({product, closeProduct} : ProductProps) {
 							<Stack>
 								<Button onClick={()=>{
 									addProduct({
-										_id: product?._id,
+										productId: product?._id,
 										quantity: quantity,
 									})
 								}}>

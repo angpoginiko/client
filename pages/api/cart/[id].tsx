@@ -20,7 +20,15 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	switch(method){
 		case 'GET' :
 			try {
-				const cart = await db.collection("cart").find({"customerId" : customerId}).toArray();
+				const cart = await db.collection("cart").aggregate([
+					{"$unwind" : "$product"},
+					{"$lookup" : {
+						"from" : "products",
+						"localField" : "product.productId",
+						"foreignField" : "_id",
+						"as" : "productData"
+					}}
+				]).toArray();
 				if(!cart){
 					return res.status(400).json({success: false})
 				}
@@ -30,9 +38,15 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				res.json({error: "Server error"})
 			} 
 			break;
+
 		case 'DELETE':
 			try {
-				const cart = await db.collection("cart").deleteOne({customerId});
+				const customerId = new ObjectId(id.toString());
+				const productIdFormatted = new ObjectId(productId.toString());
+				const cart = await db.collection("cart").findOneAndUpdate(
+					{customerId},
+					{ "$pull": { "product": { "productId": productIdFormatted } } }
+					)
 
 				if(!cart){
 					return res.status(400).json({success: false})
@@ -40,32 +54,28 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				res.status(201).send(cart);
 			} catch (error) {
 				res.status(500);
-				res.json({error: "Server error"})
+				res.json(error)
 			}
 			break;
 
 		case 'PUT':
 			try {
+			const productIdFormatted = new ObjectId(productId.toString());
 			let cart;
-			 const exist = await db.collection("cart").findOne({"product.productId" : productId });
+			 const exist = await db.collection("cart").findOne({"product.productId" : productIdFormatted });
 			 if(!exist) {
+				 console.log(true)
 					cart = await db.collection("cart").findOneAndUpdate(
 						{ "customerId" : customerId },
-						{ "$push": { "product" :  {"productId": productId, "quantity": quantity} } }
-				);
+						{ "$push" : { "product" :  {"productId": productIdFormatted, "quantity": quantity} } }
+				)
 			 } else {
-					const query = { customerId };
-					const updateDocument = {
-						$set: { "product.$[orderItem].quantity": quantity }
-					};
-					const options = {
-						arrayFilters: [{
-							"orderItem.productId" : productId,
-						}]
-					};
-					cart = await db.collection("cart").findOneAndUpdate(query, updateDocument,options);
-					
-			 }
+				cart = await db.collection("cart").findOneAndUpdate(
+					{ "customerId" : customerId , "product.productId": productIdFormatted },
+					{ $set: { "product.$.quantity" : quantity } }
+			 )
+				
+		 }
 				if(!cart){
 					return res.status(400).json({success: false})
 				}
@@ -73,7 +83,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			} catch (error) {
 				console.log(error)
 				res.status(500);
-				res.json({error: "Server error"})
+				res.json(error)
 			}
 			break;
 		default:

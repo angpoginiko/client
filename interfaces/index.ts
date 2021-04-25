@@ -36,5 +36,19 @@ export type ProductType = {
 	productName?: string,
 	unitPrice?: number,
 	productType?: string,
-	quantity: number,
+	quantity?: number,
+	productDesc?: string,
+}
+
+export type CartProduct = {
+	productId: string | undefined,
+	quantity: number
+}
+
+
+export type UserCart = {
+	_id: string,
+	product:  CartProduct,
+	customerId: string,
+	productData: ProductType[]
 }

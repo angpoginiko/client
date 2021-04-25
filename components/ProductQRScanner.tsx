@@ -1,12 +1,15 @@
-import { Button, useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import QrReader from 'react-qr-reader';
 import { ProductType } from '../interfaces';
 import ModalComp from './ModalComp';
 import Product from './Product';
 
+interface QRScannerProps {
+	customerId: string | undefined
+}
 
-export default function QRScanner() { 
+export default function QRScanner({customerId} : QRScannerProps) { 
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const  [data, setData ] = useState<ProductType>();
   const handleErrorWebCam = (error : any) => {
@@ -32,9 +35,8 @@ export default function QRScanner() {
 			onError={handleErrorWebCam}
 			onScan={handleScanWebCam}
 		/>
-		<Button onClick={() => onOpen()}></Button>
 		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add to Cart">
-			<Product product={data} closeProduct={onClose}/>
+			<Product customerId={customerId} product={data} closeProduct={onClose}/>
 		</ModalComp>
 		</>
   );
