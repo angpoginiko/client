@@ -5,7 +5,7 @@ import {
 	HStack,
 	VStack,
 	Icon,
-	Center
+	Center,
 } from '@chakra-ui/react';
 import { MdAddBox, MdRemove, MdDelete } from 'react-icons/md';
 import { useState } from 'react';
@@ -37,53 +37,72 @@ export default function CartProduct ({ userCart, modalOpen } : CartProductProps)
 	})
 	return(
 		<>
-		<HStack borderWidth="1px" borderColor="black" bgGradient="linear(to-r, #374D76, #D7A462)" spacing="5px" borderRadius="3xl">
-			<HStack borderRight="1px" boxSize="180px" width="300px">
-				<Box w="120px" height="100" color="white">
+		<HStack 
+			borderWidth="1px" 
+			borderColor="black" 
+			bgGradient="linear(to-r, #374D76, #D7A462)" 
+			spacing={2} 
+			borderRadius="3xl" 
+			width="400"
+		>
+			<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
+				<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
 					<Center>
-						<Image boxSize="100px" src="https://www.the-pasta-project.com/wp-content/uploads/2017/08/Fettuccine-640x433.jpg" />
+						<Image boxSize={{sm: 70, md: 90, lg: 120}} src="https://www.the-pasta-project.com/wp-content/uploads/2017/08/Fettuccine-640x433.jpg" />
 					</Center>
 				</Box>
 
-				<VStack>
-					<Text color="white">
+				<VStack width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
+					<Text color="white" fontSize={{base: 10, sm: 15, md: 20, lg: 30}}>
 						{productName}
 					</Text>
 
-					<Text color="white">
+					<Text color="white" fontSize={{base: 5, sm: 10, md: 13, lg: 16}}>
 						Price: Php {unitPrice} / Kg
 					</Text>
 				</VStack>
 			</HStack>
 			
-			<HStack boxSize="180px" borderRight="1px" width="500px">
-
-				<Text color="white">
-					<Text>
+			<HStack height={{base: 75, sm: 90, md: 100, lg: 180}} borderRight="1px" width={{base: 100.5, sm: 211.5, md: 282, lg: 376, xl: 530}}>
+				<Box color="white">
+					<Text fontSize={{base: 7, sm: 12, md: 15, lg: 18}}>
 						Description:
 					</Text>	
-					<Text> 
-						{productDesc}
+					<Text fontSize={{base: 4, sm: 8, md: 11, lg: 14}}> 
+						 {productDesc}
 					</Text>
-
-				</Text>
-
+				</Box>
 			</HStack>
-			
-			<VStack width="100px">
-
-				<HStack border={"1px"} borderRadius="3xl">
+			<VStack width={{base: 35, sm: 63, md: 84, lg: 112, xl: 160}} id="test">
+				<HStack border={{base: '0', md: '1px'}} borderRadius={{md: '2xl', lg: '3xl'}} width={{ md: 84, lg: 112, xl: 160}} spacing={0}>
 					<Center>
-						<Box as="button" onClick={() => decrementQuantity()} boxSize={7} borderRight="1px"><Icon as={MdRemove}/></Box>
-							<Box width={7}><Center>{quantity}</Center></Box>
-						<Box as="button" onClick={() => increamentQuantity()} boxSize={7} borderLeft="1px"><Icon as={MdAddBox}/></Box>
-					</Center>	
-				</HStack>
+						<Box as="button" width={{base: 12, sm: 21, md: 28, lg: 37, xl: 53}} onClick={() => decrementQuantity()} boxSize={{base: 3, sm: 4, md: 5, lg: 7}} borderRight={{base: '0', md: '1px'}}>
+							<Center>
+							<Icon as={MdRemove} boxSize={{base: 2, md: 3, lg: 6}}/>
+							</Center>
+						</Box>
+					</Center>
 
+					<Center  id="69">
+						<Box width={{base: 5, sm: 8, lg: 37, xl: 53}}>
+							<Center><Text fontSize={{base: 'xs', sm: 'sm', lg: 'lg'}}>{quantity}</Text></Center>
+						</Box>
+					</Center>
+
+					<Center>
+						<Box as="button" width={{base: 12, sm: 21, md: 28, lg: 37, xl: 53}} onClick={() => increamentQuantity()} boxSize={{base: 3, sm: 4, md: 5, lg: 7}} borderLeft={{base: '0', md: '1px'}}>
+							<Center>
+							<Icon as={MdAddBox} boxSize={{base: 2, md: 3, lg: 6}}/>
+							</Center>
+						</Box>
+					</Center>
+				</HStack>
+				
 				<Center>
-					<Box as="button" onClick={() => modalOpen()} boxSize={10}><Icon boxSize={6} as={MdDelete}/></Box>
+					<Box as="button" onClick={() => modalOpen()} boxSize={10}><Icon boxSize={{base: 4, md: 5, lg: 6}} as={MdDelete}/></Box>
 				</Center>	
 			</VStack>
+			<Box></Box>
 		</HStack>
 		</>
 	);

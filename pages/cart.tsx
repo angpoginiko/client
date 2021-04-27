@@ -71,28 +71,27 @@ export default function Cart({user} : any) {
 					<VStack w="100%" h="800px">
 						{cart?.length ? cart.map((userCart) => {
 							return(
-									<>
-										<CartProduct userCart={userCart} modalOpen={onOpen}/>
-
-										<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
-											<Flex>
-												<Text>
-													Are you sure you want to remove this item?
-												</Text>
-												<HStack>
-													<Button onClick={()=> handleDelete(userCart.product.productId)}>
-														Yes
-													</Button>
-													<Button onClick={() => onClose()}>
-														No
-													</Button>
-												</HStack>
-											</Flex>
-									</ModalComp>
-									</>
+									<div key={userCart._id}>
+											<CartProduct userCart={userCart} modalOpen={onOpen}/>
+											<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
+												<Flex>
+													<Text>
+														Are you sure you want to remove this item?
+													</Text>
+													<HStack>
+														<Button onClick={()=> handleDelete(userCart.product.productId)}>
+															Yes
+														</Button>
+														<Button onClick={() => onClose()}>
+															No
+														</Button>
+													</HStack>
+												</Flex>
+										</ModalComp>
+									</div>
 								);
 						}):
-							(<Text>
+							(<Text key={user}>
 								You have no item on your Cart
 							</Text>
 								)
