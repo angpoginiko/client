@@ -27,7 +27,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		});
 		res.status(200).send(products.ops[0]);
 	} catch (error) {
-		console.log(req.body);
 		res.status(401);
 		res.json({message: `${error}`})
 	}

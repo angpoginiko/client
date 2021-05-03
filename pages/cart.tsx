@@ -15,14 +15,20 @@ import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
 import { useQuery } from 'react-query';
-import { UserCart } from '../interfaces';
-import { useEffect } from 'react';
+import { UserCart, CartProductType } from '../interfaces';
+import { useEffect, useState } from 'react';
 import ModalComp from '../components/ModalComp';
+import CheckoutItems from '../components/CheckoutItems'
 
 
 
 export default function Cart({user} : any) {
+	const [checkoutItems, setCheckoutItems] = useState<UserCart[]>([])
+	const [hasItems, setHasItems] = useState(false);
+	const [orderId, setOrderId] = useState('');
+	const [total, setTotal] = useState(0);
 	const { onOpen, isOpen, onClose } = useDisclosure();
+	const {onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose} = useDisclosure();
 	const fetchCart = async () => {
 		const res = await fetch(`api/cart/${user}`);
 		return res.json();
@@ -42,11 +48,28 @@ export default function Cart({user} : any) {
 				refetch();
 				onClose();
     }
-   }
+  }
+
+	const onCheckout = async (checkoutItems : UserCart[]) => {
+		const productArray:CartProductType[] = [];
+		checkoutItems.map((checkoutItem) => {
+			productArray.push(checkoutItem.product);
+		})
+		const response = await fetch("/api/orders/addOrders", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({items: productArray}),
+		});
+		const orderId = await response.json();
+		setOrderId(orderId);
+	}
 
 	useEffect(() => {
+		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false);
 		refetch();
-	}, [cart])
+	}, [cart, checkoutItems]);
   return (
     <>
       <Head>
@@ -56,23 +79,30 @@ export default function Cart({user} : any) {
         />
       </Head>
 			<Layout authentication={user}>
-			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
-				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
+				<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
+					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
+						<Center>
+							<VStack spacing="0">
+								<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>
+									My Cart
+								</Text>
+							</VStack>
+						</Center>
+					</Box>
+					
 					<Center>
-						<VStack spacing="0">
-							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>
-								My Cart
-							</Text>
-						</VStack>
-					</Center>
-				</Box>
-				
-				<Center>
-					<VStack w="100%" h="800px">
-						{cart?.length ? cart.map((userCart) => {
-							return(
-									<div key={userCart._id}>
-											<CartProduct userCart={userCart} modalOpen={onOpen}/>
+						<VStack w="100%" h="800px">
+							{cart?.length ? cart.map((userCart) => {
+								return(
+										<div key={userCart.product.productId}>
+											<CartProduct userCart={userCart} 
+											modalOpen={onOpen} 
+											checkoutProduct={checkoutItems} 
+											setCheckoutProduct={(product: UserCart[]) => setCheckoutItems(product)}
+											refresh={refetch}
+											setTotalPrice={setTotal}
+											totalPrice={total}
+											/>
 											<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
 												<Flex>
 													<Text>
@@ -87,22 +117,31 @@ export default function Cart({user} : any) {
 														</Button>
 													</HStack>
 												</Flex>
-										</ModalComp>
-									</div>
-								);
-						}):
-							(<Text key={user}>
-								You have no item on your Cart
-							</Text>
-								)
-						}
-					</VStack>
-					<Button>
-						Checkout
-					</Button>
-				</Center>
-			</VStack>
-		</Layout>
+											</ModalComp>
+										</div>
+									);
+							}):
+								(<Text key={user}>
+									You have no item on your Cart
+								</Text>
+									)
+							}
+						</VStack>
+						<Text>
+							Total Price: {total}
+						</Text>
+						<Button disabled={hasItems ? false : true} onClick={() => {
+							onCheckout(checkoutItems),
+							checkoutOpen()
+						}}>
+							Checkout
+						</Button>
+						<ModalComp isModalOpen={isCheckoutOpen} onModalClose={checkoutClose} title="Checkout Items?">
+							<CheckoutItems cart={checkoutItems} orderId={orderId} totalPrice={total}/>
+						</ModalComp>
+					</Center>
+				</VStack>
+			</Layout>
     </>
   );
 }

@@ -1,32 +1,36 @@
 import React, {useState} from 'react';
 import QRCode from 'qrcode';
-import { Button, Input } from '@chakra-ui/react';
+import { Button } from '@chakra-ui/react';
 
+interface QRGeneratorProps {
+	text: string;
+	buttonName: string;
+	isCreated: boolean;
+	setIsCreated: (isCreated: boolean) => void;
+}
 
-export default function QRGenerator() { 
-  const [text, setText] = useState('');
+export default function QRGenerator({text, buttonName, isCreated, setIsCreated} : QRGeneratorProps) { 
   const [imageUrl, setImageUrl] = useState('');
 
 
   const generateQrCode = async () => {
     try {
-          const response = await QRCode.toDataURL(text);
-          setImageUrl(response);
+			const response = await QRCode.toDataURL(text);
+			setImageUrl(response);
     }catch (error) {
       console.log(error);
     }
   }
   return (
 		<>
-    <Input label="Enter Text Here" onChange={(e) => setText(e.target.value)}/>
-			<Button onClick={() => generateQrCode()}>Generate</Button>
-				<br/>
-				<br/>
-				<br/>
-			{imageUrl ? (
-				<a href={imageUrl} download>
-						<img src={imageUrl} alt="img" width="500" height="500"/>
-				</a>) : null}
+			{isCreated && 
+				<Button 
+				onClick={() => {setIsCreated(false),generateQrCode()}}>
+					{buttonName}
+				</Button>
+			}
+			{imageUrl && 
+				<img src={imageUrl} alt="img" width="500" height="500"/>}
 		</>
   );
 }

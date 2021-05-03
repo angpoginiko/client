@@ -64,7 +64,6 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			let cart;
 			 const exist = await db.collection("cart").findOne({"product.productId" : productIdFormatted });
 			 if(!exist) {
-				 console.log(true)
 					cart = await db.collection("cart").findOneAndUpdate(
 						{ "customerId" : customerId },
 						{ "$push" : { "product" :  {"productId": productIdFormatted, "quantity": quantity} } }

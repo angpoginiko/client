@@ -10,7 +10,7 @@ import {
 	Icon,
 	useDisclosure, 
 } from '@chakra-ui/react';
-import { CartProduct, ProductType } from '../interfaces';
+import { CartProductType, ProductType } from '../interfaces';
 import { MdAddBox,  MdRemove} from "react-icons/md";
 import React, { useState } from 'react';
 import ModalComp from './ModalComp';
@@ -27,7 +27,6 @@ interface ProductProps {
 
 
 export default function ProductPage({product, closeProduct, customerId} : ProductProps) {
-	console.log(customerId)
 	const [quantity, setQuantity] = useState(1);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 
@@ -43,8 +42,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 		}
 	}
 
-	const addProduct = async (product: CartProduct) => {
-		console.log(product)
+	const addProduct = async (product: CartProductType) => {
 		const response = await fetch (`/api/cart/${customerId}`, {
 			method: "PUT",
 			headers: {

@@ -40,15 +40,16 @@ export type ProductType = {
 	productDesc?: string,
 }
 
-export type CartProduct = {
+export type CartProductType = {
 	productId: string | undefined,
 	quantity: number
+	isAdded?: boolean
 }
 
 
 export type UserCart = {
 	_id: string,
-	product:  CartProduct,
+	product:  CartProductType,
 	customerId: string,
 	productData: ProductType[]
 }
