@@ -18,10 +18,11 @@ import {
 import { NextPageContext } from 'next';
 import { server } from '../config';
 import { formAuth } from './api/formAuth';
+import userRoles from '../constants/userRoles'
 
 type FormData = {
   username: string;
-  password: string;
+  userPassword: string;
 };
 
 
@@ -38,8 +39,16 @@ export default function Login (){
 			credentials: 'include',
 			body: JSON.stringify({profile: formData}),
 		})
-		await response.json();
-		await router.push("/Home");
+		const user = await response.json();
+		
+		if(user.userRole == userRoles.Customer){
+			await router.push("/Home");
+		} else if (user.userRole == userRoles.Admin){
+			await router.push("/HomeAdmin");
+		} else if (user.userRole == userRoles.Cashier){
+			await router.push("/HomeCashier");
+		}
+
 	}
 	return(
 		<>
@@ -62,7 +71,7 @@ export default function Login (){
             </FormControl>
             <FormControl id="password" isInvalid={errors.password && errors.password.type === "required"}>
               <FormLabel>Password</FormLabel>
-              <Input name="password" ref={register({required:true})} type="password"/>
+              <Input name="userPassword" ref={register({required:true})} type="password"/>
 							<FormErrorMessage>Password Required</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
