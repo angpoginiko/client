@@ -33,10 +33,8 @@ type Props = {
 }
 
 
-const Layout = ({ children, title = 'Home', authentication }: Props) => {
-	const { onOpen, isOpen, onClose } = useDisclosure();
+const CashierNavBar = ({ children, title = 'Home', authentication }: Props) => {
 	const Router = useRouter();
-	const [auth, setAuth] = useState(!!authentication);
 
 
 	const onLogout = async () =>{ 
@@ -48,30 +46,7 @@ const Layout = ({ children, title = 'Home', authentication }: Props) => {
 			credentials: "include"
 		})
 		await Router.push("/")
-		setAuth(false);
 	}
-
-
-	const loginButton = (
-		<>
-			<Button
-					as={'a'}
-					fontSize={'sm'}
-					fontWeight={400}
-					variant={'link'}
-					href="/login">
-					Sign In
-				</Button>
-				<Button
-					as={'a'}
-					fontSize={'sm'}
-					fontWeight={400}
-					variant={'link'}
-					href="/register">
-					Sign Up
-				</Button>
-		</>
-	);
 
 	const logoutButton = (
 		<>
@@ -130,10 +105,7 @@ const Layout = ({ children, title = 'Home', authentication }: Props) => {
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
-						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
-						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Scan Item"><ProductQRScanner customerId={authentication}/></ModalComp>
-						{auth ? logoutButton: loginButton}
+						<Link onClick={onLogout}>Logout</Link>
 					</Stack>
 				</Flex>
 			</Flex>
@@ -143,4 +115,4 @@ const Layout = ({ children, title = 'Home', authentication }: Props) => {
 	</>
 )}
 
-export default Layout
+export default CashierNavBar
