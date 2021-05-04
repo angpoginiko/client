@@ -70,6 +70,18 @@ export default function Cart({user} : any) {
 		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false);
 		refetch();
 	}, [cart, checkoutItems]);
+
+	const handleDeleteOrder = async () => {
+		console.log(orderId);
+		await fetch (`/api/orders/order/${orderId}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: 'include',
+		})
+		checkoutClose();
+  }
   return (
     <>
       <Head>
@@ -136,7 +148,7 @@ export default function Cart({user} : any) {
 						}}>
 							Checkout
 						</Button>
-						<ModalComp isModalOpen={isCheckoutOpen} onModalClose={checkoutClose} title="Checkout Items?">
+						<ModalComp isModalOpen={isCheckoutOpen} onModalClose={handleDeleteOrder} title="Checkout Items?">
 							<CheckoutItems cart={checkoutItems} orderId={orderId} totalPrice={total}/>
 						</ModalComp>
 					</Center>
