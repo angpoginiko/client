@@ -19,10 +19,18 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			});
 		}
 		const id = new ObjectId(decoded.id);
-		const user = await db.collection("customers").findOne( {"_id": id});
-		const point = await user.point.earned;
-		const test = point[0]
-		res.status(200).send(test);
+		const point = await db.collection("customers").aggregate([
+			{"$match" : {"_id" : id}},
+			{"$lookup" : {
+				"from" : "earnedPoints",
+				"localField" : "point.earned",
+				"foreignField" : "_id",
+				"as" : "point.earned"
+			}}
+		]).toArray();
+		point.map((points) => {
+			res.status(200).send(points.point);
+		})
 	} catch(err) {
 		res.status(401).send({message: "youre not logged in"});
 	}

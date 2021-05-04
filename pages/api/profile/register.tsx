@@ -29,10 +29,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				password: hashedPassword,
 				email,
 				name,
+				userRole: 0,
 			},
 			point: {
 				earned: [],
 				redeemed: [],
+				encashed: [],
 			}
 		});
 		const id = customer.ops[0]._id;
