@@ -15,7 +15,7 @@ import { server } from '../config'
 import { Point } from '../interfaces/index'
 
 
-export default function Points({points} : any) {
+export default function Points({points, user} : any) {
 	const earned = points.earned as Array<Point>;
 	const redeemed = points.redeemed as Array<number>;
 	let totalEarnedPoints = 0;
@@ -43,7 +43,7 @@ export default function Points({points} : any) {
 	});
   return (
     <>
-		<Layout>
+		<Layout authentication={user}>
 			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
 					<Center>
@@ -61,7 +61,7 @@ export default function Points({points} : any) {
 					</Center>
 				</Box>
 				
-				<Box w="100%" h="800px">
+				<Box w="100%" h="100%">
 					<Center>
 						<SimpleGrid gap={{ base: "35px", md: "50px", lg: "100px" }} columns={[1, null, 2]}>
 							<Container>
@@ -94,12 +94,17 @@ export default function Points({points} : any) {
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEarnedPoints}</Text></Center>
 								</Box>
 								<Center>
-									<Text>Enchased Points</Text>
+									<Text>Encashed Points</Text>
 								</Center>
 							</Container>
 						</SimpleGrid>
 					</Center>
 				</Box>
+				<Center>
+					<Box as="button" w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290">
+						<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Encash Points</Text></Center>
+					</Box>
+				</Center>
 			</VStack>
 		</Layout>
     </>
@@ -108,6 +113,7 @@ export default function Points({points} : any) {
 
 
 Points.getInitialProps = async (ctx: NextPageContext) => {
-  const json = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
-	return {points: json};
+  const points = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
+	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
+	return {points, user};
 }
