@@ -6,14 +6,13 @@ import {
 	VStack,
 	Center,
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import { ProductType, UserCart } from '../interfaces';
 
 interface CartProductProps{
 	userCart: UserCart,
 }
 
-export default function CartProduct ({ userCart } : CartProductProps) {
+export default function CheckoutItem ({ userCart } : CartProductProps) {
 	let { productName, unitPrice  } : ProductType = {}
 	userCart.productData.map((data) => {
 		productName = data.productName

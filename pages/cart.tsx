@@ -60,7 +60,7 @@ export default function Cart({user} : any) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({items: productArray}),
+			body: JSON.stringify({items: productArray, total}),
 		});
 		const orderId = await response.json();
 		setOrderId(orderId);
@@ -72,7 +72,6 @@ export default function Cart({user} : any) {
 	}, [cart, checkoutItems]);
 
 	const handleDeleteOrder = async () => {
-		console.log(orderId);
 		await fetch (`/api/orders/order/${orderId}`, {
 			method: "DELETE",
 			headers: {
@@ -106,7 +105,7 @@ export default function Cart({user} : any) {
 						<VStack w="100%" h="800px">
 							{cart?.length ? cart.map((userCart) => {
 								return(
-										<div key={userCart.product.productId}>
+										<div key={userCart.product.productId?.toString()}>
 											<CartProduct userCart={userCart} 
 											modalOpen={onOpen} 
 											checkoutProduct={checkoutItems} 
@@ -121,7 +120,7 @@ export default function Cart({user} : any) {
 														Are you sure you want to remove this item?
 													</Text>
 													<HStack>
-														<Button onClick={()=> handleDelete(userCart.product.productId)}>
+														<Button onClick={()=> handleDelete(userCart.product.productId?.toString())}>
 															Yes
 														</Button>
 														<Button onClick={() => onClose()}>

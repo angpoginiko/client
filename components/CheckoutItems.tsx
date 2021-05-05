@@ -16,7 +16,7 @@ interface CheckoutProductProps {
 	totalPrice: number;
 }
 
-export default function CheckoutProducts({cart, orderId, totalPrice} : CheckoutProductProps) {
+export default function CheckoutItems({cart, orderId, totalPrice} : CheckoutProductProps) {
 	const [isCreated, setIsCreated] = useState(true);
   return (
     <>
@@ -29,7 +29,7 @@ export default function CheckoutProducts({cart, orderId, totalPrice} : CheckoutP
 								<VStack w="100%" h="100%">
 									{cart?.length ? cart.map((userCart) => {
 										return(
-												<div key={userCart.product.productId}>
+												<div key={userCart.product.productId?.toString()}>
 														<CheckoutItem userCart={userCart}/>
 												</div>
 											);
