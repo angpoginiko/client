@@ -30,10 +30,12 @@ type Props = {
   children?: ReactNode
   title?: string
 	authentication?: string
+	isModalOpen?: boolean;
+	onModalClose?: () => void;
 }
 
 
-const Layout = ({ children, title = 'Home', authentication }: Props) => {
+const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose }: Props) => {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const Router = useRouter();
 	const [auth, setAuth] = useState(!!authentication);
@@ -132,7 +134,7 @@ const Layout = ({ children, title = 'Home', authentication }: Props) => {
 					spacing={6}>
 						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Scan Item"><ProductQRScanner customerId={authentication}/></ModalComp>
+						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {onClose(), onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication}/></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>
