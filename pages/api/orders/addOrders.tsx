@@ -23,7 +23,8 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		const orders = await db.collection("orders").insertOne({
 			product : newItems,
 			customerId,
-			total
+			total,
+			isScanned: false
 		});
 
 		res.status(200).send(orders.ops[0]._id);

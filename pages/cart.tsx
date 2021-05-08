@@ -60,14 +60,14 @@ export default function Cart({user} : any) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({items: productArray, total}),
+			body: JSON.stringify({id: user, items: productArray, total}),
 		});
 		const orderId = await response.json();
 		setOrderId(orderId);
 	}
 
 	useEffect(() => {
-		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false);
+		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false), setTotal(0);
 		refetch();
 	}, [cart, checkoutItems]);
 
@@ -104,6 +104,7 @@ export default function Cart({user} : any) {
 					<Center>
 						<VStack w="100%" h="800px">
 							{cart?.length ? cart.map((userCart) => {
+								console.log(userCart.customerId, user);
 								return(
 										<div key={userCart.product.productId?.toString()}>
 											<CartProduct userCart={userCart} 

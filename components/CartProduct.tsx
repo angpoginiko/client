@@ -54,7 +54,6 @@ export default function CartProduct (
 		if(e.target.name === userCart.product.productId){
 			setIsAdded(!isAdded)
 			userCart.product.isAdded = e.target.checked;
-
 			if(userCart.product.isAdded == true){
 				checkoutProduct.push(userCart);
 				setCheckoutProduct(checkoutProduct);
@@ -94,7 +93,7 @@ export default function CartProduct (
 		>
 			
 			<Center borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{sm: 70, md: 90, lg: 120}}>
-				<Checkbox name={userCart.product.productId} checked={userCart.product.isAdded} onChange={handleChange}></Checkbox>
+				<Checkbox name={userCart.product.productId?.toString()} checked={userCart.product.isAdded} onChange={handleChange}></Checkbox>
 			</Center>
 
 			<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>

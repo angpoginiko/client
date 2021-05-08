@@ -27,19 +27,25 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			break;
 		case 'GET' :
 			try {
-				const order = await db.collection("orders").aggregate([
-					{"$unwind" : "$product"},
-					{"$lookup" : {
-						"from": 'products',
-						"localField": 'product.productId',
-						"foreignField": '_id',
-						"as": 'productData'
-					}}
-				]).toArray();
-				if(!order){
-					return res.status(400).json({success: false})
+				const scanned = await db.collection("orders").findOne({_id});
+				if(scanned.isScanned == false){
+					await db.collection("orders").findOneAndUpdate(
+						{_id},
+						{ $set: { "isScanned": true } });
+					const order = await db.collection("orders").aggregate([
+						{"$unwind" : "$product"},
+						{"$lookup" : {
+							"from": 'products',
+							"localField": 'product.productId',
+							"foreignField": '_id',
+							"as": 'productData'
+						}}
+					]).toArray();
+					if(!order){
+						return res.status(400).json({success: false})
+					}
+					res.status(201).send({order,id});	
 				}
-				res.status(201).send(order);
 			} catch (error) {
 				res.status(500);
 				res.json({error: "Server error"})
