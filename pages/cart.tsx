@@ -67,7 +67,7 @@ export default function Cart({user} : any) {
 	}
 
 	useEffect(() => {
-		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false), setTotal(0);
+		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false);
 		refetch();
 	}, [cart, checkoutItems]);
 
@@ -148,7 +148,12 @@ export default function Cart({user} : any) {
 						}}>
 							Checkout
 						</Button>
-						<ModalComp isModalOpen={isCheckoutOpen} onModalClose={handleDeleteOrder} title="Checkout Items?">
+						<ModalComp
+						 isModalOpen={isCheckoutOpen}
+						  onModalClose={() => {
+							handleDeleteOrder(),
+							location.reload()}} 
+							title="Checkout Items?">
 							<CheckoutItems cart={checkoutItems} orderId={orderId} totalPrice={total}/>
 						</ModalComp>
 					</Center>

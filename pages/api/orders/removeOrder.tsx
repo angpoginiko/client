@@ -12,28 +12,33 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	try {
 		const userCart: UserCart[] = data;
 		userCart.map(async (cart) => {
-			const productId = new ObjectId(cart.product.productId)
-			const productQuantity = cart.product.quantity;
-			const customerId = new ObjectId(cart.customerId);
-			const newQuantity = await db.collection("products").aggregate([
-				{ $match: { _id: productId } },
-				{ $project: { quantity: { $subtract: [ "$quantity", productQuantity ] } } } 
-			]).toArray();
-				newQuantity.map(async (quantity) => {
-					await db.collection("products").findOneAndUpdate(
-						{ _id: productId},
-						{ $set:
-								{
-									quantity: quantity.quantity,
-								}
-						}
-					);
-				});
-			await db.collection("cart").findOneAndUpdate(
-				{"customerId": customerId},
-				{ "$pull": { "product": { "productId" : productId } } }
-				)
-			});
+				const productId = new ObjectId(cart.product.productId)
+				const productQuantity = cart.product.quantity;
+				const customerId = new ObjectId(cart.customerId);
+				const newQuantity = await db.collection("products").aggregate([
+					{ $match: { _id: productId } },
+					{ $project: { quantity: { $subtract: [ "$quantity", productQuantity ] } } } 
+				]).toArray();
+					newQuantity.map(async (quantity) => {
+						await db.collection("products").findOneAndUpdate(
+							{ _id: productId},
+							{ $set:
+									{
+										quantity: quantity.quantity,
+									}
+							}
+						);
+					});
+				await db.collection("cart").findOneAndUpdate(
+					{"customerId": customerId},
+					{ "$pull": { "product": { "productId" : productId } } }
+					)
+				
+				await db.collection("purchaseHistory").findOneAndUpdate(
+					{ "customerId" : customerId },
+					{ "$push" : { "purchases" :  {"productId": productId, "quantity": productQuantity, dateCheckout: new Date()} } }
+				);
+		});
 		const products = await db.collection("orders").deleteOne({_id});
 		if(!products){
 			return res.status(400).json({success: false})
