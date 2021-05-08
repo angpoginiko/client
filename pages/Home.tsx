@@ -11,16 +11,21 @@ import {
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
+import { useEffect } from 'react';
+import userRoles from '../constants/userRoles';
+import { useRouter } from 'next/router';
 
 export default function AuthIndexPage({ user } : any) {
+	const router = useRouter();
+	useEffect(() => {
+		if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier')
+		} else if(userRoles.Admin == user.userRole){
+			router.replace('/HomeAdmin')
+		}
+	}, [user]);
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
 			<Layout authentication={user}>
       <Container maxW={'3xl'}>
         <Stack

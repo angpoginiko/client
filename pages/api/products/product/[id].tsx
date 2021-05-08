@@ -13,7 +13,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 	switch(method){
 		case 'GET' :
 			try {
-				const products = await db.collection("products").find({_id}).toArray();
+				const products = await db.collection("products").findOne({_id});
 
 				if(!products){
 					return res.status(400).json({success: false})

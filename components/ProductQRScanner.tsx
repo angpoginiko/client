@@ -20,10 +20,8 @@ export default function QRScanner({customerId} : QRScannerProps) {
 				const response = await fetch (`/api/products/product/${result}`, {
 					method: "GET",
 				})
-				const unmappedData = await response.json();
-				unmappedData.map((data: ProductType) => {
-					setData(data);
-				})
+				const data = await response.json();
+				setData(data);
 				onOpen();
     }
    }

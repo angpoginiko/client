@@ -19,6 +19,8 @@ import { UserCart, CartProductType } from '../interfaces';
 import { useEffect, useState } from 'react';
 import ModalComp from '../components/ModalComp';
 import CheckoutItems from '../components/CheckoutItems'
+import { useRouter } from 'next/router';
+import userRoles from '../constants/userRoles';
 
 
 
@@ -30,14 +32,14 @@ export default function Cart({user} : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const {onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose} = useDisclosure();
 	const fetchCart = async () => {
-		const res = await fetch(`api/cart/${user}`);
+		const res = await fetch(`api/cart/${user._id}`);
 		return res.json();
 	}
 	
 	const { data: cart, refetch } = useQuery<UserCart[]>("product", fetchCart);
 	const handleDelete = async (productId: string | undefined) => {
     if (productId){
-				await fetch (`/api/cart/${user}`, {
+				await fetch (`/api/cart/${user._id}`, {
 					method: "DELETE",
 					headers: {
 						"Content-Type": "application/json",
@@ -60,7 +62,7 @@ export default function Cart({user} : any) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({id: user, items: productArray, total}),
+			body: JSON.stringify({id: user._id, items: productArray, total}),
 		});
 		const orderId = await response.json();
 		setOrderId(orderId);
@@ -81,6 +83,15 @@ export default function Cart({user} : any) {
 		})
 		checkoutClose();
   }
+
+	const router = useRouter();
+	useEffect(() => {
+		if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier')
+		} else if(userRoles.Admin == user.userRole){
+			router.replace('/HomeAdmin')
+		}
+	}, []);
   return (
     <>
       <Head>
@@ -104,7 +115,6 @@ export default function Cart({user} : any) {
 					<Center>
 						<VStack w="100%" h="800px">
 							{cart?.length ? cart.map((userCart) => {
-								console.log(userCart.customerId, user);
 								return(
 										<div key={userCart.product.productId?.toString()}>
 											<CartProduct userCart={userCart} 

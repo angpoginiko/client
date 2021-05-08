@@ -56,3 +56,9 @@ export type UserCart = {
 	productData: ProductType[]
 	total?: number
 }
+
+export type Purchases = {
+	productId: string | undefined | ObjectId,
+	quantity: number
+	dateCheckout: Date;
+}

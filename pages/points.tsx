@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../components/Layout'
 import {
   Box,
@@ -8,14 +8,18 @@ import {
 	Center,
 	SimpleGrid,
 	HStack,
+	Button,
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config'
 import { Point } from '../interfaces/index'
+import { useRouter } from 'next/router'
+import userRoles from '../constants/userRoles';
 
 
-export default function Points({points} : any) {
+export default function Points({points, user} : any) {
+	const router = useRouter();
 	const earned = points.earned as Array<Point>;
 	const redeemed = points.redeemed as Array<number>;
 	let totalEarnedPoints = 0;
@@ -41,9 +45,17 @@ export default function Points({points} : any) {
 	redeemed.length === 0 ? totalRedeemedPoints = 0 : redeemed.map((points) => {
 		totalRedeemedPoints += points;
 	});
+	
+	useEffect(() => {
+		if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier')
+		} else if(userRoles.Admin == user.userRole){
+			router.replace('/HomeAdmin')
+		}
+	}, [user])
   return (
     <>
-		<Layout>
+		<Layout authentication={user}>
 			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
 					<Center>
@@ -108,6 +120,7 @@ export default function Points({points} : any) {
 
 
 Points.getInitialProps = async (ctx: NextPageContext) => {
-  const json = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
-	return {points: json};
+  const points = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
+	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
+	return { points, user }
 }
