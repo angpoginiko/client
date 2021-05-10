@@ -121,7 +121,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 								textDecoration: 'none',
 								bg: useColorModeValue('gray.200', 'gray.700'),
 							}}
-							href="/">
+							href={auth ? '/Home' : '/'}>
 							Home
 						</Link>
 					</HStack>

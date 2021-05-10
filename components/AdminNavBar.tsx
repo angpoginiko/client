@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
 import Head from 'next/head';
 import {
-	Avatar,
   Box,
   Flex,
   HStack,
@@ -11,20 +10,8 @@ import {
   useColorModeValue,
   Stack,
 	Link,
-	Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-	Icon,
-	useDisclosure
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
-import ModalComp from './ModalComp';
-
-const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
-	ssr: false,
-});
 
 type Props = {
   children?: ReactNode
@@ -32,11 +19,8 @@ type Props = {
 	authentication?: string
 }
 
-
-const CashierNavBar = ({ children, title = 'Home' }: Props) => {
+const AdminNavBar = ({ children, title = 'Home' }: Props) => {
 	const Router = useRouter();
-
-
 	const onLogout = async () =>{ 
 		await fetch("api/profile/logout",{
 			method: "POST",
@@ -69,7 +53,7 @@ const CashierNavBar = ({ children, title = 'Home' }: Props) => {
 								textDecoration: 'none',
 								bg: useColorModeValue('gray.200', 'gray.700'),
 							}}
-							href="/HomeCashier">
+							href="/HomeAdmin">
 							Home
 						</Link>
 					</HStack>
@@ -90,4 +74,4 @@ const CashierNavBar = ({ children, title = 'Home' }: Props) => {
 	</>
 )}
 
-export default CashierNavBar
+export default AdminNavBar

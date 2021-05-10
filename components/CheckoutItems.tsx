@@ -3,7 +3,6 @@ import {
   Text,
   VStack,
 	Center,
-	Button
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { UserCart } from '../interfaces';

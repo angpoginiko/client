@@ -28,7 +28,7 @@ export default function ReceiptItem({ item } : PurchaseItemProps) {
 				{(item.quantity * product?.unitPrice!).toString()}
 			</Td>
 			<Td>
-				{item.dateCheckout}
+				{new Date(item.dateCheckout).toDateString()}
 			</Td>
 		</Tr>
   );

@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form'
 import Layout from '../components/Layout';
 import { Profile } from '../interfaces/index'
-import { useRouter } from 'next/router'
 import {
   Box,
   FormControl,
@@ -15,14 +14,19 @@ import {
   useColorModeValue,
 	Input,
 	FormErrorMessage,
+	useDisclosure
 } from '@chakra-ui/react';
+import ModalComp from './ModalComp';
 
+interface AddCashierProps {
+	modalClose: () => void;
+}
 
-const Register : React.FC = () => {
+export default function AddCashier({ modalClose } : AddCashierProps) {
+	const {isOpen, onOpen, onClose} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
-	const Router = useRouter();
 	const onSubmit = async (formData: Profile) => {
-		const response = await fetch("/api/profile/register", {
+		const response = await fetch("/api/profile/AddCashier", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -30,15 +34,14 @@ const Register : React.FC = () => {
 			body: JSON.stringify({profile: formData}),
 		});
 		await response.json();
-		Router.push("/login");
+		onOpen();
 	}
 	const password = useRef();
 	return(
 		<>
-		<Layout title="Register">
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign up</Heading>
+          <Heading fontSize={'4xl'}>Add New Cashier</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -78,14 +81,6 @@ const Register : React.FC = () => {
             </FormControl>
 
             <Stack spacing={10}>
-						<Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}>
-								<Text color={'gray.600'}>
-									Already have an account? <Link color={'blue.400'} href="/login">Sign in</Link>
-								</Text>
-						</Stack>
               <Button
                 bg={'blue.400'}
                 color={'white'}
@@ -94,16 +89,16 @@ const Register : React.FC = () => {
                 }}
 								type="submit"
 								>
-                Sign in
+                Add
               </Button>
             </Stack>
           </Stack>
 				</form>	
         </Box>
       </Stack>
-	</Layout>
+			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), modalClose()}} title="Add Cashier">
+				Cashier Added!!!
+			</ModalComp>
 		</>
 	);
 }
-
-export default Register;

@@ -7,21 +7,33 @@ import {
   Text,
   Button,
   Stack,
+	Center,
+	SimpleGrid,
+	useDisclosure
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
+import userRoles from '../constants/userRoles';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import AdminNavBar from '../components/AdminNavBar';
+import ModalComp from '../components/ModalComp';
+import AddCashier from '../components/AddCashier';
 
 export default function AdminIndexPage({ user } : any) {
+	const {isOpen: isCashierOpen, onOpen: onCashierOpen, onClose: onCashierClose} = useDisclosure();
+	const router = useRouter();
+	useEffect(() => {
+		if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier')
+		} else if(userRoles.Customer == user.userRole){
+			router.replace('/Home')
+		}
+	}, []);
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-			<Layout authentication={user}>
+			<AdminNavBar>
       <Container maxW={'3xl'}>
         <Stack
           as={Box}
@@ -36,38 +48,29 @@ export default function AdminIndexPage({ user } : any) {
             <Text as={'span'} color={'green.400'}>
             </Text>
           </Heading>
-          <Text color={'gray.500'}>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis lorem sit amet lectus tristique, 
-					venenatis varius nibh blandit. Fusce faucibus varius lorem. 
-					Ut consequat, lacus eu ultricies suscipit, purus sem convallis purus, 
-					et fringilla magna lectus in purus. 
-					Morbi mollis tempor dolor, in interdum mauris pharetra sit amet. 
-					Aliquam dictum viverra dui, in pellentesque urna dignissim quis. 
-					Nam commodo venenatis suscipit. Vestibulum imperdiet lorem nec ex hendrerit dapibus. 
-					Integer at nisl felis.
-          </Text>
-          <Stack
-            direction={'column'}
-            spacing={3}
-            align={'center'}
-            alignSelf={'center'}
-            position={'relative'}>
-            <Button
-              colorScheme={'green'}
-              bg={'green.400'}
-              rounded={'full'}
-              px={6}
-              _hover={{
-                bg: 'green.500',
-              }}
-							href="/login"
-							>
-              Get Started
-            </Button>
-          </Stack>
+					<Box w="100%" h="800px">
+					<Center>
+						<SimpleGrid gap="20px">
+							<Container>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onCashierOpen}>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Cashier</Text></Center>
+								</Box>
+							</Container>
+
+							<Container>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button">
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Inventory</Text></Center>
+								</Box>
+							</Container>
+						</SimpleGrid>
+					</Center>
+				</Box>
         </Stack>
       </Container>
-		</Layout>
+			<ModalComp isModalOpen={isCashierOpen} onModalClose={onCashierClose} title="Add Cashier">
+				<AddCashier modalClose={onCashierClose}/>
+			</ModalComp>
+		</AdminNavBar>
     </>
   );
 }
