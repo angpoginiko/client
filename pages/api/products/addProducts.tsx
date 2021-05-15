@@ -12,18 +12,18 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				unitPrice,
 				productType,
 				quantity,
+				productDesc
 			}
 		} = req.body;
 		const existingProduct = await db.collection("products").findOne({productName});
 		if(existingProduct) return res.status(400).json({message: "Product already exist"});
 
 		const products = await db.collection("products").insertOne({
-			product: {
-				productName,
-				unitPrice,
-				productType,
-				quantity,
-			}
+			productName,
+			unitPrice,
+			productType,
+			quantity, 
+			productDesc
 		});
 		res.status(200).send(products.ops[0]);
 	} catch (error) {

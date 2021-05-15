@@ -1,16 +1,13 @@
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form'
-import Layout from '../components/Layout';
 import { Profile } from '../interfaces/index'
 import {
   Box,
   FormControl,
   FormLabel,
   Stack,
-  Link,
   Button,
   Heading,
-  Text,
   useColorModeValue,
 	Input,
 	FormErrorMessage,

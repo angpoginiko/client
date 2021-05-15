@@ -58,7 +58,7 @@ export default function AdminIndexPage({ user } : any) {
 							</Container>
 
 							<Container>
-								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button">
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={()=> router.push('/Inventory')}>
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Inventory</Text></Center>
 								</Box>
 							</Container>
