@@ -171,7 +171,7 @@ export default function CartProduct (
 						disabled={isAdded}
 						>
 							<Center>
-							<Icon as={MdAddBox} boxSize={{base: 2, md: 3, lg: 6}}/>
+								<Icon as={MdAddBox} boxSize={{base: 2, md: 3, lg: 6}}/>
 							</Center>
 						</Box>
 					</Center>

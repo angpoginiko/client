@@ -1,9 +1,8 @@
+import { ObjectId } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from '../../../../utils/mongodb'
-import { ObjectId } from 'mongodb'
-import { authentication } from '../../authentication';
 
-export default authentication (async function (req: NextApiRequest, res: NextApiResponse) 
+export default async function (req: NextApiRequest, res: NextApiResponse) 
 {
 	const {
 		query: { id },
@@ -14,12 +13,12 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 	switch(method){
 		case 'GET' :
 			try {
-				const products = await db.collection("products").findOne({_id});
+				const productType = await db.collection("productType").findOne({_id});
 
-				if(!products){
+				if(!productType){
 					return res.status(400).json({success: false})
 				}
-				res.status(201).send(products);
+				res.status(201).send(productType);
 			} catch (error) {
 				res.status(500);
 				res.json({error: "Server error"})
@@ -27,12 +26,12 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 			break;
 		case 'DELETE':
 			try {
-				const products = await db.collection("products").deleteOne({_id});
+				const productType = await db.collection("productType").deleteOne({_id});
 
-				if(!products){
+				if(!productType){
 					return res.status(400).json({success: false})
 				}
-				res.status(201).send(products);
+				res.status(201).send(productType);
 			} catch (error) {
 				res.status(500);
 				res.json({error: "Server error"})
@@ -41,18 +40,16 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 
 		case 'PUT':
 			try {
-				const products = await db.collection("products").findOneAndUpdate({_id}, req.body);
-				if(!products){
+				const productType = await db.collection("productType").findOneAndUpdate({_id}, req.body);
+				if(!productType){
 					return res.status(400).json({success: false})
 				}
-				res.status(201).send(products);
+				res.status(201).send(productType);
 			} catch (error) {
 				res.status(500);
 				res.json({error: "Server error"})
 			}
 			break;
 		default:
-
 	}
-	
-})
+}

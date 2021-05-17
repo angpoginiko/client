@@ -25,6 +25,7 @@ import ProductList from '../components/ProductList';
 import ModalComp from '../components/ModalComp';
 import AddProduct from '../components/AddProduct';
 import { useQuery } from 'react-query';
+import AdminNavBar from '../components/AdminNavBar';
 
 
 export default function Points({user} : any) {
@@ -46,7 +47,7 @@ export default function Points({user} : any) {
 	const { data: products, refetch } = useQuery<ProductType[]>("product", fetchCart);
   return (
     <>
-		<Layout authentication={user}>
+		<AdminNavBar authentication={user}>
 				<Box w="100%" height="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
@@ -60,26 +61,30 @@ export default function Points({user} : any) {
 										<Th>Quantity</Th>
 										<Th>Price</Th>
 										<Th>Product Type</Th>
+										<Th>Options</Th>
 									</Tr>
 								</Thead>
 								<Tbody>
 								{products && products.map((items: ProductType) => {
 										return(
-												<ProductList product={items} key={items._id}/>
+												<ProductList product={items} key={items._id} refetch={refetch}/>
 										)
 									})}
 								</Tbody>
 							</Table>
 
 							<HStack>
-							<Button onClick={()=>onOpen()}>
-								Add
-							</Button>
+								<Button onClick={()=>onOpen()}>
+									Add Product
+								</Button>
+								<Button>
+									Add Product Type
+								</Button>
 							</HStack>
 						</VStack>
 					</Center>
 				</Box>
-		</Layout>
+		</AdminNavBar>
 		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add Product">
 			<AddProduct modalClose={onClose} refresh={refetch}/>
 		</ModalComp>

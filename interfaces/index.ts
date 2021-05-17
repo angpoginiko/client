@@ -42,6 +42,11 @@ export type ProductType = {
 	productDesc?: string,
 }
 
+export type ProductTypeType = {
+	_id?: string,
+	name: string
+}
+
 export type CartProductType = {
 	productId: string | undefined | ObjectId,
 	quantity: number

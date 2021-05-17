@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from  '../../../utils/mongodb'
+import { authentication } from '../authentication';
 
 
-export default async function (req: NextApiRequest, res: NextApiResponse) 
+export default authentication(async function (req: NextApiRequest, res: NextApiResponse) 
 {
 	try {
 		const { db } = await connect();
@@ -31,4 +32,4 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		res.json({message: `${error}`})
 	}
 	
-}
+})

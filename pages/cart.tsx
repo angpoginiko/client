@@ -32,7 +32,7 @@ export default function Cart({user} : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const {onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose} = useDisclosure();
 	const fetchCart = async () => {
-		const res = await fetch(`api/cart/${user._id}`);
+		const res = await fetch(`api/cart/${user.id}`);
 		return res.json();
 	}
 	

@@ -12,7 +12,8 @@ import {
 	Input,
 	FormErrorMessage,
 	useDisclosure,
-	Select
+	Select,
+	Textarea
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
@@ -20,9 +21,10 @@ import { useQuery } from 'react-query';
 interface AddCashierProps {
 	modalClose: () => void;
 	refresh: () => void;
+	defaultValues: ProductType;
 }
 
-export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
+export default function AddCashier({ modalClose, refresh, defaultValues } : AddCashierProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
 	const onSubmit = async (formData: ProductType) => {
@@ -47,7 +49,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add Product</Heading>
+          <Heading fontSize={'4xl'}>Add New Cashier</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -58,19 +60,19 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
           <Stack spacing={4}>
             <FormControl id="productName" isInvalid={errors.productName && errors.productName.type === "required"}>
               <FormLabel>Name</FormLabel>
-              <Input name="productName" ref={register({required:true})} />
+              <Input name="productName" ref={register({required:true})} defaultValue={defaultValues.productName}/>
 							<FormErrorMessage>Name Required</FormErrorMessage>
             </FormControl>
 
 						<FormControl id="quantity" isInvalid={errors.quantity && errors.quantity.type === "required"}>
               <FormLabel>Quantity</FormLabel>
-              <Input name="quantity" ref={register({required:true})} />
+              <Input name="quantity" ref={register({required:true})} defaultValue={defaultValues.quantity}/>
 							<FormErrorMessage>Quantity Required</FormErrorMessage>
             </FormControl>
 
 						<FormControl id="unitPrice" isInvalid={errors.unitPrice && errors.unitPrice.type === "required"}>
               <FormLabel>Price</FormLabel>
-              <Input name="unitPrice" ref={register({required:true})}/>
+              <Input name="unitPrice" ref={register({required:true})} defaultValue={defaultValues.unitPrice}/>
 							<FormErrorMessage>Price Required</FormErrorMessage>
             </FormControl>
 
@@ -87,7 +89,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
 
 						<FormControl id="productDesc" isInvalid={errors.productDesc && errors.productDesc.type === "required"}>
               <FormLabel>Product Description</FormLabel>
-              <Input name="productDesc" ref={register({required:true})}/>
+              <Textarea name="productDesc" ref={register({required:true})} defaultValue={defaultValues.productDesc}/>
 							<FormErrorMessage>ProductType Description</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
@@ -99,7 +101,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
                 }}
 								type="submit"
 								>
-                Add
+                Save
               </Button>
             </Stack>
           </Stack>
@@ -107,7 +109,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
         </Box>
       </Stack>
 			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), modalClose(), refresh()}} title="Add Cashier">
-				Item Added!!!
+				Item Edited!!!
 			</ModalComp>
 		</>
 	);

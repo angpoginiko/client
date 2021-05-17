@@ -10,7 +10,6 @@ import {
 	Th,
 	Tr,
 	Tbody,
-	Tfoot,
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -39,7 +38,7 @@ export default function Points({user, purchases} : any) {
 							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }} color="white">
 								PURCHASE HISTORY
 							</Text>
-							<Table>
+							{purchases?.purchases ? <Table>
 								<Thead>
 									<Tr>
 										<Th>Name:</Th>
@@ -55,7 +54,11 @@ export default function Points({user, purchases} : any) {
 										)
 									})}
 								</Tbody>
-							</Table>
+							</Table>: 
+							<Text>
+								No Purchases Found. Scan Items Now!
+							</Text>
+							}
 						</VStack>
 					</Center>
 				</Box>	
