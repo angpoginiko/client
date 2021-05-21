@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import ModalComp from './ModalComp';
+import { User } from '../interfaces';
 
 const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
 	ssr: false,
@@ -29,7 +30,7 @@ const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'),
 type Props = {
   children?: ReactNode
   title?: string
-	authentication?: string
+	authentication?: User
 	isModalOpen?: boolean;
 	onModalClose?: () => void;
 }
@@ -93,6 +94,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 				<MenuList>
 					<MenuItem><Link href="#">Profile</Link></MenuItem>
 					<MenuItem><Link href="/points">Rewards</Link></MenuItem>
+					<MenuItem><Link href="/purchaseHistory">Purchase History</Link></MenuItem>
 					<MenuDivider />
 					<MenuItem><Link onClick={onLogout}>Logout</Link></MenuItem>
 				</MenuList>
@@ -134,7 +136,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					spacing={6}>
 						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {onClose(), onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication}/></ModalComp>
+						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {onClose(), onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>

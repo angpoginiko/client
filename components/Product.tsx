@@ -10,10 +10,11 @@ import {
 	Icon,
 	useDisclosure, 
 } from '@chakra-ui/react';
-import { CartProductType, ProductType } from '../interfaces';
+import { CartProductType, ProductType, ProductTypeType } from '../interfaces';
 import { MdAddBox,  MdRemove} from "react-icons/md";
 import React, { useState } from 'react';
 import ModalComp from './ModalComp';
+import { useQuery } from 'react-query';
 
 const IMAGE =
 'https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80';
@@ -54,6 +55,13 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 		await response.json();
 		onOpen();
 	}
+
+	const fetchProductType = async () => {
+		const res = await fetch(`api/productType/productTypes/${product?.productType}`);
+		return res.json();
+	}
+
+	const { data: productType } = useQuery<ProductTypeType>("productType", fetchProductType);
   return (
 		<>
 			<Center py={12}>
@@ -99,7 +107,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 					</Box>
 						<Stack pt={10} align={'center'}>
 							<Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
-								{product?.productType}
+								{productType?.name}
 							</Text>
 							<Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
 								{product?.productName}

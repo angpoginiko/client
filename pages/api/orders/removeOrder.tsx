@@ -33,7 +33,6 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 					{"customerId": customerId},
 					{ "$pull": { "product": { "productId" : productId } } }
 					)
-				
 				await db.collection("purchaseHistory").findOneAndUpdate(
 					{ "customerId" : customerId },
 					{ "$push" : { "purchases" :  {"productId": productId, "quantity": productQuantity, dateCheckout: new Date()} } }

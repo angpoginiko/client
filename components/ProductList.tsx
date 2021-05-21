@@ -24,22 +24,21 @@ interface PurchaseItemProps {
 export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
 	const [imageUrl, setImageUrl] = useState('');
 	const {isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose} = useDisclosure();
-
-	const fetchCart = async () => {
+	
+	const generateQrCode = async () => {
+		try {
+			const response = await QRCode.toDataURL(product._id!);
+			setImageUrl(response);
+		}catch (error) {
+			console.log(error);
+		}
+	}
+	const fetchProductType = async () => {
 		const res = await fetch(`api/productType/productTypes/${product.productType}`);
 		return res.json();
 	}
 
-	const generateQrCode = async () => {
-    try {
-			const response = await QRCode.toDataURL(product._id!);
-			setImageUrl(response);
-    }catch (error) {
-      console.log(error);
-    }
-  }
-	
-	const { data: productType } = useQuery<ProductTypeType>("productType", fetchCart);
+	const { data: productType } = useQuery<ProductTypeType>("productType", fetchProductType);
 	return (
 		<Tr>
 			<Td>

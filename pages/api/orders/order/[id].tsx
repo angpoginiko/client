@@ -44,7 +44,11 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 					if(!order){
 						return res.status(400).json({success: false})
 					}
+					console.log(order);
 					res.status(201).send({order,id});	
+				}
+				else{
+					res.status(500);
 				}
 			} catch (error) {
 				res.status(500);
