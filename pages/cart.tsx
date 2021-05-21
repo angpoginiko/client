@@ -39,7 +39,7 @@ export default function Cart({user} : any) {
 	const { data: cart, refetch } = useQuery<UserCart[]>("product", fetchCart);
 	const handleDelete = async (productId: string | undefined) => {
     if (productId){
-				await fetch (`/api/cart/${user._id}`, {
+				await fetch (`/api/cart/${user.id}`, {
 					method: "DELETE",
 					headers: {
 						"Content-Type": "application/json",
@@ -62,7 +62,7 @@ export default function Cart({user} : any) {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({id: user._id, items: productArray, total}),
+			body: JSON.stringify({id: user.id, items: productArray, total}),
 		});
 		const orderId = await response.json();
 		setOrderId(orderId);
