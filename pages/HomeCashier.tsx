@@ -47,12 +47,6 @@ export default function CashierIndexPage({ user } : any) {
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Checkout</Text></Center>
 								</Box>
 							</Container>
-
-							<Container>
-								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button">
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Encash</Text></Center>
-								</Box>
-							</Container>
 						</SimpleGrid>
 					</Center>
 				</Box>
