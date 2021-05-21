@@ -26,8 +26,7 @@ export default function OrderQRScanner() {
     console.log(error);
   }
   const handleScanWebCam = async (result: string | null) => {
-		console.log(result)
-    if (result){
+    if (result != null){
 				const response = await fetch (`/api/orders/order/${result}`, {
 					method: "GET",
 				})
@@ -48,7 +47,7 @@ export default function OrderQRScanner() {
 				body: JSON.stringify({data, id: orderId})
 			})
 			await response.json();
-	}
+		}
 	}
   return (
     <>
