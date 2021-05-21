@@ -7,10 +7,12 @@ import {
 	HStack,
 	useDisclosure
 } from "@chakra-ui/react"
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { MdPrint, MdEdit } from 'react-icons/md';
 import ModalComp from "./ModalComp";
 import EditProduct from './EditProduct'
 import { useQuery } from "react-query";
+import QRCode from 'qrcode';
+import { useState } from "react";
 
 
 interface PurchaseItemProps {
@@ -20,12 +22,22 @@ interface PurchaseItemProps {
 
 
 export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
+	const [imageUrl, setImageUrl] = useState('');
 	const {isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose} = useDisclosure();
 
 	const fetchCart = async () => {
 		const res = await fetch(`api/productType/productTypes/${product.productType}`);
 		return res.json();
 	}
+
+	const generateQrCode = async () => {
+    try {
+			const response = await QRCode.toDataURL(product._id!);
+			setImageUrl(response);
+    }catch (error) {
+      console.log(error);
+    }
+  }
 	
 	const { data: productType } = useQuery<ProductTypeType>("productType", fetchCart);
 	return (
@@ -47,7 +59,9 @@ export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
 					<Box as="button" onClick={onEditOpen}>
 						<Icon as={MdEdit} boxSize={{base: 2, md: 3, lg: 6}}/>
 					</Box>
-					Generate QR
+					<a href={imageUrl} download onClick={() => {generateQrCode(), imageUrl}} title="Download QR">
+						<Icon as={MdPrint} boxSize={{base: 2, md: 3, lg: 6}}/>
+					</a>
 				</HStack>
 			</Td>
 			<ModalComp isModalOpen={isEditOpen} onModalClose={onEditClose} title="">

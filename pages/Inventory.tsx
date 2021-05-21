@@ -24,12 +24,14 @@ import { ProductType } from '../interfaces';
 import ProductList from '../components/ProductList';
 import ModalComp from '../components/ModalComp';
 import AddProduct from '../components/AddProduct';
+import AddProductType from '../components/AddProductType';
 import { useQuery } from 'react-query';
 import AdminNavBar from '../components/AdminNavBar';
 
 
 export default function Points({user} : any) {
 	const {isOpen , onOpen, onClose} = useDisclosure();
+	const {isOpen: isProductTypeOpen , onOpen: onProductTypeOpen, onClose: onProductTypeClose} = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -77,7 +79,7 @@ export default function Points({user} : any) {
 								<Button onClick={()=>onOpen()}>
 									Add Product
 								</Button>
-								<Button>
+								<Button onClick={()=>onProductTypeOpen()}>
 									Add Product Type
 								</Button>
 							</HStack>
@@ -87,6 +89,9 @@ export default function Points({user} : any) {
 		</AdminNavBar>
 		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add Product">
 			<AddProduct modalClose={onClose} refresh={refetch}/>
+		</ModalComp>
+		<ModalComp isModalOpen={isProductTypeOpen} onModalClose={onProductTypeClose} title="Add Product Type">
+			<AddProductType modalClose={onProductTypeClose} refresh={refetch}/>
 		</ModalComp>
     </>
   );
