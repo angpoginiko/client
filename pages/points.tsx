@@ -33,9 +33,8 @@ export default function Points({points, user} : any) {
 		})
 		totalEarnedPoints = earnedPoints.reduce((a,b) => a + b, 0);
 	}
-	
 	earned.map((points) => {
-		if(new Date().getDate() <= new Date(points.dateAdded).getDate()){
+		if(new Date() >= new Date(points.expiryDate)){
 			totalExpiredPoints += points.points;
 		} else {
 			totalAvailablePoints += points.points;

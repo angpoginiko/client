@@ -44,8 +44,8 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 					if(!order){
 						return res.status(400).json({success: false})
 					}
-					console.log(order);
-					res.status(201).send({order,id});	
+					const customerId = order[0].customerId;
+					res.status(201).send({order, id, customerId});	
 				}
 				else{
 					res.status(500);

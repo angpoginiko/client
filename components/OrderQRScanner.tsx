@@ -13,14 +13,21 @@ import QrReader from 'react-qr-reader';
 import { UserCart } from '../interfaces';
 import ModalComp from './ModalComp';
 import ReceiptItem from './ReceiptItem';
+import AddPoints from './AddPoints'
 
+type DataType = {
+	 order: UserCart[],
+	 id: string,
+	 customerId: string
+}
 
 export default function OrderQRScanner() { 
 	const [totalPrice, setTotalPrice] = useState(0);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose } = useDisclosure();
+	const { onOpen: addPointsOpen, isOpen: isAddPointsOpen, onClose: addPointsClose } = useDisclosure();
 	const { onOpen: confirmModalOpen, isOpen: isConfirmModalOpen, onClose: confirmModalClose } = useDisclosure();
-	const [data, setData ] = useState<UserCart[]>();
+	const [data, setData ] = useState<DataType>();
 	const [orderId, setOrderId] = useState('');
   const handleErrorWebCam = (error : any) => {
     console.log(error);
@@ -28,10 +35,10 @@ export default function OrderQRScanner() {
   const handleScanWebCam = async (result: string | null) => {
     if (result != null){
 				const response = await fetch (`/api/orders/order/${result}`, {
-					method: "GET",
+					method: "GET", 
 				})
 				const orderData = await response.json();
-				setData(orderData.order);
+				setData(orderData);
 				setOrderId(result);
 				onOpen();
 				checkoutClose();
@@ -68,7 +75,7 @@ export default function OrderQRScanner() {
 						</Tr>
 					</Thead>
 					<Tbody>
-						{data && data.map((items) => {
+						{data?.order && data?.order.map((items) => {
 							return(
 									<ReceiptItem item={items} setTotalPrice={setTotalPrice} key={items.product.productId?.toString()}/>
 							)
@@ -88,6 +95,17 @@ export default function OrderQRScanner() {
 				}}>
 					Checkout
 				</Button>
+
+				<Button onClick={addPointsOpen}>
+					Add Points
+				</Button>
+
+				<Button onClick={() => {
+					onClose(),
+					checkoutOpen()
+				}}>
+					Checkout
+				</Button>
 			</>
 		</ModalComp>
 		<ModalComp isModalOpen={isCheckoutOpen} onModalClose={checkoutClose} title="">
@@ -96,7 +114,7 @@ export default function OrderQRScanner() {
 					Confirm Checkout?
 				</Text>
 				<Button onClick={() => {
-					handleCheckout(data!),
+					handleCheckout(data?.order!),
 					checkoutClose()
 					confirmModalOpen();
 					}}>
@@ -113,6 +131,10 @@ export default function OrderQRScanner() {
 					Checkout Confirmed
 				</Text>
 			</>
+		</ModalComp>
+
+		<ModalComp isModalOpen={isAddPointsOpen} onModalClose={addPointsClose} title="Add Points">
+			<AddPoints customerId={data?.customerId} onModalClose={addPointsClose}/>
 		</ModalComp>
 		</>
   );
