@@ -30,7 +30,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		]).toArray();
 		point.map((points) => {
 			res.status(200).send(points.point);
-		})
+		});
 	} catch(err) {
 		res.status(401).send({message: "youre not logged in"});
 	}

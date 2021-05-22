@@ -13,7 +13,7 @@ import {
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config'
-import { Point } from '../interfaces/index'
+import { EncashedPoints, Point } from '../interfaces/index'
 import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
 
@@ -21,11 +21,14 @@ import userRoles from '../constants/userRoles';
 export default function Points({points, user} : any) {
 	const router = useRouter();
 	const earned = points.earned as Array<Point>;
+	const encashed = points.encashed as Array<EncashedPoints>;
 	const redeemed = points.redeemed as Array<number>;
 	let totalEarnedPoints = 0;
 	let totalExpiredPoints = 0;
 	let totalAvailablePoints = 0;
+	let availablePoints = 0;
 	let totalRedeemedPoints = 0;
+	let totalEncashedPoints = 0;
 
 	if(earned.length >= 0){
 		const earnedPoints = earned.map((points) => {
@@ -34,12 +37,19 @@ export default function Points({points, user} : any) {
 		totalEarnedPoints = earnedPoints.reduce((a,b) => a + b, 0);
 	}
 	earned.map((points) => {
-		if(new Date() >= new Date(points.expiryDate)){
+		if(new Date() >= new Date(points.expiryDate!)){
 			totalExpiredPoints += points.points;
 		} else {
-			totalAvailablePoints += points.points;
+			availablePoints += points.points;
 		}
+		encashed?.map((encashed) => {
+			if(new Date() < new Date(points.expiryDate!)){
+				totalEncashedPoints += encashed.points;
+			} 
+		});
 	});
+
+	totalAvailablePoints = availablePoints - totalEncashedPoints;
 	
 	redeemed.length === 0 ? totalRedeemedPoints = 0 : redeemed.map((points) => {
 		totalRedeemedPoints += points;
@@ -102,7 +112,7 @@ export default function Points({points, user} : any) {
 
 							<Container>
 								<Box w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290">
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEarnedPoints}</Text></Center>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEncashedPoints}</Text></Center>
 								</Box>
 								<Center>
 									<Text>Enchased Points</Text>

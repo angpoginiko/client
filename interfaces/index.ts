@@ -27,10 +27,15 @@ export type Token =
 }
 
 export type Point = {
-	_id: string,
+	_id?: string,
   points: number,
-	dateAdded: Date,
-  expiryDate: Date
+	dateAdded?: Date,
+  expiryDate?: Date
+}
+
+export type EncashedPoints = {
+	points: number,
+	dateCheckout: Date
 }
 
 export type ProductType = {

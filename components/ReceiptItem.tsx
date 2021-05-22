@@ -5,16 +5,14 @@ import {
 } from "@chakra-ui/react"
 interface ReceiptProps {
 	item: UserCart;
-	setTotalPrice: (totalPrice: number) => void;
 }
 
-export default function ReceiptItem({ item, setTotalPrice } : ReceiptProps) {
+export default function ReceiptItem({ item } : ReceiptProps) {
 	let { productName, unitPrice } : ProductType = {}
 	item.productData.map((data) => {
 		productName = data.productName,
 		unitPrice = data.unitPrice
 	});
-	setTotalPrice(item.total!);
   return (
 		<Tr>
 			<Td>
@@ -23,7 +21,7 @@ export default function ReceiptItem({ item, setTotalPrice } : ReceiptProps) {
 			<Td>
 				{productName}
 			</Td>
-			<Td>
+			<Td isNumeric>
 				{item.product.quantity * unitPrice!}
 			</Td>
 		</Tr>

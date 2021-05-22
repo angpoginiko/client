@@ -7,7 +7,7 @@ import { UserCart } from '../../../interfaces';
 export default authentication(async function (req: NextApiRequest, res: NextApiResponse) 
 {
 	const { db } = await connect();
-	const {data, id} = req.body;
+	const {data, id, totalPrice, encashedPoints} = req.body;
 	const _id = new ObjectId(id);
 	try {
 		const userCart: UserCart[] = data;
@@ -35,8 +35,12 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 					)
 				await db.collection("purchaseHistory").findOneAndUpdate(
 					{ "customerId" : customerId },
-					{ "$push" : { "purchases" :  {"productId": productId, "quantity": productQuantity, dateCheckout: new Date()} } }
-				);
+					{ "$push" : { "purchases" :  {"cart": data, dateCheckout: new Date(), totalPrice, encashedPoints} } }
+				);	
+				await db.collection("customers").updateOne(
+					{ "_id" : customerId },
+					{ "$push" : { "point.encashed" :  { "points" : parseInt(encashedPoints), "dateCheckout": new Date()} } }
+				)
 		});
 		const products = await db.collection("orders").deleteOne({_id});
 		if(!products){

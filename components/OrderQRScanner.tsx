@@ -7,6 +7,7 @@ import { useDisclosure,
   Th,
 	Text,
 	Button,
+	Td,
  } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import QrReader from 'react-qr-reader';
@@ -14,6 +15,7 @@ import { UserCart } from '../interfaces';
 import ModalComp from './ModalComp';
 import ReceiptItem from './ReceiptItem';
 import AddPoints from './AddPoints'
+import Encashment from './Encashment';
 
 type DataType = {
 	 order: UserCart[],
@@ -22,13 +24,15 @@ type DataType = {
 }
 
 export default function OrderQRScanner() { 
-	const [totalPrice, setTotalPrice] = useState(0);
+	const [encashedPoints, setEncashedPoints] = useState<number|undefined>(undefined);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose } = useDisclosure();
 	const { onOpen: addPointsOpen, isOpen: isAddPointsOpen, onClose: addPointsClose } = useDisclosure();
+	const { onOpen: encashedPointsOpen, isOpen: isEncashedPointsOpen, onClose: encashedPointsClose } = useDisclosure();
 	const { onOpen: confirmModalOpen, isOpen: isConfirmModalOpen, onClose: confirmModalClose } = useDisclosure();
 	const [data, setData ] = useState<DataType>();
 	const [orderId, setOrderId] = useState('');
+	const totalPrice = data?.order[0]?.total;
   const handleErrorWebCam = (error : any) => {
     console.log(error);
   }
@@ -45,13 +49,14 @@ export default function OrderQRScanner() {
     }
   }
 	const handleCheckout = async(data: UserCart[]) => {
+		const points = encashedPoints || 0;
 		if (data){
 			const response = await fetch (`/api/orders/removeOrder`, {
 				method: "POST",	
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({data, id: orderId})
+				body: JSON.stringify({data, id: orderId, encashedPoints: points, totalPrice: totalPrice})
 			})
 			await response.json();
 		}
@@ -77,15 +82,22 @@ export default function OrderQRScanner() {
 					<Tbody>
 						{data?.order && data?.order.map((items) => {
 							return(
-									<ReceiptItem item={items} setTotalPrice={setTotalPrice} key={items.product.productId?.toString()}/>
+									<ReceiptItem item={items} key={items.product.productId?.toString()}/>
 							)
 						})}
 					</Tbody>
 					<Tfoot>
+						{encashedPoints && 
+							<Tr>
+								<Th/>
+								<Td>Encashed Points: </Td>
+								<Td isNumeric> -{encashedPoints}</Td>
+							</Tr>
+						}
 						<Tr>
 							<Th/>
 							<Th/>
-							<Th isNumeric>Total: P{totalPrice}</Th>
+							<Th isNumeric>Total: P{encashedPoints ? totalPrice!-encashedPoints : totalPrice}</Th>
 						</Tr>
 					</Tfoot>
 				</Table>
@@ -100,11 +112,8 @@ export default function OrderQRScanner() {
 					Add Points
 				</Button>
 
-				<Button onClick={() => {
-					onClose(),
-					checkoutOpen()
-				}}>
-					Checkout
+				<Button onClick={encashedPointsOpen}>
+					Encash Points
 				</Button>
 			</>
 		</ModalComp>
@@ -135,6 +144,10 @@ export default function OrderQRScanner() {
 
 		<ModalComp isModalOpen={isAddPointsOpen} onModalClose={addPointsClose} title="Add Points">
 			<AddPoints customerId={data?.customerId} onModalClose={addPointsClose}/>
+		</ModalComp>
+
+		<ModalComp isModalOpen={isEncashedPointsOpen} onModalClose={encashedPointsClose} title="Add Points">
+			<Encashment customerId={data?.customerId} onModalClose={encashedPointsClose} setPoints={setEncashedPoints}/>
 		</ModalComp>
 		</>
   );
