@@ -1,17 +1,14 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
-import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
 import Head from 'next/head';
 import {
   Box,
   Flex,
   HStack,
-  Button,
   useColorModeValue,
   Stack,
 	Link,
 } from '@chakra-ui/react';
-import dynamic from 'next/dynamic';
 
 type Props = {
   children?: ReactNode

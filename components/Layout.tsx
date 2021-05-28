@@ -92,7 +92,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					/>
 				</MenuButton>
 				<MenuList>
-					<MenuItem><Link href="#">Profile</Link></MenuItem>
+					<MenuItem><Link href="/profile">Profile</Link></MenuItem>
 					<MenuItem><Link href="/points">Rewards</Link></MenuItem>
 					<MenuItem><Link href="/purchaseHistory">Purchase History</Link></MenuItem>
 					<MenuDivider />
