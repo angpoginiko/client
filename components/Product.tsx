@@ -83,7 +83,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 							pos: 'absolute',
 							top: 5,
 							left: 0,
-							backgroundImage: `url(${product?.image.toString()})`,
+							backgroundImage: `url(${product?.image?.toString()})`,
 							filter: 'blur(15px)',
 							zIndex: -1,
 						}}
