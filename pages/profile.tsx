@@ -1,13 +1,15 @@
 import Layout from '../components/Layout'
 import {
-  Box,
   Heading,
-  Container,
+  Avatar,
+  Box,
+  Center,
   Text,
   Stack,
-	Icon,
-	Center,
-	useDisclosure
+  Button,
+  Link,
+  Badge,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -17,7 +19,6 @@ import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
 
 export default function ProfilePage({ user, profile } : any) {
-	const { onOpen, isOpen, onClose } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -27,54 +28,79 @@ export default function ProfilePage({ user, profile } : any) {
 		}
 	}, [user]);
   return (
-    <>
-			<Layout authentication={user} isModalOpen={isOpen} onModalClose={onClose}>
-      <Container maxW={'3xl'}>
-        <Stack
-          as={Box}
+		<Layout title="Profile" authentication={user}>
+    <Center py={6}>
+      <Box
+        maxW={'320px'}
+        w={'full'}
+        bg={useColorModeValue('white', 'gray.900')}
+        boxShadow={'2xl'}
+        rounded={'lg'}
+        p={6}
+        textAlign={'center'}>
+        <Avatar
+          size={'xl'}
+          src={profile.image || ""}
+          alt={'Avatar Alt'}
+          mb={4}
+          pos={'relative'}
+        />
+        <Heading fontSize={'2xl'} fontFamily={'body'}>
+          {profile.name}
+        </Heading>
+        <Text fontWeight={600} color={'gray.500'} mb={4}>
+					{profile.username}
+					<p>
+						{profile.email}
+					</p>
+        </Text>
+        <Text
           textAlign={'center'}
-          spacing={{ base: 8, md: 14 }}
-          py={{ base: 20, md: 36 }}>
-						<Box>
-							<Box>
-								Name: {profile.name} 
-							</Box>
+          color={useColorModeValue('gray.700', 'gray.400')}
+          px={3}>
+          	Address: {profile.address || "N/A"}
+					<p>
+						Gender: {profile.gender || "N/A"}
+					</p>
+					<p>
+						Mobile Number: {profile.mobileNumber || "N/A"}
+					</p>
+					<p>
+						TIN: {profile.tin || "N/A"}
+					</p>
+        </Text>
 
-							<Box>
-								Username: {profile.username}							
-							</Box> 
-
-							<Box>
-								Email: {profile.email}
-							</Box>
-
-							<Box>
-								Address: {profile.address || "N/A"}
-							</Box>
-
-							<Box>
-								Gender: {profile.gender || "N/A"}
-							</Box>
-
-							<Box>
-								Mobile Number: {profile.mobileNumber || "N/A"}
-							</Box>
-
-							<Box>
-								TIN: {profile.tin || "N/A"}
-							</Box>
-						</Box>
-          <Stack
-            direction={'column'}
-            spacing={3}
-            align={'center'}
-            alignSelf={'center'}
-            position={'relative'}>
-          </Stack>
+        <Stack mt={8} direction={'row'} spacing={4}>
+          <Button
+            flex={1}
+            fontSize={'sm'}
+            rounded={'full'}
+            _focus={{
+              bg: 'gray.200',
+            }}>
+            Edit Password
+          </Button>
+          <Button
+            flex={1}
+            fontSize={'sm'}
+            rounded={'full'}
+            bg={'blue.400'}
+            color={'white'}
+            boxShadow={
+              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+            }
+            _hover={{
+              bg: 'blue.500',
+            }}
+            _focus={{
+              bg: 'blue.500',
+            }}>
+            Edit Profile
+          </Button>
         </Stack>
-      </Container>
+      </Box>
+    </Center>
 		</Layout>
-    </>
   );
 }
 

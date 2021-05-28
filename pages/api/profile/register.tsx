@@ -30,6 +30,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				email,
 				name,
 				userRole: 0,
+				image: ''
 			},
 			point: {
 				earned: [],

@@ -52,7 +52,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
 				onOpen();
       }
     }
-    reader.readAsDataURL(image[0] as Blob);
+    reader.readAsDataURL(image![0] as Blob);
 	}
 	const fetchCart = async () => {
 		const res = await fetch(`api/productType/getProductTypes`);
