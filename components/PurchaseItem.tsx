@@ -2,6 +2,7 @@ import { ProductType, Purchases } from "../interfaces";
 import {
   Tr,
   Td,
+	Link
 } from "@chakra-ui/react"
 import { useQuery } from "react-query";
 interface PurchaseItemProps {
@@ -15,20 +16,12 @@ export default function ReceiptItem({ item } : PurchaseItemProps) {
 	}
 	
 	const { data: product } = useQuery<ProductType>("product", fetchCart);
-	const itemName = product?.productName;
   return (
 		<Tr>
 			<Td>
-				{itemName}
-			</Td>
-			<Td>
-				{item.quantity}
-			</Td>
-			<Td>
-				{(item.quantity * product?.unitPrice!).toString()}
-			</Td>
-			<Td>
-				{new Date(item.dateCheckout).toDateString()}
+				<Link>
+					{new Date(item.dateCheckout).toDateString()}
+				</Link>
 			</Td>
 		</Tr>
   );

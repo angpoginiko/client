@@ -28,7 +28,8 @@ export default function Points({user, purchases} : any) {
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin')
 		}
-	}, [user])
+	}, [user]);
+	console.log(purchases.purchases)
   return (
     <>
 		<Layout authentication={user}>
@@ -38,12 +39,9 @@ export default function Points({user, purchases} : any) {
 							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }} color="white">
 								PURCHASE HISTORY
 							</Text>
-							{purchases?.purchases ? <Table>
+							{purchases.purchases.length > 0 ? <Table>
 								<Thead>
 									<Tr>
-										<Th>Name:</Th>
-										<Th>Quantity</Th>
-										<Th isNumeric>Price</Th>
 										<Th>Date</Th>
 									</Tr>
 								</Thead>
