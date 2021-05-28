@@ -30,7 +30,7 @@ export default function CartProduct (
 		refresh,
 		totalPrice,
 		setTotalPrice } : CartProductProps) {
-	let { productName, unitPrice, productDesc  } : ProductType = {}
+	let { productName, unitPrice, productDesc, image  } : ProductType = {}
 	const [quantity, setQuantity] = useState(userCart.product.quantity);
 	const [isAdded, setIsAdded] = useState(false);
 	const increamentQuantity = () => {
@@ -48,6 +48,7 @@ export default function CartProduct (
 		productName = data.productName
 		unitPrice = data.unitPrice
 		productDesc = data.productDesc
+		image = data.image
 	});
 	
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -99,7 +100,7 @@ export default function CartProduct (
 			<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
 				<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
 					<Center>
-						<Image boxSize={{sm: 70, md: 90, lg: 120}} src="https://www.the-pasta-project.com/wp-content/uploads/2017/08/Fettuccine-640x433.jpg" />
+						<Image boxSize={{sm: 70, md: 90, lg: 120}} src={image?.toString()} />
 					</Center>
 				</Box>
 

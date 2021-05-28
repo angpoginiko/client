@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
+import { useState } from 'react';
 
 interface AddCashierProps {
 	modalClose: () => void;
@@ -26,6 +27,7 @@ interface AddCashierProps {
 
 export default function AddCashier({ modalClose, refresh, defaultValues } : AddCashierProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
+	const [image, setImage] = useState<string | ArrayBuffer | null>(defaultValues.image.toString());
 	const { register, handleSubmit, errors } = useForm();
 	const onSubmit = async (formData: ProductType) => {
 		const response = await fetch("/api/products/addProducts", {
@@ -43,8 +45,17 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 		const res = await fetch(`api/productType/getProductTypes`);
 		return res.json();
 	}
-	
 	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchCart);
+
+	const imageHandler = (e) => {
+    const reader = new FileReader();
+    reader.onload = () =>{
+      if(reader.readyState === 2){
+        setImage(reader.result)
+      }
+    }
+    reader.readAsDataURL(e.target.files[0])
+  };
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -78,10 +89,9 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 
             <FormControl id="productType" isInvalid={errors.productType && errors.productType.type === "required"}>
               <FormLabel>Product Type</FormLabel>
-              <Select placeholder="--Product Types--">
+              <Select name="productType" placeholder="--Product Types--" ref={register({required:true})} defaultValue={defaultValues.productType}>
 								{productTypes && productTypes.map((productType) => {
-									console.log(productType)
-									return (<option value={productType._id}>{productType.name}</option>);
+									return (<option value={productType._id} key={productType.name}>{productType.name}</option>);
 								})}
 							</Select>
 							<FormErrorMessage>ProductType Required</FormErrorMessage>
@@ -91,6 +101,13 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
               <FormLabel>Product Description</FormLabel>
               <Textarea name="productDesc" ref={register({required:true})} defaultValue={defaultValues.productDesc}/>
 							<FormErrorMessage>ProductType Description</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="image" isInvalid={errors.image && errors.image.type === "required"}>
+              <FormLabel>Image Required</FormLabel>
+							<img src={image?.toString()} alt="" id="img" className="img" />
+              <input type="file" name="image" ref={register({required:true})} onChange={imageHandler} accept="image/*"/>
+							<FormErrorMessage>ProductType Description Required</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
               <Button

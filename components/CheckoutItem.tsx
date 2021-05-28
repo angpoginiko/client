@@ -13,12 +13,12 @@ interface CartProductProps{
 }
 
 export default function CheckoutItem ({ userCart } : CartProductProps) {
-	let { productName, unitPrice  } : ProductType = {}
+	let { productName, unitPrice, image  } : ProductType = {}
 	userCart.productData.map((data) => {
 		productName = data.productName
 		unitPrice = data.unitPrice
+		image = data?.image
 	});
-	
 	return(
 		<>
 			<HStack 
@@ -33,7 +33,7 @@ export default function CheckoutItem ({ userCart } : CartProductProps) {
 				<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100}} width={{base: 97.5, sm: 175.5, md: 234, lg: 225.6}}>
 					<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
 						<Center>
-							<Image boxSize={{sm: 70, md: 90}} src="https://www.the-pasta-project.com/wp-content/uploads/2017/08/Fettuccine-640x433.jpg" />
+							<Image boxSize={{sm: 70, md: 90}} src={image?.toString()} />
 						</Center>
 					</Box>
 

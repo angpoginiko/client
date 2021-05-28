@@ -8,7 +8,7 @@ interface ReceiptProps {
 }
 
 export default function ReceiptItem({ item } : ReceiptProps) {
-	let { productName, unitPrice } : ProductType = {}
+	let { productName, unitPrice, image } : ProductType = {}
 	item.productData.map((data) => {
 		productName = data.productName,
 		unitPrice = data.unitPrice

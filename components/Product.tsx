@@ -15,11 +15,6 @@ import { MdAddBox,  MdRemove} from "react-icons/md";
 import React, { useState } from 'react';
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
-
-const IMAGE =
-'https://images.unsplash.com/photo-1518051870910-a46e30d9db16?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1350&q=80';
-
-
 interface ProductProps {
 	product: ProductType | undefined
 	closeProduct: () => void
@@ -88,7 +83,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 							pos: 'absolute',
 							top: 5,
 							left: 0,
-							backgroundImage: `url(${IMAGE})`,
+							backgroundImage: `url(${product?.image.toString()})`,
 							filter: 'blur(15px)',
 							zIndex: -1,
 						}}
@@ -102,7 +97,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 							height={230}
 							width={282}
 							objectFit={'cover'}
-							src={IMAGE}
+							src={product?.image.toString()}
 						/>
 					</Box>
 						<Stack pt={10} align={'center'}>

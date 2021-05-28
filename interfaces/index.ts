@@ -45,6 +45,7 @@ export type ProductType = {
 	productType?: string,
 	quantity?: number,
 	productDesc?: string,
+	image?: FileList | string
 }
 
 export type ProductTypeType = {

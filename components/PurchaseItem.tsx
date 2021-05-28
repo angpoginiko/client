@@ -16,7 +16,6 @@ export default function ReceiptItem({ item } : PurchaseItemProps) {
 	
 	const { data: product } = useQuery<ProductType>("product", fetchCart);
 	const itemName = product?.productName;
-	console.log(product?.productName);
   return (
 		<Tr>
 			<Td>
