@@ -1,28 +1,67 @@
-import { ProductType, Purchases } from "../interfaces";
+import { Purchases } from "../interfaces";
 import {
   Tr,
   Td,
-	Link
+	Link,
+	Table,
+	Thead,
+	Tbody,
+	Th,
+	Tfoot,
+	useDisclosure
 } from "@chakra-ui/react"
-import { useQuery } from "react-query";
+import ModalComp from './ModalComp'
+import ReceiptItem from './ReceiptItem'
+
 interface PurchaseItemProps {
 	item: Purchases;
 }
 
-export default function ReceiptItem({ item } : PurchaseItemProps) {
-	const fetchCart = async () => {
-		const res = await fetch(`api/products/product/${item.productId}`);
-		return res.json();
-	}
-	
-	const { data: product } = useQuery<ProductType>("product", fetchCart);
+export default function PurchaseItem({ item } : PurchaseItemProps) {
+	const {isOpen, onOpen, onClose} = useDisclosure();
   return (
+	<>
 		<Tr>
 			<Td>
-				<Link>
+				<Link onClick={onOpen}>
 					{new Date(item.dateCheckout).toDateString()}
 				</Link>
 			</Td>
 		</Tr>
+		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add to Cart">
+			<>
+				<Table>
+					<Thead>
+						<Tr>
+							<Th>Quantity:</Th>
+							<Th>Description</Th>
+							<Th isNumeric>Price</Th>
+						</Tr>
+					</Thead>
+					<Tbody>
+						{item?.cart && item?.cart.map((items) => {
+							return(
+									<ReceiptItem item={items} key={items.product.productId?.toString()}/>
+							)
+						})}
+					</Tbody>
+					<Tfoot>
+						{item.encashedPoints || item.encashedPoints > 0 && 
+							<Tr>
+								<Th/>
+								<Td>Encashed Points: </Td>
+								<Td isNumeric> {item.encashedPoints}</Td>
+							</Tr>
+						}
+						<Tr>
+							<Th/>
+							<Th/>
+							<Th isNumeric>Total: P{item?.encashedPoints ? item?.totalPrice-item?.totalPrice : item?.totalPrice}</Th>
+						</Tr>
+					</Tfoot>
+				</Table>
+			</>
+		</ModalComp>
+		</>
   );
 }

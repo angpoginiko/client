@@ -22,9 +22,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 
 		const products = await db.collection("products").insertOne({
 			productName,
-			unitPrice,
+			unitPrice: parseInt(unitPrice),
 			productType,
-			quantity, 
+			quantity: parseInt(quantity), 
 			productDesc,
 			image
 		});

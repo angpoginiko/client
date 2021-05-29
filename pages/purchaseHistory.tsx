@@ -29,7 +29,6 @@ export default function Points({user, purchases} : any) {
 			router.replace('/HomeAdmin')
 		}
 	}, [user]);
-	console.log(purchases.purchases)
   return (
     <>
 		<Layout authentication={user}>

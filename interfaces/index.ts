@@ -69,7 +69,8 @@ export type UserCart = {
 }
 
 export type Purchases = {
-	productId: string | undefined | ObjectId,
-	quantity: number
+	cart: UserCart[],
+	encashedPoints: number
 	dateCheckout: Date;
+	totalPrice: number;
 }
