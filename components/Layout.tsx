@@ -136,7 +136,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					spacing={6}>
 						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {onClose ?? onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
+						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {Boolean(onClose) ? onClose() : onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>
