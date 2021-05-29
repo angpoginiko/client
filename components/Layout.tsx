@@ -87,7 +87,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					<Avatar
 						size={'sm'}
 						src={
-							'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
+							''
 						}
 					/>
 				</MenuButton>
@@ -136,7 +136,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					spacing={6}>
 						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {onClose(), onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
+						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {onClose ?? onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>
