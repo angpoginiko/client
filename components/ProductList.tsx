@@ -13,6 +13,7 @@ import EditProduct from './EditProduct'
 import { useQuery } from "react-query";
 import QRCode from 'qrcode';
 import { useState } from "react";
+import useCase from "../hooks/useCase";
 
 
 interface PurchaseItemProps {
@@ -38,6 +39,11 @@ export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
 		return res.json();
 	}
 
+	const toPascalCase = (text: string | undefined) => {
+		const newString = text?.replace(/\w+/g,
+			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
+		return newString;
+	}
 	const { data: productType } = useQuery<ProductTypeType>("productType", fetchProductType);
 	return (
 		<Tr>
@@ -51,11 +57,11 @@ export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
 				{product.unitPrice?.toString()}
 			</Td>
 			<Td>
-				{productType?.name}
+			{toPascalCase(productType?.name!)}
 			</Td>
 			<Td>
 				<HStack>
-					<Box as="button" onClick={onEditOpen}>
+					<Box as="button" onClick={onEditOpen} title="Edit Product">
 						<Icon as={MdEdit} boxSize={{base: 2, md: 3, lg: 6}}/>
 					</Box>
 					<a href={imageUrl} download onClick={() => {generateQrCode(), imageUrl}} title="Download QR">

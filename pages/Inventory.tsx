@@ -46,6 +46,7 @@ export default function Points({user} : any) {
 		return res.json();
 	}
 	
+	
 	const { data: products, refetch } = useQuery<ProductType[]>("product", fetchCart);
   return (
     <>

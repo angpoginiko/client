@@ -56,6 +56,12 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
     }
     reader.readAsDataURL(e.target.files[0])
   };
+
+	const toPascalCase = (text: string | undefined) => {
+		const newString = text?.replace(/\w+/g,
+			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
+		return newString;
+	}
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -91,7 +97,7 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
               <FormLabel>Product Type</FormLabel>
               <Select name="productType" placeholder="--Product Types--" ref={register({required:true})} defaultValue={defaultValues.productType}>
 								{productTypes && productTypes.map((productType) => {
-									return (<option value={productType._id} key={productType.name}>{productType.name}</option>);
+									return (<option value={productType._id} key={productType.name}>{toPascalCase(productType.name)}</option>);
 								})}
 							</Select>
 							<FormErrorMessage>ProductType Required</FormErrorMessage>

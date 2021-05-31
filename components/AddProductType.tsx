@@ -46,7 +46,7 @@ export default function AddProduct({ modalClose, refresh } : AddProductType) {
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add New Cashier</Heading>
+          <Heading fontSize={'4xl'}>Add Product Type</Heading>
         </Stack>
         <Box
           rounded={'lg'}

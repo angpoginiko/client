@@ -16,9 +16,11 @@ import { useEffect } from 'react';
 import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
 import { MdCenterFocusStrong } from 'react-icons/md';
+import { useState } from 'react';
 
 export default function AuthIndexPage({ user } : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
+	const [frontPageClicker, setFrontPageClicker] = useState(false);
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -27,9 +29,14 @@ export default function AuthIndexPage({ user } : any) {
 			router.replace('/HomeAdmin')
 		}
 	}, [user]);
+
+	const onModalClose = () => {
+		setFrontPageClicker(false);
+		onClose();
+	}
   return (
     <>
-			<Layout authentication={user} isModalOpen={isOpen} onModalClose={onClose}>
+			<Layout authentication={user} isModalOpen={isOpen} onModalClose={onModalClose} frontPageClick={frontPageClicker}>
       <Container maxW={'3xl'}>
         <Stack
           as={Box}
@@ -38,7 +45,7 @@ export default function AuthIndexPage({ user } : any) {
           py={{ base: 20, md: 36 }}>
 					<Center>
 					<Box as='button'>
-          	<Icon onClick={onOpen} as={MdCenterFocusStrong} boxSize="350px"/>
+          	<Icon onClick={()=> {onOpen(), setFrontPageClicker(true)}} as={MdCenterFocusStrong} boxSize="350px"/>
 					</Box>
 					</Center>
 					<Heading

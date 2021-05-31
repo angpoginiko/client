@@ -54,7 +54,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
     }
     reader.readAsDataURL(image![0] as Blob);
 	}
-	const fetchCart = async () => {
+	const fetchProductType = async () => {
 		const res = await fetch(`api/productType/getProductTypes`);
 		return res.json();
 	}
@@ -68,8 +68,14 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
     }
     reader.readAsDataURL(e.target.files[0])
   };
+
+	const toPascalCase = (text: string | undefined) => {
+		const newString = text?.replace(/\w+/g,
+			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
+		return newString;
+	}
 	
-	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchCart);
+	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchProductType);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -117,7 +123,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
               <FormLabel>Product Type</FormLabel>
               <Select name="productType" placeholder="--Product Types--" ref={register({required:true})}>
 								{productTypes && productTypes.map((productType) => {
-									return (<option value={productType._id} key={productType.name}>{productType.name}</option>);
+									return (<option value={productType._id} key={productType.name}>{toPascalCase(productType.name)}</option>);
 								})}
 							</Select>
 							<FormErrorMessage>ProductType Required</FormErrorMessage>

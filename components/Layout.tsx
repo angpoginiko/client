@@ -33,10 +33,11 @@ type Props = {
 	authentication?: User
 	isModalOpen?: boolean;
 	onModalClose?: () => void;
+	frontPageClick?: boolean;
 }
 
 
-const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose }: Props) => {
+const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose, frontPageClick }: Props) => {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const Router = useRouter();
 	const [auth, setAuth] = useState(!!authentication);
@@ -100,8 +101,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 				</MenuList>
 			</Menu>
 		</>
-	)
-	
+	);
 	return(
 		<>
 		<Head>
@@ -136,7 +136,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					spacing={6}>
 						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {Boolean(onClose) ? onClose() : onModalClose!()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
+						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {frontPageClick ? onModalClose!() : onClose()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>

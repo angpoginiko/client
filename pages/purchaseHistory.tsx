@@ -32,7 +32,7 @@ export default function Points({user, purchases} : any) {
   return (
     <>
 		<Layout authentication={user}>
-				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
+				<Box w="100%" h="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
 							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }} color="white">

@@ -118,12 +118,12 @@ export default function Cart({user} : any) {
 								return(
 										<div key={userCart.product.productId?.toString()}>
 											<CartProduct userCart={userCart} 
-											modalOpen={onOpen} 
-											checkoutProduct={checkoutItems} 
-											setCheckoutProduct={(product: UserCart[]) => setCheckoutItems(product)}
-											refresh={refetch}
-											setTotalPrice={setTotal}
-											totalPrice={total}
+												modalOpen={onOpen} 
+												checkoutProduct={checkoutItems} 
+												setCheckoutProduct={(product: UserCart[]) => setCheckoutItems(product)}
+												refresh={refetch}
+												setTotalPrice={setTotal}
+												totalPrice={total}
 											/>
 											<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
 												<Flex>

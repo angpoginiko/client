@@ -49,15 +49,9 @@ export default function ProfilePage({ user, profile } : any) {
           {profile.name}
         </Heading>
         <Text fontWeight={600} color={'gray.500'} mb={4}>
-					{profile.username}
-					<p>
-						{profile.email}
-					</p>
+					{profile.username}<br/>
+					{profile.email}
         </Text>
-        <Text
-          textAlign={'center'}
-          color={useColorModeValue('gray.700', 'gray.400')}
-          px={3}>
           	Address: {profile.address || "N/A"}
 					<p>
 						Gender: {profile.gender || "N/A"}
@@ -68,7 +62,6 @@ export default function ProfilePage({ user, profile } : any) {
 					<p>
 						TIN: {profile.tin || "N/A"}
 					</p>
-        </Text>
 
         <Stack mt={8} direction={'row'} spacing={4}>
           <Button

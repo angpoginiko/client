@@ -46,7 +46,7 @@ export default function PurchaseItem({ item } : PurchaseItemProps) {
 						})}
 					</Tbody>
 					<Tfoot>
-						{item.encashedPoints || item.encashedPoints > 0 && 
+						{(item.encashedPoints || item.encashedPoints > 0) && 
 							<Tr>
 								<Th/>
 								<Td>Encashed Points: </Td>
