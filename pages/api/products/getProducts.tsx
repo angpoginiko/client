@@ -7,7 +7,15 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 {
 	try {
 		const { db } = await connect();
-		const products = await db.collection("products").find().toArray()
+		const products = await db.collection("products").aggregate([
+			{"$lookup" : {
+				"from" : "productType",
+				"localField" : "productType",
+				"foreignField" : "_id",
+				"as" : "productType"
+			}},
+			{"$unwind" : "$productType"}
+		]).toArray();
 		res.status(201).send(products);
 	} catch (error) {
 		res.status(500);

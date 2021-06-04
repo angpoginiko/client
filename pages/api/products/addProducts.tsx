@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from  '../../../utils/mongodb'
 import { authentication } from '../authentication';
@@ -17,13 +18,16 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			},
 			image,
 		} = req.body;
+
+		const productTypeId = new ObjectId(productType);
+		
 		const existingProduct = await db.collection("products").findOne({productName});
 		if(existingProduct) return res.status(400).json({message: "Product already exist"});
 
 		const products = await db.collection("products").insertOne({
 			productName,
 			unitPrice: parseInt(unitPrice),
-			productType,
+			productType: productTypeId,
 			quantity: parseInt(quantity), 
 			productDesc,
 			image

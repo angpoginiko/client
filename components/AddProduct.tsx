@@ -132,7 +132,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
 						<FormControl id="productDesc" isInvalid={errors.productDesc && errors.productDesc.type === "required"}>
               <FormLabel>Product Description</FormLabel>
               <Textarea name="productDesc" ref={register({required:true})}/>
-							<FormErrorMessage>ProductType Description</FormErrorMessage>
+							<FormErrorMessage>Product Description is Required</FormErrorMessage>
             </FormControl>
 
 
@@ -140,7 +140,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
               <FormLabel>Image Required</FormLabel>
 							<img src={image?.toString()} alt="" id="img" className="img" />
               <input type="file" name="image" ref={register({required:true})} onChange={imageHandler} accept="image/*"/>
-							<FormErrorMessage>ProductType Description Required</FormErrorMessage>
+							<FormErrorMessage>Product Image is Required</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
               <Button

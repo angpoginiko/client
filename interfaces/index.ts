@@ -42,7 +42,7 @@ export type ProductType = {
 	_id?: string,
 	productName?: string,
 	unitPrice?: number,
-	productType?: string | ProductTypeType,
+	productType?: ProductTypeType,
 	quantity?: number,
 	productDesc?: string,
 	image?: FileList | string

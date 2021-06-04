@@ -50,13 +50,6 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 		await response.json();
 		onOpen();
 	}
-
-	const fetchProductType = async () => {
-		const res = await fetch(`api/productType/productTypes/${product?.productType}`);
-		return res.json();
-	}
-
-	const { data: productType } = useQuery<ProductTypeType>("productType", fetchProductType);
   return (
 		<>
 			<Center py={12}>
@@ -97,12 +90,12 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 							height={230}
 							width={282}
 							objectFit={'cover'}
-							src={product?.image.toString()}
+							src={product?.image!.toString()}
 						/>
 					</Box>
 						<Stack pt={10} align={'center'}>
 							<Text color={'gray.500'} fontSize={'sm'} textTransform={'uppercase'}>
-								{productType?.name}
+								{product?.productType?.name}
 							</Text>
 							<Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
 								{product?.productName}
@@ -113,7 +106,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 								</Text>
 								<Text color={'gray.600'}>
 								<Button onClick={() => increamentQuantity()}><Icon as={MdAddBox}/></Button>
-								{quantity}
+									{quantity}
 								<Button onClick={() => decrementQuantity()}><Icon as={MdRemove}/></Button>
 									{`${product?.quantity} remaining`}
 								</Text>

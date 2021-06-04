@@ -10,11 +10,8 @@ import {
 import { MdPrint, MdEdit } from 'react-icons/md';
 import ModalComp from "./ModalComp";
 import EditProduct from './EditProduct'
-import { useQuery } from "react-query";
 import QRCode from 'qrcode';
 import { useState } from "react";
-import useCase from "../hooks/useCase";
-
 
 interface PurchaseItemProps {
 	product: ProductType;
@@ -34,17 +31,12 @@ export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
 			console.log(error);
 		}
 	}
-	const fetchProductType = async () => {
-		const res = await fetch(`api/productType/productTypes/${product.productType}`);
-		return res.json();
-	}
 
 	const toPascalCase = (text: string | undefined) => {
 		const newString = text?.replace(/\w+/g,
 			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
 		return newString;
 	}
-	const { data: productType } = useQuery<ProductTypeType>("productType", fetchProductType);
 	return (
 		<Tr>
 			<Td>
@@ -57,7 +49,7 @@ export default function ReceiptItem({ product, refetch } : PurchaseItemProps) {
 				{product.unitPrice?.toString()}
 			</Td>
 			<Td>
-			{toPascalCase(productType?.name!)}
+				{toPascalCase(product.productType?.name)}
 			</Td>
 			<Td>
 				<HStack>

@@ -50,13 +50,13 @@ export default function PurchaseItem({ item } : PurchaseItemProps) {
 							<Tr>
 								<Th/>
 								<Td>Encashed Points: </Td>
-								<Td isNumeric> {item.encashedPoints}</Td>
+								<Td isNumeric> -{item.encashedPoints}</Td>
 							</Tr>
 						}
 						<Tr>
 							<Th/>
 							<Th/>
-							<Th isNumeric>Total: P{item?.encashedPoints ? item?.totalPrice-item?.totalPrice : item?.totalPrice}</Th>
+							<Th isNumeric>Total: P{item.encashedPoints ? item?.totalPrice-item?.encashedPoints : item?.totalPrice}</Th>
 						</Tr>
 					</Tfoot>
 				</Table>

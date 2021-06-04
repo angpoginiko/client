@@ -27,18 +27,39 @@ interface AddCashierProps {
 
 export default function AddCashier({ modalClose, refresh, defaultValues } : AddCashierProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
-	const [image, setImage] = useState<string | ArrayBuffer | null>(defaultValues.image.toString());
+	const [image, setImage] = useState<string | ArrayBuffer | null>(defaultValues.image!.toString());
 	const { register, handleSubmit, errors } = useForm();
 	const onSubmit = async (formData: ProductType) => {
-		const response = await fetch("/api/products/addProducts", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({product: formData}),
-		});
-		await response.json();
-		onOpen();
+		const { image, ...data } = formData;
+    if(image?.length != 0) { 
+			const reader = new FileReader();
+			let newImage : string | ArrayBuffer | null = '';
+			reader.onload = async () =>{
+				if(reader.readyState === 2){
+					newImage = reader.result;
+					const response = await fetch(`/api/products/product/${defaultValues._id}`, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({product: data, image: newImage}),
+					});
+					await response.json();
+					onOpen();
+				}
+			}
+			reader.readAsDataURL(image?.length == 0 ? defaultValues.image![0] as Blob : image![0] as Blob);
+		} else {
+			const response = await fetch(`/api/products/product/${defaultValues._id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({product: data, image: defaultValues.image}),
+			});
+			await response.json();
+			onOpen();
+		}
 	}
 
 	const fetchCart = async () => {
@@ -95,7 +116,7 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 
             <FormControl id="productType" isInvalid={errors.productType && errors.productType.type === "required"}>
               <FormLabel>Product Type</FormLabel>
-              <Select name="productType" placeholder="--Product Types--" ref={register({required:true})} defaultValue={defaultValues.productType}>
+              <Select name="productType" placeholder="--Product Types--" ref={register({required:true})} defaultValue={defaultValues.productType?._id}>
 								{productTypes && productTypes.map((productType) => {
 									return (<option value={productType._id} key={productType.name}>{toPascalCase(productType.name)}</option>);
 								})}
@@ -109,11 +130,10 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 							<FormErrorMessage>ProductType Description</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="image" isInvalid={errors.image && errors.image.type === "required"}>
+						<FormControl id="image">
               <FormLabel>Image Required</FormLabel>
 							<img src={image?.toString()} alt="" id="img" className="img" />
-              <input type="file" name="image" ref={register({required:true})} onChange={imageHandler} accept="image/*"/>
-							<FormErrorMessage>ProductType Description Required</FormErrorMessage>
+              <input type="file" name="image" ref={register} onChange={imageHandler} accept="image/*"/>
             </FormControl>
             <Stack spacing={10}>
               <Button
