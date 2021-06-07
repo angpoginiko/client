@@ -78,6 +78,8 @@ const Register : React.FC = () => {
 							type="password"
 							ref={register({
 								required: "Repeat Password is required",
+								validate: value =>
+								value === password.current || "The passwords do not match"
 							})}
 							/>
 							<FormErrorMessage>{errors.repeatpassword && errors.repeatpassword.message}</FormErrorMessage>

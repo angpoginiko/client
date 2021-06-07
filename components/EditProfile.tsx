@@ -15,14 +15,14 @@ import {
 	Select
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
-interface AddCashierProps {
+interface EditProfileProps {
 	modalClose: () => void;
 	refresh: () => void;
 	defaultValues?: Profile;
 	id: string;
 }
 
-export default function AddCashier({ modalClose, refresh, defaultValues, id } : AddCashierProps) {
+export default function EditProfile({ modalClose, refresh, defaultValues, id } : EditProfileProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
 	
@@ -42,7 +42,7 @@ export default function AddCashier({ modalClose, refresh, defaultValues, id } : 
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add New Cashier</Heading>
+          <Heading fontSize={'4xl'}>Edit Profile</Heading>
         </Stack>
         <Box
           rounded={'lg'}

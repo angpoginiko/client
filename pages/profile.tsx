@@ -18,11 +18,13 @@ import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
 import ModalComp from '../components/ModalComp'
 import EditProfile from '../components/EditProfile'
+import EditPassword from '../components/EditPassword'
 import { useQuery } from 'react-query';
 import { Profile } from '../interfaces';
 
 export default function ProfilePage({ user } : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
+	const { onOpen: onOpenPassword, isOpen: isOpenPassword, onClose: onClosePassword } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -80,7 +82,9 @@ export default function ProfilePage({ user } : any) {
             rounded={'full'}
             _focus={{
               bg: 'gray.200',
-            }}>
+            }}
+						onClick={onOpenPassword}
+						>
             Edit Password
           </Button>
           <Button
@@ -108,6 +112,10 @@ export default function ProfilePage({ user } : any) {
 		
 			<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
 				<EditProfile modalClose={onClose} refresh={refetch} defaultValues={profile} id={user.id}/>
+			</ModalComp>
+
+			<ModalComp isModalOpen={isOpenPassword} onModalClose={onClosePassword} title="">
+				<EditPassword modalClose={onClose} id={user.id}/>
 			</ModalComp>
 		</Layout>
   );

@@ -75,3 +75,8 @@ export type Purchases = {
 	dateCheckout: Date;
 	totalPrice: number;
 }
+
+export type PasswordType = {
+	newpassword: string,
+	oldpassword: string
+}
