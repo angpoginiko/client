@@ -64,7 +64,7 @@ export default function Points({points, user} : any) {
 	}, [user])
   return (
     <>
-		<Layout authentication={user}>
+		<Layout authentication={user} title="Points">
 			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
 					<Center>

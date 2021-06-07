@@ -54,6 +54,7 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
     }
     reader.readAsDataURL(image![0] as Blob);
 	}
+	
 	const fetchProductType = async () => {
 		const res = await fetch(`api/productType/getProductTypes`);
 		return res.json();

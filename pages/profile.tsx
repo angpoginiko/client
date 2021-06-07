@@ -2,6 +2,7 @@ import Layout from '../components/Layout'
 import {
   Heading,
   Avatar,
+	AvatarBadge,
   Box,
   Center,
   Text,
@@ -10,6 +11,7 @@ import {
   useColorModeValue,
 	useDisclosure
 } from '@chakra-ui/react';
+import { MdAddBox } from 'react-icons/md';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
@@ -21,10 +23,12 @@ import EditProfile from '../components/EditProfile'
 import EditPassword from '../components/EditPassword'
 import { useQuery } from 'react-query';
 import { Profile } from '../interfaces';
+import EditProfileImagePage from '../components/EditProfileImage';
 
 export default function ProfilePage({ user } : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: onOpenPassword, isOpen: isOpenPassword, onClose: onClosePassword } = useDisclosure();
+	const { onOpen: onOpenImage, isOpen: isOpenImage, onClose: onCloseImage } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -56,7 +60,9 @@ export default function ProfilePage({ user } : any) {
           alt={'Avatar Alt'}
           mb={4}
           pos={'relative'}
-        />
+					/
+        >
+				
         <Heading fontSize={'2xl'} fontFamily={'body'}>
           {profile?.name}
         </Heading>
@@ -87,6 +93,25 @@ export default function ProfilePage({ user } : any) {
 						>
             Edit Password
           </Button>
+					<Button
+            flex={1}
+            fontSize={'sm'}
+            rounded={'full'}
+            bg={'blue.400'}
+            color={'white'}
+            boxShadow={
+              '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+            }
+            _hover={{
+              bg: 'blue.500',
+            }}
+            _focus={{
+              bg: 'blue.500',
+            }}
+						onClick={onOpenImage}
+						>
+            Edit Image
+          </Button>
           <Button
             flex={1}
             fontSize={'sm'}
@@ -116,6 +141,10 @@ export default function ProfilePage({ user } : any) {
 
 			<ModalComp isModalOpen={isOpenPassword} onModalClose={onClosePassword} title="">
 				<EditPassword modalClose={onClose} id={user.id}/>
+			</ModalComp>
+
+			<ModalComp isModalOpen={isOpenImage} onModalClose={onCloseImage} title="">
+				<EditProfileImagePage modalClose={onCloseImage} id={user.id} refresh={refetch}/>
 			</ModalComp>
 		</Layout>
   );

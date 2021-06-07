@@ -87,9 +87,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					cursor={'pointer'}>
 					<Avatar
 						size={'sm'}
-						src={
-							''
-						}
+						src={authentication?.image?.toString()}
 					/>
 				</MenuButton>
 				<MenuList>

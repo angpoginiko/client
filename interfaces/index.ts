@@ -2,7 +2,8 @@ import { ObjectId } from 'mongodb'
 
 export type User = {
   id: string;
-  name: string
+  name: string;
+	image?: string;
 }
 
 export type Profile = {
