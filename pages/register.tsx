@@ -19,7 +19,7 @@ import {
 
 
 const Register : React.FC = () => {
-	const { register, handleSubmit, errors } = useForm();
+	const { register, handleSubmit, errors, watch } = useForm();
 	const Router = useRouter();
 	const onSubmit = async (formData: Profile) => {
 		const response = await fetch("/api/profile/register", {
@@ -33,6 +33,7 @@ const Register : React.FC = () => {
 		Router.push("/login");
 	}
 	const password = useRef();
+	password.current = watch("password", "");
 	return(
 		<>
 		<Layout title="Register">

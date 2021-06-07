@@ -21,7 +21,7 @@ interface AddCashierProps {
 
 export default function AddCashier({ modalClose } : AddCashierProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
-	const { register, handleSubmit, errors } = useForm();
+	const { register, handleSubmit, errors, watch } = useForm();
 	const onSubmit = async (formData: Profile) => {
 		const response = await fetch("/api/profile/AddCashier", {
 			method: "POST",
@@ -34,6 +34,7 @@ export default function AddCashier({ modalClose } : AddCashierProps) {
 		onOpen();
 	}
 	const password = useRef();
+	password.current = watch("password", "");
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -71,10 +72,16 @@ export default function AddCashier({ modalClose } : AddCashierProps) {
 							<FormErrorMessage>Password Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword && errors.repeatpassword.type === "required"}>
+						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword}>
               <FormLabel>Repeat Password</FormLabel>
-              <Input name="repeatpassword" ref={register({required:true})} type="password"/>
-							<FormErrorMessage>Repeat Password Requireed</FormErrorMessage>
+              <Input name="repeatpassword" 
+							ref={register({
+								required: "Repeat Password is required",
+								validate: value =>
+								value === password.current || "The passwords do not match"
+							})}
+							type="password"/>
+							<FormErrorMessage>{errors.repeatpassword && errors.repeatpassword.message}</FormErrorMessage>
             </FormControl>
 
             <Stack spacing={10}>

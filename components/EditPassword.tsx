@@ -20,7 +20,7 @@ interface EditPasswordProps {
 	modalClose: () => void;
 }
 
-export default function EditPassword({ id } : EditPasswordProps) {
+export default function EditPassword({ id, modalClose } : EditPasswordProps) {
 	const [errorMessage, setErrorMessage] = useState('')
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
