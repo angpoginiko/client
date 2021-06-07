@@ -15,7 +15,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 
 		if(!decoded){
 			return res.status(401).send({
-				message: "youre not logged"
+				message: "youre not logged in"
 			});
 		}
 		const id = new ObjectId(decoded.id);

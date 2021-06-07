@@ -7,9 +7,8 @@ import {
   Text,
   Stack,
   Button,
-  Link,
-  Badge,
   useColorModeValue,
+	useDisclosure
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -17,8 +16,13 @@ import { server } from '../config';
 import { useEffect } from 'react';
 import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
+import ModalComp from '../components/ModalComp'
+import EditProfile from '../components/EditProfile'
+import { useQuery } from 'react-query';
+import { Profile } from '../interfaces';
 
-export default function ProfilePage({ user, profile } : any) {
+export default function ProfilePage({ user } : any) {
+	const { onOpen, isOpen, onClose } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -27,6 +31,12 @@ export default function ProfilePage({ user, profile } : any) {
 			router.replace('/HomeAdmin')
 		}
 	}, [user]);
+	
+	const fetchCart = async () => {
+		const res = await fetch(`api/profile/GetUser`);
+		return res.json();
+	}
+	const { data: profile, refetch } = useQuery<Profile>("productTypes", fetchCart);
   return (
 		<Layout title="Profile" authentication={user}>
     <Center py={6}>
@@ -40,27 +50,27 @@ export default function ProfilePage({ user, profile } : any) {
         textAlign={'center'}>
         <Avatar
           size={'xl'}
-          src={profile.image || ""}
+          src={profile?.image?.toString() || ""}
           alt={'Avatar Alt'}
           mb={4}
           pos={'relative'}
         />
         <Heading fontSize={'2xl'} fontFamily={'body'}>
-          {profile.name}
+          {profile?.name}
         </Heading>
         <Text fontWeight={600} color={'gray.500'} mb={4}>
-					{profile.username}<br/>
-					{profile.email}
+					{profile?.username}<br/>
+					{profile?.email}
         </Text>
-          	Address: {profile.address || "N/A"}
+          	Address: {profile?.address || "N/A"}
 					<p>
-						Gender: {profile.gender || "N/A"}
+						Gender: {profile?.gender || "N/A"}
 					</p>
 					<p>
-						Mobile Number: {profile.mobileNumber || "N/A"}
+						Mobile Number: {profile?.mobileNumber || "N/A"}
 					</p>
 					<p>
-						TIN: {profile.tin || "N/A"}
+						TIN: {profile?.tin || "N/A"}
 					</p>
 
         <Stack mt={8} direction={'row'} spacing={4}>
@@ -87,18 +97,23 @@ export default function ProfilePage({ user, profile } : any) {
             }}
             _focus={{
               bg: 'blue.500',
-            }}>
+            }}
+						onClick={onOpen}
+						>
             Edit Profile
           </Button>
         </Stack>
       </Box>
     </Center>
+		
+			<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
+				<EditProfile modalClose={onClose} refresh={refetch} defaultValues={profile} id={user.id}/>
+			</ModalComp>
 		</Layout>
   );
 }
 
 ProfilePage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
-	return {user: json, profile};
+	return {user: json};
 }
