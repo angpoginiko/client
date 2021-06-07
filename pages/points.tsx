@@ -106,7 +106,7 @@ export default function Points({points, user} : any) {
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalRedeemedPoints}</Text></Center>
 								</Box>
 								<Center>
-									<Text>Redeemed Points</Text>
+									<Text>Points to Redeem</Text>
 								</Center>
 							</Container>
 
@@ -115,7 +115,7 @@ export default function Points({points, user} : any) {
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEncashedPoints}</Text></Center>
 								</Box>
 								<Center>
-									<Text>Enchased Points</Text>
+									<Text>Used Points</Text>
 								</Center>
 							</Container>
 						</SimpleGrid>

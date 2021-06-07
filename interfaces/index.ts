@@ -6,7 +6,7 @@ export type User = {
 }
 
 export type Profile = {
-	id: string
+	_id: string
 	username: string
 	password: string
 	repeatPassword?: string,
@@ -16,7 +16,8 @@ export type Profile = {
 	mobileNumber?: string
 	address?: string
 	gender?: string
-	userRole: number
+	userRole?: number
+	image?: FileList | string
 }
 
 export type Token = 

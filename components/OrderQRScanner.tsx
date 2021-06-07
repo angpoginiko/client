@@ -69,7 +69,7 @@ export default function OrderQRScanner() {
 			onError={handleErrorWebCam}
 			onScan={handleScanWebCam}
 		/>
-		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add to Cart">
+		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="To Checkout">
 			<>
 				<Table>
 					<Thead>

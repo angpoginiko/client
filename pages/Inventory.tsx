@@ -10,7 +10,6 @@ import {
 	Th,
 	Tr,
 	Tbody,
-	Tfoot,
 	Button,
 	HStack,
 	useDisclosure
