@@ -14,11 +14,12 @@ export type Profile = {
 	email: string
 	name: string
 	tin?: string
-	mobileNumber?: string
+	mobilenumber?: string
 	address?: string
 	gender?: string
 	userRole?: number
 	image?: FileList | string
+	birthday?: Date
 }
 
 export type Token = 

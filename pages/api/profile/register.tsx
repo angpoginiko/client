@@ -11,14 +11,13 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 			profile: {
 				name,
 				username,
-				email,
+				birthday,
 				password,
 				repeatpassword
 			}
 		} = req.body;
 		const existingUser = await db.collection("profile").findOne({username});
-		const existingEmail = await db.collection("profile").findOne({email});
-		if(existingUser || existingEmail) return res.status(400).json({message: "User already exist"});
+		if(existingUser) return res.status(400).json({message: "User already exist"});
 		if(password !== repeatpassword) return res.status(400).json({message: "Passwords does not match"});
 		
 		const hashedPassword = await bcrypt.hash(password, 12);
@@ -27,7 +26,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 			profile: {
 				username,
 				password: hashedPassword,
-				email,
+				birthday: birthday[0],
 				name,
 				userRole: 0,
 				image: ''

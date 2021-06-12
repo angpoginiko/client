@@ -38,6 +38,7 @@ export default function EditProfile({ modalClose, refresh, defaultValues, id } :
 		await response.json();
 		onOpen();
 	}
+	console.log(defaultValues);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -90,7 +91,7 @@ export default function EditProfile({ modalClose, refresh, defaultValues, id } :
 
 						<FormControl id="mobilenumber" isInvalid={errors.mobilenumber && errors.mobilenumber.type === "required"}>
 							<FormLabel>Mobile Number</FormLabel>
-              	<Input name="mobilenumber" ref={register({required:true})} defaultValue={defaultValues?.mobileNumber}/>
+              	<Input name="mobilenumber" ref={register({required:true})} defaultValue={defaultValues?.mobilenumber}/>
 							<FormErrorMessage>Mobile Number Required</FormErrorMessage>
             </FormControl>
 

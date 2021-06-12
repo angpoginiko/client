@@ -42,7 +42,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 						email,
 						gender,
 						mobilenumber,
-						tin
+						tin,
+						address,
 					}
 				} = req.body;
 
@@ -54,7 +55,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 							"profile.email": email,
 							"profile.gender": gender,
 							"profile.mobilenumber": mobilenumber,
-							"profile.tin" : tin
+							"profile.tin" : tin,
+							"profile.address" : address
 					 }});
 				if(!profile){
 					return res.status(400).json({success: false})

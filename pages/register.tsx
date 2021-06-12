@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { useForm } from 'react-hook-form'
+import React, { useRef, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form'
 import Layout from '../components/Layout';
 import { Profile } from '../interfaces/index'
 import { useRouter } from 'next/router'
@@ -15,11 +15,18 @@ import {
   useColorModeValue,
 	Input,
 	FormErrorMessage,
+	useDisclosure
 } from '@chakra-ui/react';
+import Flatpickr from 'react-flatpickr'
+import "flatpickr/dist/themes/confetti.css";
+import ModalComp from '../components/ModalComp';
 
 
 const Register : React.FC = () => {
-	const { register, handleSubmit, errors, watch } = useForm();
+	const { register, handleSubmit, errors, watch, control } = useForm();
+	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
+	const [errorMessage, setErrorMessage] = useState('');
+	const [date, setDate] = useState(new Date());
 	const Router = useRouter();
 	const onSubmit = async (formData: Profile) => {
 		const response = await fetch("/api/profile/register", {
@@ -29,8 +36,13 @@ const Register : React.FC = () => {
 			},
 			body: JSON.stringify({profile: formData}),
 		});
-		await response.json();
-		Router.push("/login");
+		const json = await response.json();
+		if(response.ok){	
+			Router.push("/login");
+		} else {
+			setErrorMessage(json.message);
+			onOpenError();
+		}
 	}
 	const password = useRef();
 	password.current = watch("password", "");
@@ -48,28 +60,58 @@ const Register : React.FC = () => {
           p={8}>
 				<form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
-            <FormControl id="name" isInvalid={errors.name && errors.username.type === "required"}>
+            <FormControl id="name" isInvalid={errors.name && errors.name.type === "required"}>
               <FormLabel>Name</FormLabel>
               <Input name="name" ref={register({required:true})} />
 							<FormErrorMessage>Name Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="username" isInvalid={errors.username && errors.username.type === "required"}>
+						<FormControl id="username" isInvalid={errors.username}>
               <FormLabel>Username</FormLabel>
-              <Input name="username" ref={register({required:true})} />
-							<FormErrorMessage>Username Required</FormErrorMessage>
+              <Input 
+							name="username" 
+							ref={register({
+								required: "Username Required",
+								minLength: {
+									message: "Username requires 5-20 characters",
+									value: 5,
+								},
+							})} 
+							/>
+							<FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="email" isInvalid={errors.email && errors.email.type === "required"}>
-              <FormLabel>Email</FormLabel>
-              <Input name="email" ref={register({required:true})} type="email"/>
-							<FormErrorMessage>Email Required</FormErrorMessage>
+						<FormControl id="birthday" isInvalid={errors.birthday && errors.birthday.type === "required"}>
+              <FormLabel>Birthday</FormLabel>
+              <Controller
+								as={<Flatpickr name="birthday" className="chakra-input css-n9lnwn"/>}
+								value={date}
+								onChange={(date: Date) => setDate(date)}
+								name="birthday"
+								control={control}
+								className="chakra-input css-n9lnwn"
+								defaultValue={new Date}
+							/>
+							<FormErrorMessage>Birthday Required</FormErrorMessage>
             </FormControl>
 
-            <FormControl id="password" isInvalid={errors.password && errors.password.type === "required"}>
+            <FormControl id="password" isInvalid={errors.password}>
               <FormLabel>Password</FormLabel>
-              <Input name="password" ref={register({required:true})} type="password"/>
-							<FormErrorMessage>Password Required</FormErrorMessage>
+              <Input 
+							name="password" 
+							ref={register({
+								required: "Password is required",
+								minLength: {
+									value: 8,
+									message: "Password requires 8-20 characters"
+								},
+								pattern: {
+									value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])^[a-zA-Z0-9]{8,20}$/,
+									message: "Password needs an uppercase letter, a lowercase letter, and a number"
+								}
+							})} 
+							type="password"/>
+							<FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
             </FormControl>
 
 						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword}>
@@ -110,6 +152,9 @@ const Register : React.FC = () => {
 				</form>	
         </Box>
       </Stack>
+			<ModalComp isModalOpen={isOpenError} onModalClose={onCloseError} title="Registration Error">
+				{errorMessage}
+			</ModalComp>
 	</Layout>
 		</>
 	);

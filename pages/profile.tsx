@@ -38,11 +38,11 @@ export default function ProfilePage({ user } : any) {
 		}
 	}, [user]);
 	
-	const fetchCart = async () => {
+	const fetchProfile = async () => {
 		const res = await fetch(`api/profile/GetUser`);
 		return res.json();
 	}
-	const { data: profile, refetch } = useQuery<Profile>("productTypes", fetchCart);
+	const { data: profile, refetch } = useQuery<Profile>("profile", fetchProfile);
   return (
 		<Layout title="Profile" authentication={user}>
     <Center py={6}>
@@ -68,14 +68,17 @@ export default function ProfilePage({ user } : any) {
         </Heading>
         <Text fontWeight={600} color={'gray.500'} mb={4}>
 					{profile?.username}<br/>
-					{profile?.email}
+					{profile?.email || "N/A"}<br/>
         </Text>
+					<p>
+					Birthday: {new Date(profile?.birthday!).toLocaleDateString() || "N/A"}
+					</p>
           	Address: {profile?.address || "N/A"}
 					<p>
 						Gender: {profile?.gender || "N/A"}
 					</p>
 					<p>
-						Mobile Number: {profile?.mobileNumber || "N/A"}
+						Mobile Number: {profile?.mobilenumber || "N/A"}
 					</p>
 					<p>
 						TIN: {profile?.tin || "N/A"}

@@ -18,7 +18,15 @@ import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
 
 
-export default function Points({points, user} : any) {
+export default function Points({points, user, profile} : any) {
+
+	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
+	if(!isProfileComplete) {
+		return <Layout authentication={user} title="Points">
+			You need to complete profile first
+		</Layout>
+	}
+
 	const router = useRouter();
 	const earned = points.earned as Array<Point>;
 	const encashed = points.encashed as Array<EncashedPoints>;
@@ -61,7 +69,9 @@ export default function Points({points, user} : any) {
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin')
 		}
-	}, [user])
+	}, [user]);
+
+	
   return (
     <>
 		<Layout authentication={user} title="Points">
@@ -131,5 +141,6 @@ export default function Points({points, user} : any) {
 Points.getInitialProps = async (ctx: NextPageContext) => {
   const points = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return { points, user }
+	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
+	return { points, user, profile }
 }
