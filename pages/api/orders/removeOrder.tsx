@@ -42,7 +42,15 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 					{ "$push" : { "point.encashed" :  { "points" : parseInt(encashedPoints), "dateCheckout": new Date()} } }
 				)
 		});
-		const products = await db.collection("orders").deleteOne({_id});
+		const products = await db.collection("orders").findOneAndUpdate(
+			{ _id },
+			{ $set:
+					{
+						product: [],
+						total: 0
+					}
+			}
+		);
 		if(!products){
 			return res.status(400).json({success: false})
 		}

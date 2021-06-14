@@ -24,7 +24,7 @@ import userRoles from '../constants/userRoles';
 
 
 
-export default function Cart({user} : any) {
+export default function Cart({user, profile} : any) {
 	const [checkoutItems, setCheckoutItems] = useState<UserCart[]>([])
 	const [hasItems, setHasItems] = useState(false);
 	const [orderId, setOrderId] = useState('');
@@ -35,6 +35,7 @@ export default function Cart({user} : any) {
 		const res = await fetch(`api/cart/${user.id}`);
 		return res.json();
 	}
+	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
 	
 	const { data: cart, refetch } = useQuery<UserCart[]>("product", fetchCart);
 	const handleDelete = async (productId: string | undefined) => {
@@ -56,7 +57,7 @@ export default function Cart({user} : any) {
 		const productArray:CartProductType[] = [];
 		checkoutItems.map((checkoutItem) => {
 			productArray.push(checkoutItem.product);
-		})
+		});
 		const response = await fetch("/api/orders/addOrders", {
 			method: "POST",
 			headers: {
@@ -67,22 +68,10 @@ export default function Cart({user} : any) {
 		const orderId = await response.json();
 		setOrderId(orderId);
 	}
-
 	useEffect(() => {
 		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false);
 		refetch();
 	}, [cart, checkoutItems]);
-
-	const handleDeleteOrder = async () => {
-		await fetch (`/api/orders/order/${orderId}`, {
-			method: "DELETE",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: 'include',
-		})
-		checkoutClose();
-  }
 
 	const router = useRouter();
 	useEffect(() => {
@@ -117,7 +106,8 @@ export default function Cart({user} : any) {
 							{cart?.length ? cart.map((userCart) => {
 								return(
 										<div key={userCart.product.productId?.toString()}>
-											<CartProduct userCart={userCart} 
+											<CartProduct 
+												userCart={userCart} 
 												modalOpen={onOpen} 
 												checkoutProduct={checkoutItems} 
 												setCheckoutProduct={(product: UserCart[]) => setCheckoutItems(product)}
@@ -161,10 +151,17 @@ export default function Cart({user} : any) {
 						<ModalComp
 						 isModalOpen={isCheckoutOpen}
 						  onModalClose={() => {
-							handleDeleteOrder(),
-							location.reload()}} 
+							checkoutClose()}} 
 							title="Checkout Items?">
-							<CheckoutItems cart={checkoutItems} orderId={orderId} totalPrice={total}/>
+
+							<CheckoutItems
+							customerId={user.id}
+							cart={checkoutItems} 
+							orderId={orderId} 
+							totalPrice={total} 
+							isProfileComplete={isProfileComplete}
+							/>
+
 						</ModalComp>
 					</Center>
 				</VStack>
@@ -175,5 +172,6 @@ export default function Cart({user} : any) {
 
 Cart.getInitialProps = async (ctx: NextPageContext) => {
   const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return {user};
+	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
+	return {user, profile};
 }

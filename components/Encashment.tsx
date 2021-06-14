@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form'
 import {
   Box,
@@ -20,16 +20,17 @@ import {
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
 import { EncashedPoints, Point } from '../interfaces';
+import userRoles from '../constants/userRoles';
 
 interface EncashmentProps {
 	refresh?: () => void;
 	customerId: string | undefined;
 	onModalClose: () => void;
-	setPoints: (points: number) => void;
 }
 
-export default function Encashment({ customerId, onModalClose, setPoints } : EncashmentProps) {
+export default function Encashment({ customerId, onModalClose } : EncashmentProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
+	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
 
 	const fetchPoints = async () => {
@@ -55,15 +56,29 @@ export default function Encashment({ customerId, onModalClose, setPoints } : Enc
 		});
 	});
 	const totalAvailablePoints = availablePoints - totalEncashedPoints;
-	const onSubmit = async (points: Point) => {
-		setPoints(points.points);
-		onOpen();
+	const onSubmit = async (pointsUsed: Point) => {
+		if(pointsUsed.points > totalAvailablePoints){
+			onOpenError();
+		} else {
+			const point = pointsUsed.points;
+			const response = await fetch (`/api/orders/addPoints`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: 'include',
+				body: JSON.stringify({point: point, id: customerId}),
+			});
+			if(response.ok){
+				onOpen();
+			}
+		}
 	}
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add Product</Heading>
+          <Heading fontSize={'4xl'}>Encash Points</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -104,6 +119,9 @@ export default function Encashment({ customerId, onModalClose, setPoints } : Enc
       </Stack>
 			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), onModalClose()}} title="Add Cashier">
 				Points Encashed!!
+			</ModalComp>
+			<ModalComp isModalOpen={isOpenError} onModalClose={onCloseError} title="Add Cashier">
+				Points Redeem is higher than available points
 			</ModalComp>
 		</>
 	);

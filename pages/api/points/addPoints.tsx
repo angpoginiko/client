@@ -14,10 +14,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			}
 		} = req.body;
 		const id = new ObjectId(customerId);
-		const newPoints = parseInt(points.points);
 		console.log(req.body);
 		const point = await db.collection("earnedPoints").insertOne({
-			points: newPoints,
+			points,
 			dateAdded: new Date(),
 			expiryDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
 			customerId

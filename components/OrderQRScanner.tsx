@@ -15,27 +15,30 @@ import { UserCart } from '../interfaces';
 import ModalComp from './ModalComp';
 import ReceiptItem from './ReceiptItem';
 import AddPoints from './AddPoints'
-import Encashment from './Encashment';
 
 type DataType = {
 	 order: UserCart[],
 	 id: string,
-	 customerId: string
+	 customerId: string,
+	 encashedPoints: number,
 }
 
 export default function OrderQRScanner() { 
-	const [encashedPoints, setEncashedPoints] = useState<number|undefined>(undefined);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose } = useDisclosure();
 	const { onOpen: addPointsOpen, isOpen: isAddPointsOpen, onClose: addPointsClose } = useDisclosure();
-	const { onOpen: encashedPointsOpen, isOpen: isEncashedPointsOpen, onClose: encashedPointsClose } = useDisclosure();
 	const { onOpen: confirmModalOpen, isOpen: isConfirmModalOpen, onClose: confirmModalClose } = useDisclosure();
 	const [data, setData ] = useState<DataType>();
 	const [orderId, setOrderId] = useState('');
 	const totalPrice = data?.order[0]?.total;
+	const POINTS_REWARDED = 200;
   const handleErrorWebCam = (error : any) => {
     console.log(error);
   }
+	let encashedPoints = 0; 
+	data?.order.map((orders) => {
+		encashedPoints = orders.encashedPoints ? orders.encashedPoints : 0;
+	})
   const handleScanWebCam = async (result: string | null) => {
     if (result != null){
 				const response = await fetch (`/api/orders/order/${result}`, {
@@ -48,19 +51,38 @@ export default function OrderQRScanner() {
 				checkoutClose();
     }
   }
-	const handleCheckout = async(data: UserCart[]) => {
+	const handleCheckout = async(order: UserCart[]) => {
 		const points = encashedPoints || 0;
-		if (data){
+		let addedPoints = (totalPrice!/POINTS_REWARDED);
+		order.map((orders) => {
+			if(orders.product.hasContainer){
+				addedPoints+=(10/POINTS_REWARDED);
+			}
+		});
+		const body = {
+			points: addedPoints,
+			customerId: data?.customerId
+		}
+		if (order){
 			const response = await fetch (`/api/orders/removeOrder`, {
 				method: "POST",	
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({data, id: orderId, encashedPoints: points, totalPrice: totalPrice})
+				body: JSON.stringify({data: order, id: orderId, encashedPoints: points, totalPrice: totalPrice})
 			})
 			await response.json();
 		}
+		const response = await fetch("/api/points/addPoints", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({data: body}),
+		});
+		await response.json();
 	}
+	console.log(data);
   return (
     <>
 		<QrReader
@@ -111,10 +133,6 @@ export default function OrderQRScanner() {
 				<Button onClick={addPointsOpen}>
 					Add Points
 				</Button>
-
-				<Button onClick={encashedPointsOpen}>
-					Encash Points
-				</Button>
 			</>
 		</ModalComp>
 		<ModalComp isModalOpen={isCheckoutOpen} onModalClose={checkoutClose} title="">
@@ -144,10 +162,6 @@ export default function OrderQRScanner() {
 
 		<ModalComp isModalOpen={isAddPointsOpen} onModalClose={addPointsClose} title="Add Points">
 			<AddPoints customerId={data?.customerId} onModalClose={addPointsClose}/>
-		</ModalComp>
-
-		<ModalComp isModalOpen={isEncashedPointsOpen} onModalClose={encashedPointsClose} title="Add Points">
-			<Encashment customerId={data?.customerId} onModalClose={encashedPointsClose} setPoints={setEncashedPoints}/>
 		</ModalComp>
 		</>
   );

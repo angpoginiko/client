@@ -17,17 +17,22 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			const newItem = {
 				productId: convertedProductId,
 				quantity: item.quantity,
+				hasContainer: item.hasContainer
 			};
 			newItems.push(newItem);
 		})
-		const orders = await db.collection("orders").insertOne({
-			product : newItems,
-			customerId,
-			total,
-			isScanned: false
-		});
-
-		res.status(200).send(orders.ops[0]._id);
+		const orders = await db.collection("orders").findOneAndUpdate(
+			{ customerId },
+			{ $set:
+					{
+						product : newItems,
+						customerId,
+						total,
+						encashedPoints: 0
+					}
+			}
+		);
+		res.status(200).send(orders.value._id);
 	} catch(err) {
 		res.status(401).send({message: "youre not logged in"});
 	}

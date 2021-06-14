@@ -27,29 +27,23 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			break;
 		case 'GET' :
 			try {
-				const scanned = await db.collection("orders").findOne({_id});
-				if(scanned.isScanned == false){
-					await db.collection("orders").findOneAndUpdate(
-						{_id},
-						{ $set: { "isScanned": true } });
-					const order = await db.collection("orders").aggregate([
-						{"$unwind" : "$product"},
-						{"$lookup" : {
-							"from": 'products',
-							"localField": 'product.productId',
-							"foreignField": '_id',
-							"as": 'productData'
-						}}
-					]).toArray();
-					if(!order){
-						return res.status(400).json({success: false})
-					}
-					const customerId = order[0].customerId;
-					res.status(201).send({order, id, customerId});	
+				await db.collection("orders").findOneAndUpdate(
+					{_id},
+					{ $set: { "isScanned": true } });
+				const order = await db.collection("orders").aggregate([
+					{"$unwind" : "$product"},
+					{"$lookup" : {
+						"from": 'products',
+						"localField": 'product.productId',
+						"foreignField": '_id',
+						"as": 'productData'
+					}}
+				]).toArray();
+				if(!order){
+					return res.status(400).json({success: false})
 				}
-				else{
-					res.status(500);
-				}
+				const customerId = order[0].customerId;
+				res.status(201).send({order, id, customerId});	
 			} catch (error) {
 				res.status(500);
 				res.json({error: "Server error"})

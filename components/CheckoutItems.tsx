@@ -3,52 +3,74 @@ import {
   Text,
   VStack,
 	Center,
+	Button,
+	useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { UserCart } from '../interfaces';
 import CheckoutItem from './CheckoutItem'
 import QRGenerator from './QRGenerator'
+import ModalComp from './ModalComp'
+import Encashment from './Encashment'
 
 interface CheckoutProductProps {
 	cart : UserCart[];
 	orderId: string;
 	totalPrice: number;
+	isProfileComplete: boolean;
+	customerId: string;
 }
 
-export default function CheckoutItems({cart, orderId, totalPrice} : CheckoutProductProps) {
+export default function CheckoutItems(
+	{
+		cart, 
+		orderId, 
+		totalPrice, 
+		isProfileComplete, 
+		customerId
+	} : CheckoutProductProps) {
 	const [isCreated, setIsCreated] = useState(true);
+	const { onOpen: encashedPointsOpen, isOpen: isEncashedPointsOpen, onClose: encashedPointsClose } = useDisclosure();
   return (
     <>
-				<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
-					{isCreated && 
-					(
-					<>
-							<Box></Box>
-							<Center>
-								<VStack w="100%" h="100%">
-									{cart?.length ? cart.map((userCart) => {
-										return(
-												<div key={userCart.product.productId?.toString()}>
-														<CheckoutItem userCart={userCart}/>
-												</div>
-											);
-									}):
-										(<Text>
-											You have no item on your Checkout
-										</Text>
-											)
-									}
-								</VStack>
-							</Center>
-						</>)
-					}
-					<Center boxSize="100%">
-						<VStack>
-							<Text>Total: {totalPrice}</Text>
-							<QRGenerator text={orderId} buttonName="Generate Checkout QR" isCreated={isCreated} setIsCreated={setIsCreated}/>
-						</VStack>
-					</Center>
-				</VStack>
+			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
+				{isCreated && 
+				(
+				<>
+						<Box></Box>
+						<Center>
+							<VStack w="100%" h="100%">
+								{cart?.length ? cart.map((userCart) => {
+									return(
+											<div key={userCart.product.productId?.toString()}>
+													<CheckoutItem userCart={userCart}/>
+											</div>
+										);
+								}):
+									(<Text>
+										You have no item on your Checkout
+									</Text>
+										)
+								}
+							</VStack>
+						</Center>
+					</>)
+				}
+				<Center boxSize="100%">
+					<VStack>
+						<Text>Total: {totalPrice}</Text>
+						{isCreated && (
+							<Button onClick={encashedPointsOpen} disabled={!isProfileComplete}>
+								Use Points
+							</Button>
+						)}
+						<QRGenerator text={orderId} buttonName="Generate Checkout QR" isCreated={isCreated} setIsCreated={setIsCreated}/>
+					</VStack>
+				</Center>
+			</VStack>
+			<ModalComp isModalOpen={isEncashedPointsOpen} onModalClose={encashedPointsClose} title="Redeem Points">
+				<Encashment customerId={customerId} onModalClose={encashedPointsClose} />
+			</ModalComp>
     </>
   );
 }

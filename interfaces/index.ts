@@ -58,8 +58,9 @@ export type ProductTypeType = {
 
 export type CartProductType = {
 	productId: string | undefined | ObjectId,
-	quantity: number
-	isAdded?: boolean
+	quantity: number,
+	isAdded?: boolean,
+	hasContainer?: boolean
 }
 
 
@@ -67,8 +68,9 @@ export type UserCart = {
 	_id: string,
 	product:  CartProductType,
 	customerId: string,
-	productData: ProductType[]
-	total?: number
+	productData: ProductType[],
+	total?: number,
+	encashedPoints?: number
 }
 
 export type Purchases = {

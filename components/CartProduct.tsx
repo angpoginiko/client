@@ -33,6 +33,7 @@ export default function CartProduct (
 	let { productName, unitPrice, productDesc, image  } : ProductType = {}
 	const [quantity, setQuantity] = useState(userCart.product.quantity);
 	const [isAdded, setIsAdded] = useState(false);
+	const [hasContainer, setHasContainer] = useState(false);
 	const increamentQuantity = () => {
 		setQuantity(prevQuantity => prevQuantity + 1);
 	}
@@ -55,10 +56,10 @@ export default function CartProduct (
 		if(e.target.name === userCart.product.productId){
 			setIsAdded(!isAdded)
 			userCart.product.isAdded = e.target.checked;
+			userCart.product.hasContainer = hasContainer
 			if(userCart.product.isAdded == true){
 				checkoutProduct.push(userCart);
 				setCheckoutProduct(checkoutProduct);
-				
 				totalPrice = totalPrice + (unitPrice! * quantity);
 				setTotalPrice(totalPrice);
 			}
@@ -75,6 +76,12 @@ export default function CartProduct (
 				totalPrice = totalPrice - (unitPrice! * quantity);
 				setTotalPrice(totalPrice);
 			}
+			refresh();
+		}
+	}
+	const handleHasContainer = (e: ChangeEvent<HTMLInputElement>) => {
+		if(e.target.name === `${userCart.product.productId}hasContainer`){
+			setHasContainer(!hasContainer);
 			refresh();
 		}
 	}
@@ -105,7 +112,7 @@ export default function CartProduct (
 				</Box>
 
 				<VStack width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
-					<Text color="white" fontSize={{base: 10, sm: 15, md: 20, lg: 30}}>
+					<Text color="white" fontSize={{base: 10, sm: 15, lg: 30}}>
 						{productName}
 					</Text>
 
@@ -125,6 +132,7 @@ export default function CartProduct (
 					</Text>
 				</Box>
 			</HStack>
+
 			<VStack 
 			width={{base: 35, sm: 63, md: 84, lg: 112, xl: 160}} 
 			>
@@ -133,6 +141,7 @@ export default function CartProduct (
 				borderRadius={{md: '2xl', lg: '3xl'}} 
 				width={{ md: 84, lg: 112, xl: 160}} 
 				spacing={0}>
+
 					<Center>
 						<Box 
 						as="button" 
@@ -143,7 +152,7 @@ export default function CartProduct (
 						disabled={isAdded}
 						>
 							<Center>
-							<Icon as={MdRemove} boxSize={{base: 2, md: 3, lg: 6}}/>
+								<Icon as={MdRemove} boxSize={{base: 2, md: 3, lg: 6}}/>
 							</Center>
 						</Box>
 					</Center>
@@ -188,6 +197,15 @@ export default function CartProduct (
 					</Box>
 				</Center>	
 			</VStack>
+
+			<Center borderLeft="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{sm: 70, md: 90, lg: 120}}>
+				<HStack>
+					<Text>
+						Add container
+					</Text>
+					<Checkbox name={`${userCart.product.productId}hasContainer`} isDisabled={isAdded} checked={userCart.product.hasContainer} onChange={handleHasContainer}></Checkbox>
+				</HStack>
+			</Center>
 			<Box></Box>
 		</HStack>
 		</>
