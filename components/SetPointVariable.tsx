@@ -17,28 +17,23 @@ import {
 	NumberInputField
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
+import { Point } from '../interfaces';
 
-interface AddPointsProps {
-	refresh?: () => void;
-	customerId: string | undefined;
+interface SetPointVariableProps {
 	onModalClose: () => void;
 }
 
-export default function AddPoints({ customerId, onModalClose } : AddPointsProps) {
+export default function SetPointVariable({ onModalClose } : SetPointVariableProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
 
-	const onSubmit = async (points: object) => {
-		const body = {
-			points,
-			customerId: customerId
-		}
-		const response = await fetch("/api/points/addPoints", {
+	const onSubmit = async (points: Point) => {
+		const response = await fetch("/api/points/setPointVariable", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({data: body}),
+			body: JSON.stringify({points: points.points})
 		});
 		await response.json();
 		onOpen();
@@ -47,7 +42,7 @@ export default function AddPoints({ customerId, onModalClose } : AddPointsProps)
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add Product</Heading>
+          <Heading fontSize={'4xl'}>Set Point Variable</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -57,7 +52,7 @@ export default function AddPoints({ customerId, onModalClose } : AddPointsProps)
 				<form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
             <FormControl id="points" isInvalid={errors.points && errors.points.type === "required"}>
-              <FormLabel>Points to be Added</FormLabel>
+              <FormLabel>Set Points</FormLabel>
 							<NumberInput>
 								<NumberInputField name="points" ref={register({required:true})}/>
 								<NumberInputStepper>
@@ -84,7 +79,7 @@ export default function AddPoints({ customerId, onModalClose } : AddPointsProps)
         </Box>
       </Stack>
 			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), onModalClose()}} title="Add Cashier">
-				Points Added!!!
+				Point Variable Changed!!!
 			</ModalComp>
 		</>
 	);

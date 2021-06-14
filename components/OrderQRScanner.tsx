@@ -14,7 +14,7 @@ import QrReader from 'react-qr-reader';
 import { UserCart } from '../interfaces';
 import ModalComp from './ModalComp';
 import ReceiptItem from './ReceiptItem';
-import AddPoints from './AddPoints'
+import { useQuery } from 'react-query';
 
 type DataType = {
 	 order: UserCart[],
@@ -26,19 +26,24 @@ type DataType = {
 export default function OrderQRScanner() { 
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: checkoutOpen, isOpen: isCheckoutOpen, onClose: checkoutClose } = useDisclosure();
-	const { onOpen: addPointsOpen, isOpen: isAddPointsOpen, onClose: addPointsClose } = useDisclosure();
 	const { onOpen: confirmModalOpen, isOpen: isConfirmModalOpen, onClose: confirmModalClose } = useDisclosure();
 	const [data, setData ] = useState<DataType>();
 	const [orderId, setOrderId] = useState('');
 	const totalPrice = data?.order[0]?.total;
-	const POINTS_REWARDED = 200;
   const handleErrorWebCam = (error : any) => {
     console.log(error);
   }
 	let encashedPoints = 0; 
 	data?.order.map((orders) => {
 		encashedPoints = orders.encashedPoints ? orders.encashedPoints : 0;
-	})
+	});
+
+	const fetchPointVariable = async () => {
+		const res = await fetch(`api/points/pointVariable`);
+		return res.json();
+	}
+	const { data: pointVariable } = useQuery<number>("pointVariable", fetchPointVariable);
+
   const handleScanWebCam = async (result: string | null) => {
     if (result != null){
 				const response = await fetch (`/api/orders/order/${result}`, {
@@ -53,10 +58,10 @@ export default function OrderQRScanner() {
   }
 	const handleCheckout = async(order: UserCart[]) => {
 		const points = encashedPoints || 0;
-		let addedPoints = (totalPrice!/POINTS_REWARDED);
+		let addedPoints = (totalPrice!/pointVariable!);
 		order.map((orders) => {
 			if(orders.product.hasContainer){
-				addedPoints+=(10/POINTS_REWARDED);
+				addedPoints+=(10/pointVariable!);
 			}
 		});
 		const body = {
@@ -82,7 +87,6 @@ export default function OrderQRScanner() {
 		});
 		await response.json();
 	}
-	console.log(data);
   return (
     <>
 		<QrReader
@@ -109,7 +113,7 @@ export default function OrderQRScanner() {
 						})}
 					</Tbody>
 					<Tfoot>
-						{encashedPoints && 
+						{Boolean(encashedPoints) && 
 							<Tr>
 								<Th/>
 								<Td>Encashed Points: </Td>
@@ -128,10 +132,6 @@ export default function OrderQRScanner() {
 					checkoutOpen()
 				}}>
 					Checkout
-				</Button>
-
-				<Button onClick={addPointsOpen}>
-					Add Points
 				</Button>
 			</>
 		</ModalComp>
@@ -158,10 +158,6 @@ export default function OrderQRScanner() {
 					Checkout Confirmed
 				</Text>
 			</>
-		</ModalComp>
-
-		<ModalComp isModalOpen={isAddPointsOpen} onModalClose={addPointsClose} title="Add Points">
-			<AddPoints customerId={data?.customerId} onModalClose={addPointsClose}/>
 		</ModalComp>
 		</>
   );

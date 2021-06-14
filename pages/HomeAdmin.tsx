@@ -5,7 +5,6 @@ import {
   Heading,
   Container,
   Text,
-  Button,
   Stack,
 	Center,
 	SimpleGrid,
@@ -20,9 +19,13 @@ import { useRouter } from 'next/router';
 import AdminNavBar from '../components/AdminNavBar';
 import ModalComp from '../components/ModalComp';
 import AddCashier from '../components/AddCashier';
+import AddAdmin from '../components/AddAdmin';
+import SetPointVariable from '../components/SetPointVariable';
 
 export default function AdminIndexPage({ user } : any) {
 	const {isOpen: isCashierOpen, onOpen: onCashierOpen, onClose: onCashierClose} = useDisclosure();
+	const {isOpen: isAdminOpen, onOpen: onAdminOpen, onClose: onAdminClose} = useDisclosure();
+	const {isOpen: isPointsOpen, onOpen: onPointsOpen, onClose: onPointsClose} = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -52,8 +55,20 @@ export default function AdminIndexPage({ user } : any) {
 					<Center>
 						<SimpleGrid gap="20px">
 							<Container>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAdminOpen}>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Admin</Text></Center>
+								</Box>
+							</Container>
+
+							<Container>
 								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onCashierOpen}>
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Cashier</Text></Center>
+								</Box>
+							</Container>
+
+							<Container>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onPointsOpen}>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Set Points Variable</Text></Center>
 								</Box>
 							</Container>
 
@@ -67,8 +82,14 @@ export default function AdminIndexPage({ user } : any) {
 				</Box>
         </Stack>
       </Container>
+			<ModalComp isModalOpen={isAdminOpen} onModalClose={onAdminClose} title="Add Admin">
+				<AddAdmin modalClose={onAdminClose}/>
+			</ModalComp>
 			<ModalComp isModalOpen={isCashierOpen} onModalClose={onCashierClose} title="Add Cashier">
 				<AddCashier modalClose={onCashierClose}/>
+			</ModalComp>
+			<ModalComp isModalOpen={isPointsOpen} onModalClose={onPointsClose} title="Set Point Variable">
+				<SetPointVariable onModalClose={onPointsClose}/>
 			</ModalComp>
 		</AdminNavBar>
     </>
