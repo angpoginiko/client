@@ -8,6 +8,7 @@ import { useDisclosure,
 	Text,
 	Button,
 	Td,
+	Center,
  } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import QrReader from 'react-qr-reader';
@@ -97,12 +98,14 @@ export default function OrderQRScanner() {
 		/>
 		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="To Checkout">
 			<>
+			<Center>
 				<Table>
 					<Thead>
 						<Tr>
 							<Th>Quantity:</Th>
 							<Th>Description</Th>
 							<Th isNumeric>Price</Th>
+							<Th>Has Container</Th>
 						</Tr>
 					</Thead>
 					<Tbody>
@@ -127,11 +130,29 @@ export default function OrderQRScanner() {
 						</Tr>
 					</Tfoot>
 				</Table>
-				<Button onClick={() => {
+			</Center>
+			<Button onClick={() => {
 					onClose(),
 					checkoutOpen()
 				}}>
 					Checkout
+				</Button>
+			</>
+		</ModalComp>
+		<ModalComp isModalOpen={isCheckoutOpen} onModalClose={checkoutClose} title="">
+			<>
+				<Text>
+					Confirm Checkout?
+				</Text>
+				<Button onClick={() => {
+					handleCheckout(data?.order!),
+					checkoutClose()
+					confirmModalOpen();
+					}}>
+					Yes
+				</Button>
+				<Button onClick={() => checkoutClose()}>
+					No
 				</Button>
 			</>
 		</ModalComp>

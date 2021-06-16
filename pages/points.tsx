@@ -30,12 +30,10 @@ export default function Points({points, user, profile} : any) {
 	const router = useRouter();
 	const earned = points.earned as Array<Point>;
 	const encashed = points.encashed as Array<EncashedPoints>;
-	const redeemed = points.redeemed as Array<number>;
 	let totalEarnedPoints = 0;
 	let totalExpiredPoints = 0;
 	let totalAvailablePoints = 0;
 	let availablePoints = 0;
-	let totalRedeemedPoints = 0;
 	let totalEncashedPoints = 0;
 
 	if(earned.length >= 0){
@@ -58,10 +56,6 @@ export default function Points({points, user, profile} : any) {
 	});
 
 	totalAvailablePoints = availablePoints - totalEncashedPoints;
-	
-	redeemed.length === 0 ? totalRedeemedPoints = 0 : redeemed.map((points) => {
-		totalRedeemedPoints += points;
-	});
 	
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -108,15 +102,6 @@ export default function Points({points, user, profile} : any) {
 								</Box>
 								<Center>
 									<Text>Expired Points</Text>
-								</Center>
-							</Container>
-
-							<Container>
-								<Box w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290">
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalRedeemedPoints}</Text></Center>
-								</Box>
-								<Center>
-									<Text>Points to Redeem</Text>
 								</Center>
 							</Container>
 
