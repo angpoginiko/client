@@ -1,6 +1,6 @@
 import React, { ReactNode, useState } from 'react'
 import { useRouter } from 'next/router'
-import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
+import { MdShoppingCart } from "react-icons/md";
 import Head from 'next/head';
 import {
 	Avatar,
@@ -17,15 +17,12 @@ import {
   MenuItem,
   MenuDivider,
 	Icon,
-	useDisclosure
+	useDisclosure,
 } from '@chakra-ui/react';
+import { User } from '../interfaces';
 import dynamic from 'next/dynamic';
 import ModalComp from './ModalComp';
-import { User } from '../interfaces';
 
-const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
-	ssr: false,
-});
 
 type Props = {
   children?: ReactNode
@@ -36,13 +33,14 @@ type Props = {
 	frontPageClick?: boolean;
 }
 
+const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
+	ssr: false,
+});
 
-const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose, frontPageClick }: Props) => {
-	const { onOpen, isOpen, onClose } = useDisclosure();
+const MainHeader = ({ children, title = 'Home', authentication }: Props) => {
 	const Router = useRouter();
+	const { onOpen, isOpen, onClose } = useDisclosure();
 	const [auth, setAuth] = useState(!!authentication);
-
-
 	const onLogout = async () =>{ 
 		await fetch("api/profile/logout",{
 			method: "POST",
@@ -53,19 +51,6 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 		})
 		await Router.push("/")
 		setAuth(false);
-	}
-
-	const onExit = async () => { 
-		const id = authentication!.id
-		await fetch("api/profile/onExit",{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({id})
-		})
-		await Router.push("/Home");
 	}
 
 
@@ -89,7 +74,6 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 				</Button>
 		</>
 	);
-
 	const logoutButton = (
 		<>
 			<Menu>
@@ -108,7 +92,6 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					<MenuItem><Link href="/points">Rewards</Link></MenuItem>
 					<MenuItem><Link href="/purchaseHistory">Purchase History</Link></MenuItem>
 					<MenuDivider />
-					<MenuItem><Link onClick={onExit}>Exit Store</Link></MenuItem>
 					<MenuItem><Link onClick={onLogout}>Logout</Link></MenuItem>
 				</MenuList>
 			</Menu>
@@ -146,17 +129,18 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
-						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
-						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {frontPageClick ? onModalClose!() : onClose()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
+						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>
 			</Flex>
+			<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Scan Item">
+				<ProductQRScanner customerId={authentication?.id!}/>
+			</ModalComp>
 		</Box>
 
 		{children}
 	</>
 )}
 
-export default Layout
+export default MainHeader
