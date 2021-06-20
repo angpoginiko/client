@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { ProductType, ProductTypeType } from '../interfaces/index'
 import {
@@ -60,14 +60,14 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
 		return res.json();
 	}
 
-	const imageHandler = (e) => {
+	const imageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
     reader.onload = () =>{
       if(reader.readyState === 2){
         setImage(reader.result)
       }
     }
-    reader.readAsDataURL(e.target.files[0])
+    reader.readAsDataURL(e.target.files![0])
   };
 
 	const toPascalCase = (text: string | undefined) => {

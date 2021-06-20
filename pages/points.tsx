@@ -8,7 +8,6 @@ import {
 	Center,
 	SimpleGrid,
 	HStack,
-	Button,
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';

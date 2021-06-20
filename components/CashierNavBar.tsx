@@ -1,30 +1,14 @@
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
-import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
 import Head from 'next/head';
 import {
-	Avatar,
   Box,
   Flex,
   HStack,
-  Button,
   useColorModeValue,
   Stack,
 	Link,
-	Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-	Icon,
-	useDisclosure
 } from '@chakra-ui/react';
-import dynamic from 'next/dynamic';
-import ModalComp from './ModalComp';
-
-const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
-	ssr: false,
-});
 
 type Props = {
   children?: ReactNode

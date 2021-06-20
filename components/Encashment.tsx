@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form'
 import {
   Box,
@@ -20,7 +20,6 @@ import {
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
 import { EncashedPoints, Point } from '../interfaces';
-import userRoles from '../constants/userRoles';
 
 interface EncashmentProps {
 	refresh?: () => void;

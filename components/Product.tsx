@@ -10,11 +10,10 @@ import {
 	Icon,
 	useDisclosure, 
 } from '@chakra-ui/react';
-import { CartProductType, ProductType, ProductTypeType } from '../interfaces';
+import { CartProductType, ProductType } from '../interfaces';
 import { MdAddBox,  MdRemove} from "react-icons/md";
 import React, { useState } from 'react';
 import ModalComp from './ModalComp';
-import { useQuery } from 'react-query';
 interface ProductProps {
 	product: ProductType | undefined
 	closeProduct: () => void

@@ -1,30 +1,29 @@
-import { useDisclosure } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React from 'react';
 import QrReader from 'react-qr-reader';
-import { ProductType } from '../interfaces';
-import ModalComp from './ModalComp';
-import Product from './Product';
+import { useRouter } from 'next/router'
 
 interface QRScannerProps {
 	customerId: string | undefined
 }
 
 export default function QRScanner({customerId} : QRScannerProps) { 
-	const { onOpen, isOpen, onClose } = useDisclosure();
-	const  [data, setData ] = useState<ProductType>();
+	const Router = useRouter();
   const handleErrorWebCam = (error : any) => {
     console.log(error);
   }
   const handleScanWebCam = async (result: string | null) => {
-    if (result){
-				const response = await fetch (`/api/products/product/${result}`, {
-					method: "GET",
-				})
-				const data = await response.json();
-				setData(data);
-				onOpen();
+    if (result == "true"){
+			await fetch("api/profile/onStore",{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				credentials: "include",
+				body: JSON.stringify({id: customerId})
+			})
+			await Router.push("/Store");
     }
-   }
+  }
   return (
     <>
 		<QrReader
@@ -33,9 +32,6 @@ export default function QRScanner({customerId} : QRScannerProps) {
 			onError={handleErrorWebCam}
 			onScan={handleScanWebCam}
 		/>
-		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add to Cart">
-			<Product customerId={customerId} product={data} closeProduct={onClose}/>
-		</ModalComp>
 		</>
   );
 }

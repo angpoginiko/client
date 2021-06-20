@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { useForm } from 'react-hook-form'
 import { Profile } from '../interfaces/index'
 import {
@@ -46,14 +46,14 @@ export default function EditProfileImagePage({ modalClose, refresh, id } : EditP
     reader.readAsDataURL(changedImage![0] as Blob);
 	}
 
-	const imageHandler = (e) => {
+	const imageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
     reader.onload = () =>{
       if(reader.readyState === 2){
         setImage(reader.result)
       }
     }
-    reader.readAsDataURL(e.target.files[0])
+    reader.readAsDataURL(e.target.files![0])
   };
 
 	return(

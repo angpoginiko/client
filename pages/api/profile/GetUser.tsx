@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from  '../../../utils/mongodb'
 import jwt from 'jsonwebtoken'
-import { Profile, Token } from '../../../interfaces';
+import { Token } from '../../../interfaces';
 import { ObjectId } from 'mongodb'
 import { authentication } from '../authentication';
 

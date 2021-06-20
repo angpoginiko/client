@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form'
-import { ProductType, ProductTypeType, Profile } from '../interfaces/index'
+import { Profile } from '../interfaces/index'
 import {
   Box,
   FormControl,

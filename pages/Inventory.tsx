@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Layout from '../components/Layout'
 import {
   Box,
   Text,

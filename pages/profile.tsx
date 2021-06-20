@@ -2,7 +2,6 @@ import Layout from '../components/Layout'
 import {
   Heading,
   Avatar,
-	AvatarBadge,
   Box,
   Center,
   Text,
@@ -11,7 +10,6 @@ import {
   useColorModeValue,
 	useDisclosure
 } from '@chakra-ui/react';
-import { MdAddBox } from 'react-icons/md';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
