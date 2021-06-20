@@ -20,15 +20,17 @@ import { Purchases } from '../interfaces';
 import PurchaseItem from '../components/PurchaseItem';
 
 
-export default function Points({user, purchases} : any) {
+export default function Points({user, purchases, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
-		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+		if(onStore){
+			router.replace('/Store');
+		} else if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/HomeAdmin');
 		}
-	}, [user]);
+	}, [user, onStore]);
   return (
     <>
 		<Layout authentication={user}>
@@ -69,5 +71,6 @@ Points.getInitialProps = async (ctx: NextPageContext) => {
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
   const purchaseHistory = await frontEndAuthentication(`${server}/api/purchaseHistory/${user.id}`, ctx);
 	const purchases: Purchases[] = purchaseHistory.purchases;
-	return { user, purchases }
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return { user, purchases, onStore }
 }

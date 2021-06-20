@@ -27,17 +27,19 @@ import { useQuery } from 'react-query';
 import AdminNavBar from '../components/AdminNavBar';
 
 
-export default function Points({user} : any) {
+export default function Points({user, onStore} : any) {
 	const {isOpen , onOpen, onClose} = useDisclosure();
 	const {isOpen: isProductTypeOpen , onOpen: onProductTypeOpen, onClose: onProductTypeClose} = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier')
-		} else if(userRoles.Customer == user.userRole){
+		} else if((userRoles.Customer == user.userRole) && !onStore){
 			router.replace('/Home')
+		} else if((userRoles.Customer == user.userRole) && onStore){
+			router.replace('/Store')
 		}
-	}, []);
+	}, [user, onStore]);
 
 	const fetchCart = async () => {
 		const res = await fetch("api/products/getProducts");
@@ -48,7 +50,7 @@ export default function Points({user} : any) {
 	const { data: products, refetch } = useQuery<ProductType[]>("product", fetchCart);
   return (
     <>
-		<AdminNavBar authentication={user}>
+		<AdminNavBar authentication={user} title="Inventory">
 				<Box w="100%" height="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
@@ -99,5 +101,6 @@ export default function Points({user} : any) {
 
 Points.getInitialProps = async (ctx: NextPageContext) => {
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return { user }
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return { user, onStore}
 }

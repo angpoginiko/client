@@ -8,11 +8,14 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 {
 	try {
 		const { db } = await connect();
-		const _id = new ObjectId("60c714323d585efdee11dedf");
-		const points = await db.collection("pointVariable").findOne(
+		const {
+			query: { id },
+		} = req;
+		const _id = new ObjectId(id.toString());
+		const profile = await db.collection("customers").findOne(
 			{_id}
 		);
-		res.status(201).send(points.pointVariable);
+		res.status(201).send(profile.onStore);
 	} catch (error) {
 		res.status(500);
 		res.json({error: "Server error"})

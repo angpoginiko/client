@@ -23,18 +23,20 @@ import { useQuery } from 'react-query';
 import { Profile } from '../interfaces';
 import EditProfileImagePage from '../components/EditProfileImage';
 
-export default function ProfilePage({ user } : any) {
+export default function ProfilePage({ user, onStore } : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: onOpenPassword, isOpen: isOpenPassword, onClose: onClosePassword } = useDisclosure();
 	const { onOpen: onOpenImage, isOpen: isOpenImage, onClose: onCloseImage } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
-		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+		if(onStore){
+			router.replace('/Store');
+		} else if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/HomeAdmin');
 		}
-	}, [user]);
+	}, [user, onStore]);
 	
 	const fetchProfile = async () => {
 		const res = await fetch(`api/profile/GetUser`);
@@ -153,5 +155,6 @@ export default function ProfilePage({ user } : any) {
 
 ProfilePage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return {user: json};
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return {user: json, onStore};
 }

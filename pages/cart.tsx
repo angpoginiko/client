@@ -24,7 +24,7 @@ import userRoles from '../constants/userRoles';
 
 
 
-export default function Cart({user, profile} : any) {
+export default function Cart({user, profile, onStore} : any) {
 	const [checkoutItems, setCheckoutItems] = useState<UserCart[]>([])
 	const [hasItems, setHasItems] = useState(false);
 	const [orderId, setOrderId] = useState('');
@@ -75,12 +75,14 @@ export default function Cart({user, profile} : any) {
 
 	const router = useRouter();
 	useEffect(() => {
-		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+		if(onStore){
+			router.replace('/Store');
+		} else if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/HomeAdmin');
 		}
-	}, []);
+	}, [user, onStore]);
   return (
     <>
       <Head>
@@ -173,5 +175,6 @@ export default function Cart({user, profile} : any) {
 Cart.getInitialProps = async (ctx: NextPageContext) => {
   const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
 	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
-	return {user, profile};
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return {user, profile, onStore};
 }

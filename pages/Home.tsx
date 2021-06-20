@@ -14,15 +14,17 @@ import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
 import MainHeader from '../components/MainHeader';
 
-export default function AuthIndexPage({ user } : any) {
+export default function AuthIndexPage({ user, onStore } : any) {
 	const router = useRouter();
 	useEffect(() => {
-		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+		if(onStore){
+			router.replace('/Store');
+		} else if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/HomeAdmin');
 		}
-	}, [user]);
+	}, [user, onStore]);
 
   return (
     <>
@@ -59,5 +61,6 @@ export default function AuthIndexPage({ user } : any) {
 
 AuthIndexPage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return {user: json};
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return {user: json, onStore};
 }

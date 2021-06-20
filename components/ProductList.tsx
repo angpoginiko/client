@@ -1,4 +1,4 @@
-import { ProductType, ProductTypeType } from "../interfaces";
+import { ProductType } from "../interfaces";
 import {
   Tr,
   Td,

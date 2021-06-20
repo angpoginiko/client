@@ -28,9 +28,6 @@ type Props = {
   children?: ReactNode
   title?: string
 	authentication?: User
-	isModalOpen?: boolean;
-	onModalClose?: () => void;
-	frontPageClick?: boolean;
 }
 
 const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {

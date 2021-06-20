@@ -20,7 +20,7 @@ import AddCashier from '../components/AddCashier';
 import AddAdmin from '../components/AddAdmin';
 import SetPointVariable from '../components/SetPointVariable';
 
-export default function AdminIndexPage({ user } : any) {
+export default function AdminIndexPage({ user, onStore } : any) {
 	const {isOpen: isCashierOpen, onOpen: onCashierOpen, onClose: onCashierClose} = useDisclosure();
 	const {isOpen: isAdminOpen, onOpen: onAdminOpen, onClose: onAdminClose} = useDisclosure();
 	const {isOpen: isPointsOpen, onOpen: onPointsOpen, onClose: onPointsClose} = useDisclosure();
@@ -28,10 +28,12 @@ export default function AdminIndexPage({ user } : any) {
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier')
-		} else if(userRoles.Customer == user.userRole){
+		} else if((userRoles.Customer == user.userRole) && onStore){
+			router.replace('/Store')
+		} else if((userRoles.Customer == user.userRole) && !onStore){
 			router.replace('/Home')
 		}
-	}, []);
+	}, [user, onStore]);
   return (
     <>
 			<AdminNavBar>
@@ -96,5 +98,6 @@ export default function AdminIndexPage({ user } : any) {
 
 AdminIndexPage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return {user: json};
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return {user: json, onStore};
 }

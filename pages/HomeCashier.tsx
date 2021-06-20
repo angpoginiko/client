@@ -14,13 +14,27 @@ import { server } from '../config';
 import CashierNavBar from '../components/CashierNavBar';
 import ModalComp from '../components/ModalComp'
 import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import userRoles from '../constants/userRoles';
 
 const OrderQRScanner = dynamic(() => import('../components/OrderQRScanner'), {
 	ssr: false,
 });
 
-export default function CashierIndexPage({ user } : any) {
+export default function CashierIndexPage({ user, onStore } : any) {
 	const { onOpen: openOrder, isOpen: isOrderOpen, onClose: closeOrder } = useDisclosure();
+	const router = useRouter();
+	
+	useEffect(() => {
+		if(userRoles.Admin == user.userRole){
+			router.replace('/HomeAdmin')
+		} else if((userRoles.Customer == user.userRole) && onStore){
+			router.replace('/Store')
+		} else if((userRoles.Customer == user.userRole) && !onStore){
+			router.replace('/Home')
+		}
+	}, [user, onStore]);
   return (
     <>
 			<CashierNavBar authentication={user}>

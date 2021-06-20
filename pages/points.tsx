@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
 
 
-export default function Points({points, user, profile} : any) {
+export default function Points({points, user, profile, onStore} : any) {
 
 	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
 	if(!isProfileComplete) {
@@ -57,12 +57,14 @@ export default function Points({points, user, profile} : any) {
 	totalAvailablePoints = availablePoints - totalEncashedPoints;
 	
 	useEffect(() => {
-		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+		if(onStore){
+			router.replace('/Store');
+		} else if(userRoles.Cashier == user.userRole){
+			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/HomeAdmin');
 		}
-	}, [user]);
+	}, [user, onStore]);
 
 	
   return (
@@ -126,5 +128,6 @@ Points.getInitialProps = async (ctx: NextPageContext) => {
   const points = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
 	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
-	return { points, user, profile }
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return { points, user, profile, onStore }
 }

@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { MdCenterFocusStrong } from 'react-icons/md';
 import { useState } from 'react';
 
-export default function AuthIndexPage({ user } : any) {
+export default function AuthIndexPage({ user, onStore} : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const [frontPageClicker, setFrontPageClicker] = useState(false);
 	const router = useRouter();
@@ -27,8 +27,10 @@ export default function AuthIndexPage({ user } : any) {
 			router.replace('/HomeCashier')
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin')
+		} else if(!onStore){
+			router.replace('./Home');
 		}
-	}, [user]);
+	}, [user, onStore]);
 
 	const onModalClose = () => {
 		setFrontPageClicker(false);
@@ -72,5 +74,6 @@ export default function AuthIndexPage({ user } : any) {
 
 AuthIndexPage.getInitialProps = async (ctx: NextPageContext) => {
 	const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return {user: json};
+	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	return {user: json, onStore};
 }
