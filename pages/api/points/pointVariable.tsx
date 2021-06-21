@@ -15,6 +15,6 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		res.status(201).send(points.pointVariable);
 	} catch (error) {
 		res.status(500);
-		res.json({error: "Server error"})
+		res.json({error: `Server error${req}`})
 	}
 });
