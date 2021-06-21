@@ -13,7 +13,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		res.status(200).json({message: "Logged Out"});
 
 	} catch (error) {
-		res.status(500).json({message: "Something went wrong"});
+		res.status(500).json({message: `Something went wrong${req}`});
 	}
 	
 }
