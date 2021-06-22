@@ -1,7 +1,6 @@
 import React from 'react';
 import QrReader from 'react-qr-reader';
 import { useRouter } from 'next/router'
-import { useMutation } from 'react-query';
 
 interface OnStoreQRScannerProps {
 	customerId: string | undefined

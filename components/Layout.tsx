@@ -22,8 +22,6 @@ import {
 import dynamic from 'next/dynamic';
 import ModalComp from './ModalComp';
 import { User } from '../interfaces';
-import { useMutation } from 'react-query';
-import PageLoader from './PageLoader';
 
 const ProductQRScanner = dynamic(() => import('./ProductQRScanner'), {
 	ssr: false,
@@ -127,11 +125,6 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 			onOpen();
 		else
 			onStoreOpen();
-	}
-	const { isLoading: isExitLoading } = useMutation(onExit);
-
-	if(isExitLoading){
-		<PageLoader />
 	}
 	return(
 		<>
