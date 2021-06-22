@@ -27,7 +27,7 @@ export default function AuthIndexPage({ user, onStore } : any) {
 	}, [user, onStore]);
   return (
     <>
-			<Layout authentication={user} onStore>
+			<Layout authentication={user} onStore={false}>
 				<Container maxW={'3xl'}>
 					<Stack
 						as={Box}

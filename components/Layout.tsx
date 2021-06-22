@@ -22,6 +22,8 @@ import {
 import dynamic from 'next/dynamic';
 import ModalComp from './ModalComp';
 import { User } from '../interfaces';
+import { useMutation } from 'react-query';
+import PageLoader from './PageLoader';
 
 const ProductQRScanner = dynamic(() => import('./ProductQRScanner'), {
 	ssr: false,
@@ -111,9 +113,9 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 				<MenuList>
 					<MenuItem><Link href="/profile">Profile</Link></MenuItem>
 					<MenuItem><Link href="/points">Rewards</Link></MenuItem>
-					<MenuItem><Link href="/purchaseHistory">Purchase History</Link></MenuItem>
+					<MenuItem><Link href="/purchase-history">Purchase History</Link></MenuItem>
 					<MenuDivider />
-					{!onStore && <MenuItem><Link onClick={onExit}>Exit Store</Link></MenuItem>}
+					{onStore && <MenuItem><Link onClick={onExit}>Exit Store</Link></MenuItem>}
 					<MenuItem><Link onClick={onLogout}>Logout</Link></MenuItem>
 				</MenuList>
 			</Menu>
@@ -121,10 +123,15 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 	);
 
 	const openCartButton = () => {
-		if(!onStore)
+		if(onStore)
 			onOpen();
 		else
 			onStoreOpen();
+	}
+	const { isLoading: isExitLoading } = useMutation(onExit);
+
+	if(isExitLoading){
+		<PageLoader />
 	}
 	return(
 		<>
@@ -158,7 +165,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
-						{!onStore && <Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>}
+						{onStore && <Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>}
 						
 						<Button href="#" onClick={() => auth ? openCartButton() : Router.push('/login')}>
 							<Icon as={MdAddShoppingCart} w={4} h={4}/>

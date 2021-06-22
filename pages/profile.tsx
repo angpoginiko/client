@@ -29,9 +29,7 @@ export default function ProfilePage({ user, onStore } : any) {
 	const { onOpen: onOpenImage, isOpen: isOpenImage, onClose: onCloseImage } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
-		if(onStore){
-			router.replace('/store');
-		} else if(userRoles.Cashier == user.userRole){
+		if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin');
@@ -44,7 +42,7 @@ export default function ProfilePage({ user, onStore } : any) {
 	}
 	const { data: profile, refetch } = useQuery<Profile>("profile", fetchProfile);
   return (
-		<Layout title="Profile" authentication={user} onStore>
+		<Layout title="Profile" authentication={user} onStore={onStore}>
     <Center py={6}>
       <Box
         maxW={'320px'}

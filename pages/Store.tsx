@@ -38,7 +38,7 @@ export default function AuthIndexPage({ user, onStore} : any) {
 	}
   return (
     <>
-			<Layout authentication={user} isModalOpen={isOpen} onModalClose={onModalClose} frontPageClick={frontPageClicker} onStore>
+			<Layout authentication={user} isModalOpen={isOpen} onModalClose={onModalClose} frontPageClick={frontPageClicker} onStore title="Store">
       <Container maxW={'3xl'}>
         <Stack
           as={Box}

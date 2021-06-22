@@ -75,9 +75,7 @@ export default function Cart({user, profile, onStore} : any) {
 
 	const router = useRouter();
 	useEffect(() => {
-		if(onStore){
-			router.replace('/store');
-		} else if(userRoles.Cashier == user.userRole){
+		if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin');
@@ -91,7 +89,7 @@ export default function Cart({user, profile, onStore} : any) {
           rel="stylesheet"
         />
       </Head>
-			<Layout authentication={user} onStore>
+			<Layout authentication={user} onStore={onStore}>
 				<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
 						<Center>

@@ -23,9 +23,7 @@ import Layout from '../components/Layout';
 export default function Points({user, purchases, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
-		if(onStore){
-			router.replace('/store');
-		} else if(userRoles.Cashier == user.userRole){
+		if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin');
@@ -33,7 +31,7 @@ export default function Points({user, purchases, onStore} : any) {
 	}, [user, onStore]);
   return (
     <>
-		<Layout authentication={user} onStore>
+		<Layout authentication={user} onStore={onStore} title="Purchase History">
 				<Box w="100%" h="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
