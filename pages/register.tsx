@@ -48,7 +48,7 @@ const Register : React.FC = () => {
 	password.current = watch("password", "");
 	return(
 		<>
-		<Layout title="Register">
+		<Layout title="Register" onStore={false}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign up</Heading>

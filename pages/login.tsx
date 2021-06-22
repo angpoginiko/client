@@ -52,7 +52,7 @@ export default function Login (){
 	}
 	return(
 		<>
-		<Layout title="Login">
+		<Layout title="Login" onStore={false}>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
