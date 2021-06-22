@@ -25,7 +25,6 @@ export default function OnStoreQRScanner({customerId} :OnStoreQRScannerProps) {
 			await Router.push("/store");
     }
   }
-	const { isLoading } = useMutation(handleScanWebCam);
   return (
     <>
 		<QrReader
