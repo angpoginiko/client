@@ -29,7 +29,7 @@ export default function AdminIndexPage({ user, onStore } : any) {
 		if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier')
 		} else if((userRoles.Customer == user.userRole) && onStore){
-			router.replace('/Store')
+			router.replace('/store')
 		} else if((userRoles.Customer == user.userRole) && !onStore){
 			router.replace('/Home')
 		}
@@ -98,6 +98,6 @@ export default function AdminIndexPage({ user, onStore } : any) {
 
 AdminIndexPage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${json!.id}`, ctx);
 	return {user: json, onStore};
 }

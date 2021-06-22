@@ -23,7 +23,11 @@ import dynamic from 'next/dynamic';
 import ModalComp from './ModalComp';
 import { User } from '../interfaces';
 
-const ProductQRScanner = dynamic(() => import('../components/ProductQRScanner'), {
+const ProductQRScanner = dynamic(() => import('./ProductQRScanner'), {
+	ssr: false,
+});
+
+const OnStoreQRScanner = dynamic(() => import('./OnStoreQRScanner'), {
 	ssr: false,
 });
 
@@ -34,14 +38,15 @@ type Props = {
 	isModalOpen?: boolean;
 	onModalClose?: () => void;
 	frontPageClick?: boolean;
+	onStore: boolean;
 }
 
 
-const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose, frontPageClick }: Props) => {
+const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose, frontPageClick, onStore }: Props) => {
 	const { onOpen, isOpen, onClose } = useDisclosure();
+	const { onOpen: onStoreOpen, isOpen: isStoreOpen, onClose: onStoreClose } = useDisclosure();
 	const Router = useRouter();
 	const [auth, setAuth] = useState(!!authentication);
-
 
 	const onLogout = async () =>{ 
 		await fetch("api/profile/logout",{
@@ -50,7 +55,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 				"Content-Type": "application/json",
 			},
 			credentials: "include"
-		})
+		});
 		await Router.push("/")
 		setAuth(false);
 	}
@@ -108,12 +113,19 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					<MenuItem><Link href="/points">Rewards</Link></MenuItem>
 					<MenuItem><Link href="/purchaseHistory">Purchase History</Link></MenuItem>
 					<MenuDivider />
-					<MenuItem><Link onClick={onExit}>Exit Store</Link></MenuItem>
+					{!onStore && <MenuItem><Link onClick={onExit}>Exit Store</Link></MenuItem>}
 					<MenuItem><Link onClick={onLogout}>Logout</Link></MenuItem>
 				</MenuList>
 			</Menu>
 		</>
 	);
+
+	const openCartButton = () => {
+		if(!onStore)
+			onOpen();
+		else
+			onStoreOpen();
+	}
 	return(
 		<>
 		<Head>
@@ -146,9 +158,19 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
-						<Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>
-						<Button href="#" onClick={() => auth ? onOpen() : Router.push('/login')}><Icon as={MdAddShoppingCart} w={4} h={4}/></Button>
-						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {frontPageClick ? onModalClose!() : onClose()}} title="Scan Item"><ProductQRScanner customerId={authentication?.id!}/></ModalComp>
+						{!onStore && <Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>}
+						
+						<Button href="#" onClick={() => auth ? openCartButton() : Router.push('/login')}>
+							<Icon as={MdAddShoppingCart} w={4} h={4}/>
+						</Button>
+						
+						<ModalComp isModalOpen={isOpen || isModalOpen!} onModalClose={() => {frontPageClick ? onModalClose!() : onClose()}} title="Scan Item">
+							<ProductQRScanner customerId={authentication?.id!}/>
+						</ModalComp>
+						
+						<ModalComp isModalOpen={isStoreOpen} onModalClose={onStoreClose} title="Scan Store QR">
+							<OnStoreQRScanner customerId={authentication?.id} />
+						</ModalComp>
 						{auth ? logoutButton: loginButton}
 					</Stack>
 				</Flex>

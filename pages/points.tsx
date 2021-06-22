@@ -21,7 +21,7 @@ export default function Points({points, user, profile, onStore} : any) {
 
 	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
 	if(!isProfileComplete) {
-		return <Layout authentication={user} title="Points">
+		return <Layout authentication={user} title="Points" onStore>
 			You need to complete profile first
 		</Layout>
 	}
@@ -58,7 +58,7 @@ export default function Points({points, user, profile, onStore} : any) {
 	
 	useEffect(() => {
 		if(onStore){
-			router.replace('/Store');
+			router.replace('/store');
 		} else if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
@@ -69,7 +69,7 @@ export default function Points({points, user, profile, onStore} : any) {
 	
   return (
     <>
-		<Layout authentication={user} title="Points">
+		<Layout authentication={user} title="Points" onStore>
 			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
 					<Center>
@@ -128,6 +128,6 @@ Points.getInitialProps = async (ctx: NextPageContext) => {
   const points = await frontEndAuthentication(`${server}/api/points/getPoints`, ctx);
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
 	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${user!.id}`, ctx);
 	return { points, user, profile, onStore }
 }

@@ -35,7 +35,8 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				earned: [],
 				redeemed: [],
 				encashed: [],
-			}
+			},
+			onStore: false
 		});
 		const id = customer.ops[0]._id;
 

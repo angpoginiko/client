@@ -1,29 +1,30 @@
-import React from 'react';
+import { useDisclosure } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import QrReader from 'react-qr-reader';
-import { useRouter } from 'next/router'
+import { ProductType } from '../interfaces';
+import ModalComp from './ModalComp';
+import Product from './Product';
 
-interface QRScannerProps {
+interface ProductQRScannerProps {
 	customerId: string | undefined
 }
 
-export default function QRScanner({customerId} : QRScannerProps) { 
-	const Router = useRouter();
+export default function ProductQRScanner({customerId} : ProductQRScannerProps) { 
+	const { onOpen, isOpen, onClose } = useDisclosure();
+	const  [data, setData ] = useState<ProductType>();
   const handleErrorWebCam = (error : any) => {
     console.log(error);
   }
   const handleScanWebCam = async (result: string | null) => {
-    if (result == "true"){
-			await fetch("api/profile/onStore",{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				credentials: "include",
-				body: JSON.stringify({id: customerId})
-			})
-			await Router.push("/Store");
+    if (result){
+				const response = await fetch (`/api/products/product/${result}`, {
+					method: "GET",
+				})
+				const data = await response.json();
+				setData(data);
+				onOpen();
     }
-  }
+   }
   return (
     <>
 		<QrReader
@@ -32,6 +33,9 @@ export default function QRScanner({customerId} : QRScannerProps) {
 			onError={handleErrorWebCam}
 			onScan={handleScanWebCam}
 		/>
+		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add to Cart">
+			<Product customerId={customerId} product={data} closeProduct={onClose}/>
+		</ModalComp>
 		</>
   );
 }

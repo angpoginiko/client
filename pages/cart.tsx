@@ -76,7 +76,7 @@ export default function Cart({user, profile, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(onStore){
-			router.replace('/Store');
+			router.replace('/store');
 		} else if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
@@ -91,7 +91,7 @@ export default function Cart({user, profile, onStore} : any) {
           rel="stylesheet"
         />
       </Head>
-			<Layout authentication={user}>
+			<Layout authentication={user} onStore>
 				<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
 						<Center>
@@ -175,6 +175,6 @@ export default function Cart({user, profile, onStore} : any) {
 Cart.getInitialProps = async (ctx: NextPageContext) => {
   const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
 	const profile = await frontEndAuthentication(`${server}/api/profile/GetUser`, ctx);
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${user!.id}`, ctx);
 	return {user, profile, onStore};
 }

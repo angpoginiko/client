@@ -37,7 +37,7 @@ export default function Points({user, onStore} : any) {
 		} else if((userRoles.Customer == user.userRole) && !onStore){
 			router.replace('/Home')
 		} else if((userRoles.Customer == user.userRole) && onStore){
-			router.replace('/Store')
+			router.replace('/store')
 		}
 	}, [user, onStore]);
 
@@ -101,6 +101,6 @@ export default function Points({user, onStore} : any) {
 
 Points.getInitialProps = async (ctx: NextPageContext) => {
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${user!.id}`, ctx);
 	return { user, onStore}
 }

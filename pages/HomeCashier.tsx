@@ -30,7 +30,7 @@ export default function CashierIndexPage({ user, onStore } : any) {
 		if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin')
 		} else if((userRoles.Customer == user.userRole) && onStore){
-			router.replace('/Store')
+			router.replace('/store')
 		} else if((userRoles.Customer == user.userRole) && !onStore){
 			router.replace('/Home')
 		}
@@ -73,5 +73,6 @@ export default function CashierIndexPage({ user, onStore } : any) {
 
 CashierIndexPage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	return {user: json};
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${json!.id}`, ctx);
+	return {user: json, onStore};
 }

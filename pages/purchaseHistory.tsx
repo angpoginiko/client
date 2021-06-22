@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import Layout from '../components/Layout'
 import {
   Box,
   Text,
@@ -18,13 +17,14 @@ import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
 import { Purchases } from '../interfaces';
 import PurchaseItem from '../components/PurchaseItem';
+import Layout from '../components/Layout';
 
 
 export default function Points({user, purchases, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(onStore){
-			router.replace('/Store');
+			router.replace('/store');
 		} else if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
@@ -33,7 +33,7 @@ export default function Points({user, purchases, onStore} : any) {
 	}, [user, onStore]);
   return (
     <>
-		<Layout authentication={user}>
+		<Layout authentication={user} onStore>
 				<Box w="100%" h="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
@@ -71,6 +71,6 @@ Points.getInitialProps = async (ctx: NextPageContext) => {
 	const user = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
   const purchaseHistory = await frontEndAuthentication(`${server}/api/purchaseHistory/${user.id}`, ctx);
 	const purchases: Purchases[] = purchaseHistory.purchases;
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${user.id}`, ctx);
 	return { user, purchases, onStore }
 }

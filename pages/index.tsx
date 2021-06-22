@@ -21,7 +21,7 @@ export default function IndexPage({ user }: any) {
           rel="stylesheet"
         />
       </Head>
-			<Layout authentication={user}>
+			<Layout authentication={user} onStore={false}>
       <Container maxW={'3xl'}>
         <Stack
           as={Box}

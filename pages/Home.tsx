@@ -12,23 +12,22 @@ import { server } from '../config';
 import { useEffect } from 'react';
 import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
-import MainHeader from '../components/MainHeader';
+import Layout from '../components/Layout';
 
 export default function AuthIndexPage({ user, onStore } : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(onStore){
-			router.replace('/Store');
+			router.replace('/store');
 		} else if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
 			router.replace('/HomeAdmin');
 		}
 	}, [user, onStore]);
-
   return (
     <>
-			<MainHeader authentication={user}>
+			<Layout authentication={user} onStore>
 				<Container maxW={'3xl'}>
 					<Stack
 						as={Box}
@@ -54,13 +53,13 @@ export default function AuthIndexPage({ user, onStore } : any) {
 						</Stack>
 					</Stack>
 				</Container>
-		</MainHeader>
+		</Layout>
     </>
   );
 }
 
 AuthIndexPage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${json!.id}`, ctx);
 	return {user: json, onStore};
 }

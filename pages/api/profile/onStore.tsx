@@ -8,18 +8,18 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	const { db } = await connect();
 	const { id } = req.body;
 	try {
-		const customerId = new ObjectId(id);
-		const onStore = await db.collection("customers").findOneAndUpdate(
-			{ customerId },
+		const _id = new ObjectId(id);
+		await db.collection("customers").findOneAndUpdate(
+			{ _id },
 			{ $set:
 					{
 						onStore: true
 					}
 			}
 		);
-		res.status(200).send(onStore.value._id);
+		res.status(200).send("DONE");
 	} catch(err) {
-		res.status(401).send({message: "youre not logged in"});
+		res.status(401).send(err);
 	}
 	
 })

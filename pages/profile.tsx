@@ -30,7 +30,7 @@ export default function ProfilePage({ user, onStore } : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(onStore){
-			router.replace('/Store');
+			router.replace('/store');
 		} else if(userRoles.Cashier == user.userRole){
 			router.replace('/HomeCashier');
 		} else if(userRoles.Admin == user.userRole){
@@ -44,7 +44,7 @@ export default function ProfilePage({ user, onStore } : any) {
 	}
 	const { data: profile, refetch } = useQuery<Profile>("profile", fetchProfile);
   return (
-		<Layout title="Profile" authentication={user}>
+		<Layout title="Profile" authentication={user} onStore>
     <Center py={6}>
       <Box
         maxW={'320px'}
@@ -155,6 +155,6 @@ export default function ProfilePage({ user, onStore } : any) {
 
 ProfilePage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
-	const onStore = await frontEndAuthentication(`${server}/api/profile/getOnStore`, ctx);
+	const onStore = await frontEndAuthentication(`${server}/api/profile/${json.id}`, ctx);
 	return {user: json, onStore};
 }
