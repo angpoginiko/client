@@ -15,6 +15,11 @@ interface NavItemProps {
 }
 
 export default function NavItem({ title, navSize, typeId, setQuery }: NavItemProps) {
+		const toPascalCase = (text: string | undefined) => {
+			const newString = text?.replace(/\w+/g,
+				function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
+			return newString;
+		}
     return (
         <Flex
             mt={30}
@@ -31,7 +36,7 @@ export default function NavItem({ title, navSize, typeId, setQuery }: NavItemPro
                 >
                     <MenuButton w="100%" onClick={() => setQuery(typeId)}>
                         <Flex>
-                            <Text ml={5} display={navSize == "small" ? "none" : "flex"}>{title}</Text>
+                            <Text ml={5} display={navSize == "small" ? "none" : "flex"}>{toPascalCase(title)}</Text>
                         </Flex>
                     </MenuButton>
                 </Link>
