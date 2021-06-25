@@ -1,7 +1,8 @@
 import {
 	Spinner,
 	HStack,
-	Center
+	Center,
+	Stack
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -43,6 +44,7 @@ export default function AuthIndexPage({ user, onStore } : any) {
   return (
     <>
 			<Layout authentication={user} onStore={false}>
+			<Stack direction="row" spacing="5%">
 			<Sidebar setQuery={setProductTypeQuery}/>
 				<HStack width={"100%"}>
 					{!isFetching && products && products.map((product) => {
@@ -50,6 +52,7 @@ export default function AuthIndexPage({ user, onStore } : any) {
 					})}
 					{isFetching && (<Center width="100%"><Spinner size="xl"/></Center>)}
 				</HStack>
+			</Stack>
 			</Layout>
     </>
   );

@@ -176,9 +176,8 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 				</Flex>
 			</Flex>
 		</Box>
-		<Stack direction="row">
-			{children}	
-		</Stack>
+		
+		{children}	
 	</>
 )}
 
