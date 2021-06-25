@@ -1,20 +1,35 @@
 import {
-  Box,
-  Heading,
-  Container,
-  Text,
-  Stack,
+	Spinner,
+	HStack,
 	Center
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
+import Sidebar from '../components/Sidebar';
+import { useQuery } from 'react-query';
+import { ProductType } from '../interfaces';
+import Product from '../components/Product'
 
 export default function AuthIndexPage({ user, onStore } : any) {
+	const [productTypeQuery, setProductTypeQuery] = useState("");
+	
+	const fetchProducts = async () => {
+		if(productTypeQuery != ""){
+			const res = await fetch(`api/products/getProductByType/${productTypeQuery}`);
+			return res.json();
+		}	
+	}
+	const { data: products, refetch, isFetching } = useQuery<ProductType[]>("products", fetchProducts);
+	
+	useEffect(() => {
+		refetch();
+	}, [productTypeQuery]);
+
 	const router = useRouter();
 	useEffect(() => {
 		if(onStore){
@@ -28,32 +43,14 @@ export default function AuthIndexPage({ user, onStore } : any) {
   return (
     <>
 			<Layout authentication={user} onStore={false}>
-				<Container maxW={'3xl'}>
-					<Stack
-						as={Box}
-						textAlign={'center'}
-						spacing={{ base: 8, md: 14 }}
-						py={{ base: 20, md: 36 }}>
-						<Center>
-						</Center>
-						<Heading
-							fontWeight={600}
-							fontSize={{ base: 'xl', sm: '2xl', md: '4xl' }}
-							lineHeight={'110%'}>
-							Online <br />
-							<Text as={'span'} color={'green.400'}>
-							</Text>
-						</Heading>
-						<Stack
-							direction={'column'}
-							spacing={3}
-							align={'center'}
-							alignSelf={'center'}
-							position={'relative'}>
-						</Stack>
-					</Stack>
-				</Container>
-		</Layout>
+			<Sidebar setQuery={setProductTypeQuery}/>
+				<HStack width={"100%"}>
+					{!isFetching && products && products.map((product) => {
+						return <Product product={product} customerId={user.id} key={product._id}/>
+					})}
+					{isFetching && (<Center width="100%"><Spinner size="xl"/></Center>)}
+				</HStack>
+			</Layout>
     </>
   );
 }

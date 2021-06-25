@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import ModalComp from './ModalComp';
 interface ProductProps {
 	product: ProductType | undefined
-	closeProduct: () => void
+	closeProduct?: () => void
 	customerId: string | undefined
 }
 
@@ -123,7 +123,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 						</Stack>
 				</Box>
 			</Center>
-			<ModalComp title="" isModalOpen={isOpen} onModalClose={() => {onClose(); closeProduct();}}>
+			<ModalComp title="" isModalOpen={isOpen} onModalClose={() => {onClose(); closeProduct && closeProduct();}}>
 				<Text>Item Added!</Text>
 			</ModalComp>
 		</>
