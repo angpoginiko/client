@@ -9,12 +9,11 @@ import {
 
 interface NavItemProps {
 	title: string;
-	navSize: string;
 	typeId: string;
 	setQuery: (query: string) => void;
 }
 
-export default function NavItem({ title, navSize, typeId, setQuery }: NavItemProps) {
+export default function NavItem({ title, typeId, setQuery }: NavItemProps) {
 		const toPascalCase = (text: string | undefined) => {
 			const newString = text?.replace(/\w+/g,
 				function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
@@ -25,7 +24,7 @@ export default function NavItem({ title, navSize, typeId, setQuery }: NavItemPro
             mt={30}
             flexDir="column"
             w="100%"
-            alignItems={navSize == "small" ? "center" : "flex-start"}
+            alignItems={"flex-start"}
         >
             <Menu placement="right">
                 <Link
@@ -36,7 +35,7 @@ export default function NavItem({ title, navSize, typeId, setQuery }: NavItemPro
                 >
                     <MenuButton w="100%" onClick={() => setQuery(typeId)}>
                         <Flex>
-                            <Text ml={5} display={navSize == "small" ? "none" : "flex"}>{toPascalCase(title)}</Text>
+                            <Text ml={5} display={"flex"}>{toPascalCase(title)}</Text>
                         </Flex>
                     </MenuButton>
                 </Link>

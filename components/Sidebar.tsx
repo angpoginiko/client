@@ -11,7 +11,6 @@ interface SideBarProps {
 }
 
 export default function Sidebar({setQuery} : SideBarProps) {
-    const [navSize, changeNavSize] = useState("large");
 		const fetchProductTypes = async () => {
 			const res = await fetch(`api/productType/getProductTypes`);
 			return res.json();
@@ -24,7 +23,7 @@ export default function Sidebar({setQuery} : SideBarProps) {
             left="5"
             h="100%"
             marginTop="2.5vh"
-            borderRadius={navSize == "small" ? "15px" : "30px"}
+            borderRadius={"30px"}
             w={"10%"}
             flexDir="column"
             justifyContent="space-between"
@@ -33,14 +32,13 @@ export default function Sidebar({setQuery} : SideBarProps) {
                 p="5%"
                 flexDir="column"
                 w="100%"
-                alignItems={navSize == "small" ? "center" : "flex-start"}
+                alignItems={"flex-start"}
                 as="nav"
             >
 							{productTypes && productTypes.map((productType) => {
 								 return(
 									<NavItem 
 										key={productType._id!} 
-										navSize={navSize} 
 										title={productType.name} 
 										setQuery={setQuery} 
 										typeId={productType._id!}
