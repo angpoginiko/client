@@ -16,8 +16,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				repeatpassword
 			}
 		} = req.body;
-		const existingUser = await db.collection("profile").findOne({username});
-		if(existingUser) return res.status(400).json({message: "User already exist"});
+		const existingUserName = await db.collection("customers").findOne({"profile.username" : username});
+		const existingName = await db.collection("customer").findOne({"profile.name" : name});
+		if(existingUserName || existingName) return res.status(400).json({message: "User already exist"});
 		if(password !== repeatpassword) return res.status(400).json({message: "Passwords does not match"});
 		
 		const hashedPassword = await bcrypt.hash(password, 12);
