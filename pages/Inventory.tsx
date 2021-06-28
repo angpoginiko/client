@@ -33,9 +33,9 @@ export default function Points({user, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+			router.replace('/home-cashier')
 		} else if((userRoles.Customer == user.userRole) && !onStore){
-			router.replace('/Home')
+			router.replace('/home')
 		} else if((userRoles.Customer == user.userRole) && onStore){
 			router.replace('/store')
 		}

@@ -50,7 +50,7 @@ const AdminNavBar = ({ children, title = 'Home' }: Props) => {
 								textDecoration: 'none',
 								bg: useColorModeValue('gray.200', 'gray.700'),
 							}}
-							href="/HomeAdmin">
+							href="/home-admin">
 							Home
 						</Link>
 					</HStack>

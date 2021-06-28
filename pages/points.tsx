@@ -58,9 +58,9 @@ export default function Points({points, user, profile, onStore} : any) {
 	
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier');
+			router.replace('/home-cashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin');
+			router.replace('/home-admin');
 		}
 	}, [user, onStore]);
   return (

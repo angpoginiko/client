@@ -11,13 +11,13 @@ export async function formAuth(url: string, ctx: NextPageContext){
 	});
 
 	if(resp.status !== 401 && !ctx.req){
-		Router.replace('/Home');
+		Router.replace('/home');
 		return {};
 	}
 
 	if(resp.status !== 401 && ctx.req){
 		ctx.res?.writeHead(302, {
-			Location: '/Home'
+			Location: '/home'
 		});
 		ctx.res?.end();
 		return;

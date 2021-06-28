@@ -20,18 +20,18 @@ import AddCashier from '../components/AddCashier';
 import AddAdmin from '../components/AddAdmin';
 import SetPointVariable from '../components/SetPointVariable';
 
-export default function AdminIndexPage({ user, onStore } : any) {
+export default function HomeAdminPage({ user, onStore } : any) {
 	const {isOpen: isCashierOpen, onOpen: onCashierOpen, onClose: onCashierClose} = useDisclosure();
 	const {isOpen: isAdminOpen, onOpen: onAdminOpen, onClose: onAdminClose} = useDisclosure();
 	const {isOpen: isPointsOpen, onOpen: onPointsOpen, onClose: onPointsClose} = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+			router.replace('/home-cashier')
 		} else if((userRoles.Customer == user.userRole) && onStore){
 			router.replace('/store')
 		} else if((userRoles.Customer == user.userRole) && !onStore){
-			router.replace('/Home')
+			router.replace('/home')
 		}
 	}, [user, onStore]);
   return (
@@ -73,7 +73,7 @@ export default function AdminIndexPage({ user, onStore } : any) {
 							</Container>
 
 							<Container>
-								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={()=> router.push('/Inventory')}>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={()=> router.push('/inventory')}>
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Inventory</Text></Center>
 								</Box>
 							</Container>
@@ -96,7 +96,7 @@ export default function AdminIndexPage({ user, onStore } : any) {
   );
 }
 
-AdminIndexPage.getInitialProps = async (ctx: NextPageContext) => {
+HomeAdminPage.getInitialProps = async (ctx: NextPageContext) => {
   const json = await frontEndAuthentication(`${server}/api/profile/retrieve`, ctx);
 	const onStore = await frontEndAuthentication(`${server}/api/profile/${json!.id}`, ctx);
 	return {user: json, onStore};

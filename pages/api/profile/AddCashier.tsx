@@ -32,6 +32,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				name,
 				userRole: 1,
 			},
+			onStore: false
 		});
 		res.status(201).send(customer);
 		

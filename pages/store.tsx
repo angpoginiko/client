@@ -24,11 +24,11 @@ export default function AuthIndexPage({ user, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier')
+			router.replace('/home-cashier')
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/home-admin')
 		} else if(!onStore){
-			router.replace('./Home');
+			router.replace('./home');
 		}
 	}, [user, onStore]);
 

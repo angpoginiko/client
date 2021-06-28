@@ -28,11 +28,11 @@ export default function CashierIndexPage({ user, onStore } : any) {
 	
 	useEffect(() => {
 		if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin')
+			router.replace('/home-admin')
 		} else if((userRoles.Customer == user.userRole) && onStore){
 			router.replace('/store')
 		} else if((userRoles.Customer == user.userRole) && !onStore){
-			router.replace('/Home')
+			router.replace('/home')
 		}
 	}, [user, onStore]);
   return (

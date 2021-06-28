@@ -42,11 +42,11 @@ export default function Login (){
 		const user = await response.json();
 		
 		if(user.userRole == userRoles.Customer){
-			await router.push("/Home");
+			await router.push("/home");
 		} else if (user.userRole == userRoles.Admin){
-			await router.push("/HomeAdmin");
+			await router.push("/home-admin");
 		} else if (user.userRole == userRoles.Cashier){
-			await router.push("/HomeCashier");
+			await router.push("/home-cashier");
 		}
 
 	}

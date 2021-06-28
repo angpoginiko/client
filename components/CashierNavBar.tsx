@@ -53,7 +53,7 @@ const CashierNavBar = ({ children, title = 'Home' }: Props) => {
 								textDecoration: 'none',
 								bg: useColorModeValue('gray.200', 'gray.700'),
 							}}
-							href="/HomeCashier">
+							href="/home-cashier">
 							Home
 						</Link>
 					</HStack>

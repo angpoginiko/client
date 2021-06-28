@@ -36,9 +36,9 @@ export default function AuthIndexPage({ user, onStore } : any) {
 		if(onStore){
 			router.replace('/store');
 		} else if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier');
+			router.replace('/home-cashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin');
+			router.replace('/home-admin');
 		}
 	}, [user, onStore]);
   return (

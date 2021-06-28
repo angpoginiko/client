@@ -70,7 +70,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 			credentials: "include",
 			body: JSON.stringify({id})
 		})
-		await Router.push("/Home");
+		await Router.push("/home");
 	}
 
 
@@ -147,7 +147,7 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 								textDecoration: 'none',
 								bg: useColorModeValue('gray.200', 'gray.700'),
 							}}
-							href={auth ? `${onStore ? "/store": "/Home"}` : '/'}>
+							href={auth ? `${onStore ? "/store": "/home"}` : '/'}>
 							Home
 						</Link>
 					</HStack>

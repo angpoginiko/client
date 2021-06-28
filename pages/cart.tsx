@@ -76,9 +76,9 @@ export default function Cart({user, profile, onStore} : any) {
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
-			router.replace('/HomeCashier');
+			router.replace('/home-cashier');
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/HomeAdmin');
+			router.replace('/home-admin');
 		}
 	}, [user, onStore]);
   return (
