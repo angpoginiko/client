@@ -51,7 +51,7 @@ export type ProductType = {
 	image?: FileList | string,
 	unitOfMeasure?: UnitOfMeasureType,
 	expiryDate?: Date,
-	reorderingStock: number
+	reorderingStock?: number
 }
 
 export type ProductTypeType = {
