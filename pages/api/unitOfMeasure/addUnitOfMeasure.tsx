@@ -11,10 +11,10 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			name
 		} = req.body;
 		const formattedName: string = name.toLowerCase();
-		const existingProduct = await db.collection("productType").findOne({name: formattedName});
+		const existingProduct = await db.collection("unitOfMeasure").findOne({name: formattedName});
 		if(existingProduct) return res.status(400).json({message: "Product Family already exist"});
 
-		const types = await db.collection("productType").insertOne({
+		const types = await db.collection("unitOfMeasure").insertOne({
 			name: formattedName
 		});
 		res.status(200).send(types.ops[0]);

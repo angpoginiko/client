@@ -5,6 +5,7 @@ import {
 	Checkbox
 } from "@chakra-ui/react"
 import { ChangeEvent } from "react";
+
 interface ReceiptProps {
 	item: UserCart;
 }

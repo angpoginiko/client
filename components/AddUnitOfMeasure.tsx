@@ -15,18 +15,18 @@ import {
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
 
-interface AddProductTypeProps {
+interface AddUnitOfMeasureProps {
 	modalClose: () => void;
 	refresh: () => void;
 }
 
-export default function AddProductType({ modalClose, refresh } : AddProductTypeProps) {
+export default function AddUnitOfMeasure({ modalClose, refresh } : AddUnitOfMeasureProps) {
 	const [errorText, setErrorText] = useState("")
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
 	const onSubmit = async (formData: object) => {
-			const response = await fetch("/api/productType/addProductType", {
+			const response = await fetch("/api/unitOfMeasure/addUnitOfMeasure", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -40,13 +40,12 @@ export default function AddProductType({ modalClose, refresh } : AddProductTypeP
 				setErrorText(json.message);
 				onErrorOpen();
 			}
-			
 	}
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add Product Family</Heading>
+          <Heading fontSize={'4xl'}>Add Unit of Measure</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -77,7 +76,7 @@ export default function AddProductType({ modalClose, refresh } : AddProductTypeP
         </Box>
       </Stack>
 			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), modalClose(), refresh()}} title="Add Cashier">
-				Property Type Added!!!
+				Unit of Measure Added!!!
 			</ModalComp>
 			<ModalComp isModalOpen={isErrorOpen} onModalClose={onErrorClose} title="Error!">
 				<Text>

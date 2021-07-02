@@ -14,7 +14,14 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				"foreignField" : "_id",
 				"as" : "productType"
 			}},
-			{"$unwind" : "$productType"}
+			{"$unwind" : "$productType"},
+			{"$lookup" : {
+				"from" : "unitOfMeasure",
+				"localField" : "unitOfMeasure",
+				"foreignField" : "_id",
+				"as" : "unitOfMeasure"
+			}},
+			{"$unwind" : "$unitOfMeasure"}
 		]).toArray();
 		res.status(201).send(products);
 	} catch (error) {

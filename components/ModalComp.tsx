@@ -24,7 +24,7 @@ export default function ModalComp({children, isModalOpen, onModalClose, title} :
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-					{children}
+						{children}
           </ModalBody>
 
           <ModalFooter>

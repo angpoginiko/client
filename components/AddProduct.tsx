@@ -1,6 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import { useForm } from 'react-hook-form'
-import { ProductType, ProductTypeType } from '../interfaces/index'
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form'
 import {
   Box,
   FormControl,
@@ -9,79 +8,70 @@ import {
   Button,
   Heading,
   useColorModeValue,
-	Input,
 	FormErrorMessage,
+	Text,
 	useDisclosure,
-	Select,
-	NumberInputField,
-	NumberInputStepper,
-	NumberDecrementStepper,
 	NumberIncrementStepper,
+	NumberInputStepper,
+	NumberInputField,
 	NumberInput,
-	Textarea
+	NumberDecrementStepper,
+	Select,
+	Divider
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
+import Flatpickr from 'react-flatpickr'
+import "flatpickr/dist/themes/confetti.css";
+import { ProductType, UnitOfMeasureType } from '../interfaces';
 import { useQuery } from 'react-query';
 
-interface AddCashierProps {
+interface AddProductProps {
 	modalClose: () => void;
 	refresh: () => void;
+	productId?: string;
+	productName: string;
 }
 
-export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
+export default function AddProduct({ modalClose, refresh, productId, productName } : AddProductProps) {
+	const [errorText, setErrorText] = useState("")
 	const {isOpen, onOpen, onClose} = useDisclosure();
-	const [image, setImage] = useState<string | ArrayBuffer | null>("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
-	const { register, handleSubmit, errors } = useForm();
-
-
+	const {isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose} = useDisclosure();
+	const { register, handleSubmit, errors, control } = useForm();
+	const [date, setDate] = useState(new Date());
 	const onSubmit = async (formData: ProductType) => {
-		const { image, ...data } = formData;
-    const reader = new FileReader();
-		let newImage : string | ArrayBuffer | null = '';
-     reader.onload = async () =>{
-      if(reader.readyState === 2){
-        newImage = reader.result;
-				const response = await fetch("/api/products/addProducts", {
+			const response = await fetch("/api/productType/addReceivingProduct", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
-					},
-					body: JSON.stringify({product: data, image: newImage}),
-				});
-				await response.json();
+				},
+				body: JSON.stringify({receivingProducts: formData, productId}),
+			});
+			const json = await response.json();
+			if(response.ok){
 				onOpen();
-      }
-    }
-    reader.readAsDataURL(image![0] as Blob);
-	}
-	
-	const fetchProductType = async () => {
-		const res = await fetch(`api/productType/getProductTypes`);
-		return res.json();
+			} else {
+				setErrorText(json.message);
+				onErrorOpen();
+			}
+			
 	}
 
-	const imageHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    reader.onload = () =>{
-      if(reader.readyState === 2){
-        setImage(reader.result)
-      }
-    }
-    reader.readAsDataURL(e.target.files![0])
-  };
+	const fetchUnitOfMeasure = async () => {
+		const res = await fetch(`api/unitOfMeasure/getUnitOfMeasure`);
+		return res.json();
+	}
 
 	const toPascalCase = (text: string | undefined) => {
 		const newString = text?.replace(/\w+/g,
 			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
 		return newString;
 	}
-	
-	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchProductType);
+	const { data: unitOfMeasure } = useQuery<UnitOfMeasureType[]>("unitOfMeasure", fetchUnitOfMeasure);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Add Product</Heading>
+          <Heading fontSize={'3xl'}>Add Product: {productName}</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -90,14 +80,8 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
           p={8}>
 				<form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
-            <FormControl id="productName" isInvalid={errors.productName && errors.productName.type === "required"}>
-              <FormLabel>Name</FormLabel>
-              <Input name="productName" ref={register({required:true})} />
-							<FormErrorMessage>Name Required</FormErrorMessage>
-            </FormControl>
-
 						<FormControl id="quantity" isInvalid={errors.quantity && errors.quantity.type === "required"}>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel>Quantity per package</FormLabel>
 							<NumberInput>
 								<NumberInputField name="quantity" ref={register({required:true})}/>
 								<NumberInputStepper>
@@ -108,40 +92,28 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
 							<FormErrorMessage>Quantity Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="unitPrice" isInvalid={errors.unitPrice && errors.unitPrice.type === "required"}>
-              <FormLabel>Price</FormLabel>
-							<NumberInput>
-								<NumberInputField name="unitPrice" ref={register({required:true})}/>
-								<NumberInputStepper>
-									<NumberIncrementStepper />
-									<NumberDecrementStepper />
-								</NumberInputStepper>
-							</NumberInput>
-							<FormErrorMessage>Price Required</FormErrorMessage>
-            </FormControl>
-
-            <FormControl id="productType" isInvalid={errors.productType && errors.productType.type === "required"}>
-              <FormLabel>Product Type</FormLabel>
-              <Select name="productType" placeholder="--Product Types--" ref={register({required:true})}>
-								{productTypes && productTypes.map((productType) => {
-									return (<option value={productType._id} key={productType.name}>{toPascalCase(productType.name)}</option>);
+						<FormControl id="unitOfMeasure" isInvalid={errors.unitOfMeasure && errors.unitOfMeasure.type === "required"}>
+              <FormLabel>Package Unit of Measure</FormLabel>
+              <Select name="unitOfMeasure" placeholder="--Unit of Measure--" ref={register({required:true})}>
+								{unitOfMeasure && unitOfMeasure.map((unitOfMeasure) => {
+									return (<option value={unitOfMeasure._id} key={unitOfMeasure.name}>{toPascalCase(unitOfMeasure.name)}</option>);
 								})}
 							</Select>
-							<FormErrorMessage>ProductType Required</FormErrorMessage>
+							<FormErrorMessage>Unit of Measure Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="productDesc" isInvalid={errors.productDesc && errors.productDesc.type === "required"}>
-              <FormLabel>Product Description</FormLabel>
-              <Textarea name="productDesc" ref={register({required:true})}/>
-							<FormErrorMessage>Product Description is Required</FormErrorMessage>
-            </FormControl>
-
-
-						<FormControl id="image" isInvalid={errors.image && errors.image.type === "required"}>
-              <FormLabel>Image Required</FormLabel>
-							<img src={image?.toString()} alt="" id="img" className="img" />
-              <input type="file" name="image" ref={register({required:true})} onChange={imageHandler} accept="image/*"/>
-							<FormErrorMessage>Product Image is Required</FormErrorMessage>
+						<FormControl id="expiryDate" isInvalid={errors.expiryDate && errors.expiryDate.type === "required"}>
+              <FormLabel>Expiry Date</FormLabel>
+              <Controller
+								as={<Flatpickr name="expiryDate" className="chakra-input css-n9lnwn"/>}
+								value={date}
+								onChange={(date: Date) => setDate(date)}
+								name="expiryDate"
+								control={control}
+								className="chakra-input css-n9lnwn"
+								defaultValue={new Date}
+							/>
+							<FormErrorMessage>Expiry Date Required</FormErrorMessage>
             </FormControl>
             <Stack spacing={10}>
               <Button
@@ -160,7 +132,12 @@ export default function AddCashier({ modalClose, refresh } : AddCashierProps) {
         </Box>
       </Stack>
 			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), modalClose(), refresh()}} title="Add Cashier">
-				Item Added!!!
+				Property Type Added!!!
+			</ModalComp>
+			<ModalComp isModalOpen={isErrorOpen} onModalClose={onErrorClose} title="Error!">
+				<Text>
+					{errorText}
+				</Text>
 			</ModalComp>
 		</>
 	);

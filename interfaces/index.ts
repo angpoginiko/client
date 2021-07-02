@@ -48,7 +48,10 @@ export type ProductType = {
 	productType?: ProductTypeType,
 	quantity?: number,
 	productDesc?: string,
-	image?: FileList | string
+	image?: FileList | string,
+	unitOfMeasure?: UnitOfMeasureType,
+	expiryDate?: Date,
+	reorderingStock: number
 }
 
 export type ProductTypeType = {
@@ -83,4 +86,16 @@ export type Purchases = {
 export type PasswordType = {
 	newpassword: string,
 	oldpassword: string
+}
+
+export type ReceivedProducts = {
+	productId : string,
+	expiryDate: Date,
+	unitOfMeasure: string,
+	quantity: number
+}
+
+export type UnitOfMeasureType = {
+	_id?: string,
+	name: string
 }

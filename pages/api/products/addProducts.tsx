@@ -13,13 +13,16 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				productName,
 				unitPrice,
 				productType,
-				quantity,
+				soldBy,
+				reorderingStock,
 				productDesc,
+				minimumStock,
 			},
 			image,
 		} = req.body;
 
 		const productTypeId = new ObjectId(productType);
+		const unitOfMeasureId = new ObjectId(soldBy);
 		
 		const existingProduct = await db.collection("products").findOne({productName});
 		if(existingProduct) return res.status(400).json({message: "Product already exist"});
@@ -28,8 +31,10 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			productName,
 			unitPrice: parseInt(unitPrice),
 			productType: productTypeId,
-			quantity: parseInt(quantity), 
+			unitOfMeasure: unitOfMeasureId,
+			reorderingStock: parseInt(reorderingStock),
 			productDesc,
+			minimumStock: parseInt(minimumStock),
 			image
 		});
 		res.status(200).send(products.ops[0]);

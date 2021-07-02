@@ -115,8 +115,8 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
             </FormControl>
 
             <FormControl id="productType" isInvalid={errors.productType && errors.productType.type === "required"}>
-              <FormLabel>Product Type</FormLabel>
-              <Select name="productType" placeholder="--Product Types--" ref={register({required:true})} defaultValue={defaultValues.productType?._id}>
+              <FormLabel>Product Family</FormLabel>
+              <Select name="productType" placeholder="--Product Family--" ref={register({required:true})} defaultValue={defaultValues.productType?._id}>
 								{productTypes && productTypes.map((productType) => {
 									return (<option value={productType._id} key={productType.name}>{toPascalCase(productType.name)}</option>);
 								})}

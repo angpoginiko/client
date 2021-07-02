@@ -9,13 +9,13 @@ import ModalComp from "./ModalComp";
 import AddProduct from "./AddProduct"
 import { MdAddBox } from 'react-icons/md';
 
-interface ProductListProps {
+interface ReceivingListProps {
 	product: ProductType;
 	refetch: () => void;
 }
 
 
-export default function ProductList({ product, refetch } : ProductListProps) {
+export default function ReceivingList({ product, refetch } : ReceivingListProps) {
 	const {isOpen: isAddOpen , onOpen: onAddOpen, onClose: onAddClose} = useDisclosure();
 
 	const toPascalCase = (text: string | undefined) => {
@@ -25,8 +25,6 @@ export default function ProductList({ product, refetch } : ProductListProps) {
 	}
 	return (
 		<Tr>
-			<Td>
-			</Td>
 			<Td>
 				{product.productName}
 			</Td>
