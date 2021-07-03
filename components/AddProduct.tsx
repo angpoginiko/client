@@ -23,6 +23,7 @@ import Flatpickr from 'react-flatpickr'
 import "flatpickr/dist/themes/confetti.css";
 import { ProductType, UnitOfMeasureType } from '../interfaces';
 import { useQuery } from 'react-query';
+import useCase from '../hooks/useCase';
 
 interface AddProductProps {
 	modalClose: () => void;
@@ -37,6 +38,7 @@ export default function AddProduct({ modalClose, refresh, productId, productName
 	const {isOpen: isErrorOpen, onOpen: onErrorOpen, onClose: onErrorClose} = useDisclosure();
 	const { register, handleSubmit, errors, control } = useForm();
 	const [date, setDate] = useState(new Date());
+	const { toPascalCase } = useCase();
 	const onSubmit = async (formData: ProductType) => {
 			const response = await fetch("/api/receivingProducts/addReceivingProducts", {
 				method: "POST",
@@ -60,12 +62,6 @@ export default function AddProduct({ modalClose, refresh, productId, productName
 		return res.json();
 	}
 	const { data: unitOfMeasure } = useQuery<UnitOfMeasureType[]>("unitOfMeasure", fetchUnitOfMeasure);
-
-	const toPascalCase = (text: string | undefined) => {
-		const newString = text?.replace(/\w+/g,
-			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-		return newString;
-	}
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>

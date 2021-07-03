@@ -6,6 +6,7 @@ import {
     Menu,
     MenuButton,
 } from '@chakra-ui/react'
+import useCase from '../hooks/useCase';
 
 interface NavItemProps {
 	title: string;
@@ -14,11 +15,7 @@ interface NavItemProps {
 }
 
 export default function NavItem({ title, typeId, setQuery }: NavItemProps) {
-		const toPascalCase = (text: string | undefined) => {
-			const newString = text?.replace(/\w+/g,
-				function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-			return newString;
-		}
+	const { toPascalCase } = useCase();
     return (
         <Flex
             mt={30}

@@ -5,6 +5,7 @@ import {
 	// useDisclosure,
 	Circle
 } from "@chakra-ui/react"
+import useCase from "../hooks/useCase";
 // import ModalComp from "./ModalComp";
 // import { MdAddBox } from 'react-icons/md';
 
@@ -15,12 +16,7 @@ interface ReceivingListProps {
 
 export default function ReceivingList({ product } : ReceivingListProps) {
 	// const {isOpen: isAddOpen , onOpen: onAddOpen, onClose: onAddClose} = useDisclosure();
-
-	const toPascalCase = (text: string | undefined) => {
-		const newString = text?.replace(/\w+/g,
-			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-		return newString;
-	}
+	const { toPascalCase } = useCase();
 
 	let statusColor = "red";
 	const expiryDate = new Date(product.expiryDate);

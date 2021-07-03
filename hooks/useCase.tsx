@@ -1,28 +1,23 @@
-import { useState } from 'react';
-
-interface Params {
-  initialValue?: string;
-}
 
 
-export default function useCase ({initialValue} : Params) {
-	const [text, setText] = useState(initialValue);
 
-	const toPascalCase = () => {
+export default function useCase () {
+
+	const toPascalCase = (text: string) => {
 		const newString = text!.replace(/\w+/g,
 			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-		setText(newString);
+		return newString;
 	}
 
-	const toCamelCase = () => {
+	const toCamelCase = (text: string) => {
 		const newString = text!.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
 			return index === 0 ? word.toLowerCase() : word.toUpperCase();
 		}).replace(/\s+/g, '');
-		setText(newString);
+		return newString;
 	}
 
 	return {
 		toPascalCase,
-		toCamelCase
+		toCamelCase,
 	}
 }

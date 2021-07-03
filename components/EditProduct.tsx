@@ -18,6 +18,7 @@ import {
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
 import { useState } from 'react';
+import useCase from '../hooks/useCase';
 
 interface AddCashierProps {
 	modalClose: () => void;
@@ -29,6 +30,8 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const [image, setImage] = useState<string | ArrayBuffer | null>(defaultValues.image!.toString());
 	const { register, handleSubmit, errors } = useForm();
+	const { toPascalCase } = useCase();
+
 	const onSubmit = async (formData: ProductType) => {
 		const { image, ...data } = formData;
     if(image?.length != 0) { 
@@ -83,12 +86,6 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
     }
     reader.readAsDataURL(e.target.files![0])
   };
-
-	const toPascalCase = (text: string | undefined) => {
-		const newString = text?.replace(/\w+/g,
-			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-		return newString;
-	}
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>

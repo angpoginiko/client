@@ -12,6 +12,7 @@ import ModalComp from "./ModalComp";
 import AddProduct from "./AddProduct"
 import EditProduct from "./EditProduct"
 import { MdAddBox, MdEdit } from 'react-icons/md';
+import useCase from "../hooks/useCase";
 
 interface ProductListProps {
 	product: ProductType;
@@ -23,12 +24,7 @@ interface ProductListProps {
 export default function ProductList({ product, refetchReceiving, refetchProducts} : ProductListProps) {
 	const {isOpen: isAddOpen , onOpen: onAddOpen, onClose: onAddClose} = useDisclosure();
 	const {isOpen: isEditOpen , onOpen: onEditOpen, onClose: onEditClose} = useDisclosure();
-
-	const toPascalCase = (text: string | undefined) => {
-		const newString = text?.replace(/\w+/g,
-			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-		return newString;
-	}
+	const { toPascalCase } = useCase();
 	return (
 		<Tr>
 			<Td>
@@ -37,10 +33,10 @@ export default function ProductList({ product, refetchReceiving, refetchProducts
 				{product.productName}
 			</Td>
 			<Td>
-				{toPascalCase(product.productType?.name)}
+				{toPascalCase(product.productType?.name!)}
 			</Td>
 			<Td>
-				{toPascalCase(product.unitOfMeasure?.name)}
+				{toPascalCase(product.unitOfMeasure?.name!)}
 			</Td>
 			<Td>
 				{product.unitPrice}

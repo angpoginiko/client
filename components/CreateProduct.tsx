@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
 import { useQuery } from 'react-query';
+import useCase from '../hooks/useCase';
 
 interface CreateProductProps {
 	modalClose: () => void;
@@ -32,6 +33,7 @@ export default function CreateProduct({ modalClose, refresh } : CreateProductPro
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const [image, setImage] = useState<string | ArrayBuffer | null>("")
 	const { register, handleSubmit, errors } = useForm();
+	const { toPascalCase } = useCase();
 
 
 	const onSubmit = async (formData: ProductType) => {
@@ -76,12 +78,6 @@ export default function CreateProduct({ modalClose, refresh } : CreateProductPro
     }
     reader.readAsDataURL(e.target.files![0])
   };
-
-	const toPascalCase = (text: string | undefined) => {
-		const newString = text?.replace(/\w+/g,
-			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
-		return newString;
-	}
 
 	return(
 		<>
