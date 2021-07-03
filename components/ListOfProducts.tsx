@@ -15,25 +15,22 @@ import {
 } from '@chakra-ui/react';
 import { ProductType } from '../interfaces';
 import ProductList from './ProductList';
-import { useQuery } from 'react-query';
-import AddProduct from './AddProduct';
 import ModalComp from './ModalComp';
 import AddProductType from './AddProductType';
 import CreateProduct from './CreateProduct';
 import AddUnitOfMeasure from './AddUnitOfMeasure';
 import { MdMenu } from 'react-icons/md';
 
+interface ListOfProductsProps {
+	products?: ProductType[];
+	refetchProducts: () => void;
+	refetchReceiving: () => void;
+}
 
-export default function ListOfProducts() {
+export default function ListOfProducts({products, refetchProducts, refetchReceiving}: ListOfProductsProps) {
 	const {isOpen , onOpen, onClose} = useDisclosure();
-	const {isOpen: isAddProductOpen , onOpen: onAddProductOpen, onClose: onAddProductClose} = useDisclosure();
 	const {isOpen: isProductTypeOpen , onOpen: onProductTypeOpen, onClose: onProductTypeClose} = useDisclosure();
 	const {isOpen: isUnitOfMeasureOpen , onOpen: onUnitOfMeasureOpen, onClose: onUnitOfMeasureClose} = useDisclosure();
-	const fetchCart = async () => {
-		const res = await fetch("api/products/getProducts");
-		return res.json();
-	}
-	const { data: products, refetch } = useQuery<ProductType[]>("product", fetchCart);
   return (
 		<Box spacing="0" >
 		<Table>
@@ -49,43 +46,38 @@ export default function ListOfProducts() {
 						/>
 						<MenuList>
 							<MenuItem onClick={()=>onOpen()}>Create Product</MenuItem>
-							<MenuItem onClick={()=>onAddProductOpen()}>Add Product</MenuItem>
 							<MenuItem onClick={()=>onUnitOfMeasureOpen()}>Add Unit of Measure</MenuItem>
 							<MenuItem onClick={()=>onProductTypeOpen()}>Add Product Family</MenuItem>
 						</MenuList>
 					</Menu>
 					</Th>
-					<Th>Name:</Th>
+					<Th>Name</Th>
 					<Th>Product Family</Th>
-					<Th>Unit of Measure</Th>
+					<Th>Sold by</Th>
 					<Th>Price per unit of measure</Th>
 					<Th>Minimum Stock</Th>
-					<Th>Add Product</Th>
+					<Th>Options</Th>
 				</Tr>
 			</Thead>
 			<Tbody>
 			{products && products.map((items: ProductType) => {
 					return(
-						<ProductList product={items} key={items._id} refetch={refetch}/>
+						<ProductList product={items} key={items._id} refetchProducts={refetchProducts} refetchReceiving={refetchReceiving}/>
 					)
 				})}
 			</Tbody>
 		</Table>
 
 		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
-			<CreateProduct modalClose={onClose} refresh={refetch}/>
-		</ModalComp>
-
-		<ModalComp isModalOpen={isAddProductOpen} onModalClose={onAddProductClose} title="">
-			<AddProduct modalClose={onClose} refresh={refetch}/>
+			<CreateProduct modalClose={onClose} refresh={refetchProducts}/>
 		</ModalComp>
 
 		<ModalComp isModalOpen={isUnitOfMeasureOpen} onModalClose={onUnitOfMeasureClose} title="">
-			<AddUnitOfMeasure refresh={refetch} modalClose={onUnitOfMeasureClose}/>
+			<AddUnitOfMeasure refresh={refetchProducts} modalClose={onUnitOfMeasureClose}/>
 		</ModalComp>
 
 		<ModalComp isModalOpen={isProductTypeOpen} onModalClose={onProductTypeClose} title="">
-			<AddProductType modalClose={onProductTypeClose} refresh={refetch}/>
+			<AddProductType modalClose={onProductTypeClose} refresh={refetchProducts}/>
 		</ModalComp>
 	</Box>
 

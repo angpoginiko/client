@@ -16,12 +16,12 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			},
 			productId,
 		} = req.body;
-
 		const id = new ObjectId(productId);
+		const unitOfMeasureId = new ObjectId(unitOfMeasure);
 	
 		const products = await db.collection("receivingProducts").insertOne({
 			quantity: parseInt(quantity),
-			unitOfMeasure: parseInt(unitOfMeasure),
+			unitOfMeasure: unitOfMeasureId,
 			expiryDate,
 			productId: id
 		});

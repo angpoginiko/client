@@ -46,12 +46,10 @@ export type ProductType = {
 	productName?: string,
 	unitPrice?: number,
 	productType?: ProductTypeType,
-	quantity?: number,
-	productDesc?: string,
-	image?: FileList | string,
 	unitOfMeasure?: UnitOfMeasureType,
-	expiryDate?: Date,
-	reorderingStock?: number
+	reorderingStock?: number,
+	productDesc?: string,
+	image?: FileList | string
 }
 
 export type ProductTypeType = {
@@ -89,10 +87,12 @@ export type PasswordType = {
 }
 
 export type ReceivedProducts = {
-	productId : string,
 	expiryDate: Date,
-	unitOfMeasure: string,
-	quantity: number
+	product: ProductType,
+	productId: string,
+	quantity: number,
+	unitOfMeasure: UnitOfMeasureType,
+	_id: string
 }
 
 export type UnitOfMeasureType = {

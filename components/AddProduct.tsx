@@ -16,8 +16,7 @@ import {
 	NumberInputField,
 	NumberInput,
 	NumberDecrementStepper,
-	Select,
-	Divider
+	Select
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
 import Flatpickr from 'react-flatpickr'
@@ -39,7 +38,7 @@ export default function AddProduct({ modalClose, refresh, productId, productName
 	const { register, handleSubmit, errors, control } = useForm();
 	const [date, setDate] = useState(new Date());
 	const onSubmit = async (formData: ProductType) => {
-			const response = await fetch("/api/productType/addReceivingProduct", {
+			const response = await fetch("/api/receivingProducts/addReceivingProducts", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -60,13 +59,13 @@ export default function AddProduct({ modalClose, refresh, productId, productName
 		const res = await fetch(`api/unitOfMeasure/getUnitOfMeasure`);
 		return res.json();
 	}
+	const { data: unitOfMeasure } = useQuery<UnitOfMeasureType[]>("unitOfMeasure", fetchUnitOfMeasure);
 
 	const toPascalCase = (text: string | undefined) => {
 		const newString = text?.replace(/\w+/g,
 			function(w){return w[0].toUpperCase() + w.slice(1).toLowerCase();});
 		return newString;
 	}
-	const { data: unitOfMeasure } = useQuery<UnitOfMeasureType[]>("unitOfMeasure", fetchUnitOfMeasure);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -131,8 +130,8 @@ export default function AddProduct({ modalClose, refresh, productId, productName
 				</form>	
         </Box>
       </Stack>
-			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), modalClose(), refresh()}} title="Add Cashier">
-				Property Type Added!!!
+			<ModalComp isModalOpen={isOpen} onModalClose={() => {onClose(), modalClose(), refresh()}} title="">
+				New Product Added
 			</ModalComp>
 			<ModalComp isModalOpen={isErrorOpen} onModalClose={onErrorClose} title="Error!">
 				<Text>

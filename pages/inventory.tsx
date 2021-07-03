@@ -16,9 +16,12 @@ import userRoles from '../constants/userRoles';
 import AdminNavBar from '../components/AdminNavBar';
 import Receiving from '../components/Receiving';
 import ListOfProducts from '../components/ListOfProducts';
+import { useQuery } from 'react-query';
+import { ProductType, ReceivedProducts } from '../interfaces';
 
 
-export default function Inventory({user, onStore} : any) {const router = useRouter();
+export default function Inventory({user, onStore} : any) {
+	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
 			router.replace('/home-cashier')
@@ -28,6 +31,18 @@ export default function Inventory({user, onStore} : any) {const router = useRout
 			router.replace('/store')
 		}
 	}, [user, onStore]);
+
+	const fetchProducts = async () => {
+		const res = await fetch("api/products/getProducts");
+		return res.json();
+	}
+	const { data: products, refetch: refetchProducts } = useQuery<ProductType[]>("product", fetchProducts);
+	
+	const fetchReceivedProducts = async () => {
+		const res = await fetch("api/receivingProducts/getReceivingProducts");
+		return res.json();
+	}
+	const { data: receivingProducts, refetch: refetchReceiving } = useQuery<ReceivedProducts[]>("receivingProducts", fetchReceivedProducts);
   return (
     <>
 		<AdminNavBar authentication={user} title="Inventory">
@@ -45,10 +60,10 @@ export default function Inventory({user, onStore} : any) {const router = useRout
 
 								<TabPanels>
 									<TabPanel>
-										<ListOfProducts/>
+										<ListOfProducts products={products} refetchReceiving={refetchReceiving} refetchProducts={refetchProducts}/>
 									</TabPanel>
 									<TabPanel>
-										<Receiving />
+										<Receiving receivingProducts={receivingProducts}/>
 									</TabPanel>
 									<TabPanel>
 										<p>two!</p>

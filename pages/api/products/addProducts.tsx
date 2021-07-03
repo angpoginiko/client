@@ -34,7 +34,6 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			unitOfMeasure: unitOfMeasureId,
 			reorderingStock: parseInt(reorderingStock),
 			productDesc,
-			minimumStock: parseInt(minimumStock),
 			image
 		});
 		res.status(200).send(products.ops[0]);

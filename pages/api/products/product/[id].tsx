@@ -52,22 +52,25 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 				const {
 					product: {
 						productName,
-						unitPrice,
 						productType,
-						quantity,
+						unitOfMeasure,
+						unitPrice,
+						reorderingStock,
 						productDesc,
 					},
 					image,
 				} = req.body;
 				console.log(req.body)
 				const productTypeId = new ObjectId(productType);
+				const unitOfMeasureId = new ObjectId(unitOfMeasure);
 				const products = await db.collection("products").findOneAndUpdate({_id}, 
 					{ $set:
 						{
 							productName,
 							unitPrice: parseInt(unitPrice),
 							productType: productTypeId,
-							quantity: parseInt(quantity), 
+							unitOfMeasure: unitOfMeasureId,
+							reorderingStock: parseInt(reorderingStock),
 							productDesc,
 							image
 						}

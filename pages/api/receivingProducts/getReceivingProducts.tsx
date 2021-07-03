@@ -7,14 +7,14 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 {
 	try {
 		const { db } = await connect();
-		const products = await db.collection("products").aggregate([
+		const products = await db.collection("receivingProducts").aggregate([
 			{"$lookup" : {
-				"from" : "productType",
-				"localField" : "productType",
+				"from" : "products",
+				"localField" : "productId",
 				"foreignField" : "_id",
-				"as" : "productType"
+				"as" : "product"
 			}},
-			{"$unwind" : "$productType"},
+			{"$unwind" : "$product"},
 			{"$lookup" : {
 				"from" : "unitOfMeasure",
 				"localField" : "unitOfMeasure",
@@ -23,13 +23,12 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			}},
 			{"$unwind" : "$unitOfMeasure"}
 		]).toArray();
-		res.status(200).send(products);
+		res.status(201).send(products);
 	} catch (error) {
 		res.status(500);
 		res.json({error: `Server error${req}`})
 	}
 })
-
 
 export const config = {
   api: {

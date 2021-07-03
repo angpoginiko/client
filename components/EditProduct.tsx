@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form'
-import { ProductType, ProductTypeType } from '../interfaces/index'
+import { ProductType, ProductTypeType, UnitOfMeasureType } from '../interfaces/index'
 import {
   Box,
   FormControl,
@@ -62,11 +62,17 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 		}
 	}
 
-	const fetchCart = async () => {
+	const fetchProductTypes = async () => {
 		const res = await fetch(`api/productType/getProductTypes`);
 		return res.json();
 	}
-	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchCart);
+	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchProductTypes);
+
+	const fetchUnitOfMeasure = async () => {
+		const res = await fetch(`api/unitOfMeasure/getUnitOfMeasure`);
+		return res.json();
+	}
+	const { data: unitOfMeasure } = useQuery<UnitOfMeasureType[]>("unitOfMeasure", fetchUnitOfMeasure);
 
 	const imageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -102,23 +108,33 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 							<FormErrorMessage>Name Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="quantity" isInvalid={errors.quantity && errors.quantity.type === "required"}>
-              <FormLabel>Quantity</FormLabel>
-              <Input name="quantity" ref={register({required:true})} defaultValue={defaultValues.quantity}/>
-							<FormErrorMessage>Quantity Required</FormErrorMessage>
-            </FormControl>
-
-						<FormControl id="unitPrice" isInvalid={errors.unitPrice && errors.unitPrice.type === "required"}>
-              <FormLabel>Price</FormLabel>
-              <Input name="unitPrice" ref={register({required:true})} defaultValue={defaultValues.unitPrice}/>
-							<FormErrorMessage>Price Required</FormErrorMessage>
-            </FormControl>
-
-            <FormControl id="productType" isInvalid={errors.productType && errors.productType.type === "required"}>
+						<FormControl id="productType" isInvalid={errors.productType && errors.productType.type === "required"}>
               <FormLabel>Product Family</FormLabel>
               <Select name="productType" placeholder="--Product Family--" ref={register({required:true})} defaultValue={defaultValues.productType?._id}>
 								{productTypes && productTypes.map((productType) => {
 									return (<option value={productType._id} key={productType.name}>{toPascalCase(productType.name)}</option>);
+								})}
+							</Select>
+							<FormErrorMessage>ProductType Required</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="unitPrice" isInvalid={errors.unitPrice && errors.unitPrice.type === "required"}>
+              <FormLabel>Price per Unit of Measure</FormLabel>
+              <Input name="unitPrice" ref={register({required:true})} defaultValue={defaultValues.unitPrice}/>
+							<FormErrorMessage>Price Required</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="reorderingStock" isInvalid={errors.reorderingStock && errors.reorderingStock.type === "required"}>
+              <FormLabel>Minimum Stock</FormLabel>
+              <Input name="reorderingStock" ref={register({required:true})} defaultValue={defaultValues.reorderingStock}/>
+							<FormErrorMessage>Minimum Stock Required</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="unitOfMeasure" isInvalid={errors.unitOfMeasure && errors.unitOfMeasure.type === "required"}>
+              <FormLabel>Unit Of Measure</FormLabel>
+              <Select name="unitOfMeasure" placeholder="--Unit of Measure--" ref={register({required:true})} defaultValue={defaultValues.unitOfMeasure?._id}>
+								{unitOfMeasure && unitOfMeasure.map((unitOfMeasure) => {
+									return (<option value={unitOfMeasure._id} key={unitOfMeasure.name}>{toPascalCase(unitOfMeasure.name)}</option>);
 								})}
 							</Select>
 							<FormErrorMessage>ProductType Required</FormErrorMessage>
