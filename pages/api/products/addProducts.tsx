@@ -14,9 +14,10 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				unitPrice,
 				productType,
 				soldBy,
-				reorderingStock,
+				reorderingStorageStock,
+				reorderingDisplayStock,
+				capacity,
 				productDesc,
-				minimumStock,
 			},
 			image,
 		} = req.body;
@@ -32,9 +33,21 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			unitPrice: parseInt(unitPrice),
 			productType: productTypeId,
 			unitOfMeasure: unitOfMeasureId,
-			reorderingStock: parseInt(reorderingStock),
+			reorderingStorageStock: parseInt(reorderingStorageStock),
+			reorderingDisplayStock: parseInt(reorderingDisplayStock),
+			capacity: parseInt(capacity),
 			productDesc,
 			image
+		});
+
+		await db.collection("stock").insertOne({
+			product: products.ops[0]._id,
+			quantity: 0
+		});
+
+		await db.collection("display").insertOne({
+			product: products.ops[0]._id,
+			quantity: 0
 		});
 		res.status(200).send(products.ops[0]);
 	} catch (error) {

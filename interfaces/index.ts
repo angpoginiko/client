@@ -47,9 +47,12 @@ export type ProductType = {
 	unitPrice?: number,
 	productType?: ProductTypeType,
 	unitOfMeasure?: UnitOfMeasureType,
-	reorderingStock?: number,
+	reorderingStorageStock?: number,
+	reorderingDisplayStock?: number,
+	capacity?: number,
 	productDesc?: string,
-	image?: FileList | string
+	image?: FileList | string,
+	quantity?: number
 }
 
 export type ProductTypeType = {
@@ -98,4 +101,10 @@ export type ReceivedProducts = {
 export type UnitOfMeasureType = {
 	_id?: string,
 	name: string
+}
+
+export type StorageDisplayProductType = {
+	product?: ProductType,
+	quantity?: number,
+	expiryDate: Date
 }

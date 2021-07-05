@@ -20,6 +20,7 @@ import AddProductType from './AddProductType';
 import CreateProduct from './CreateProduct';
 import AddUnitOfMeasure from './AddUnitOfMeasure';
 import { MdMenu } from 'react-icons/md';
+import useCase from '../hooks/useCase';
 
 interface ListOfProductsProps {
 	products?: ProductType[];
@@ -31,6 +32,7 @@ export default function ListOfProducts({products, refetchProducts, refetchReceiv
 	const {isOpen , onOpen, onClose} = useDisclosure();
 	const {isOpen: isProductTypeOpen , onOpen: onProductTypeOpen, onClose: onProductTypeClose} = useDisclosure();
 	const {isOpen: isUnitOfMeasureOpen , onOpen: onUnitOfMeasureOpen, onClose: onUnitOfMeasureClose} = useDisclosure();
+	const { toPascalCase } = useCase();
   return (
 		<Box spacing="0" >
 		<Table>
@@ -53,9 +55,11 @@ export default function ListOfProducts({products, refetchProducts, refetchReceiv
 					</Th>
 					<Th>Name</Th>
 					<Th>Product Family</Th>
-					<Th>Sold by</Th>
-					<Th>Price per unit of measure</Th>
-					<Th>Minimum Stock</Th>
+					<Th>Unit of Measure</Th>
+					<Th>Price per Unit of Measure</Th>
+					<Th>Minimum Storage Stock</Th>
+					<Th>Minimum Display Stock</Th>
+					<Th>Maximum Display Capacity</Th>
 					<Th>Options</Th>
 				</Tr>
 			</Thead>

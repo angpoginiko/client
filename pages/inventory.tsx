@@ -15,10 +15,11 @@ import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
 import AdminNavBar from '../components/AdminNavBar';
 import Receiving from '../components/Receiving';
+import Storage from '../components/Storage';
+import Display from '../components/Display';
 import ListOfProducts from '../components/ListOfProducts';
 import { useQuery } from 'react-query';
-import { ProductType, ReceivedProducts } from '../interfaces';
-
+import { ProductType, ReceivedProducts, StorageDisplayProductType } from '../interfaces';
 
 export default function Inventory({user, onStore} : any) {
 	const router = useRouter();
@@ -32,6 +33,7 @@ export default function Inventory({user, onStore} : any) {
 		}
 	}, [user, onStore]);
 
+
 	const fetchProducts = async () => {
 		const res = await fetch("api/products/getProducts");
 		return res.json();
@@ -43,38 +45,50 @@ export default function Inventory({user, onStore} : any) {
 		return res.json();
 	}
 	const { data: receivingProducts, refetch: refetchReceiving } = useQuery<ReceivedProducts[]>("receivingProducts", fetchReceivedProducts);
+
+	const fetchStockProducts = async () => {
+		const res = await fetch("api/stock/getStockProducts");
+		return res.json();
+	}
+	const { data: stockProducts, refetch: refetchStockProducts } = useQuery<StorageDisplayProductType[]>("stockProducts", fetchStockProducts);
+
+	const fetchDisplayProducts = async () => {
+		const res = await fetch("api/display/getDisplayProducts");
+		return res.json();
+	}
+	const { data: displayProducts, refetch: refetchDisplayProducts } = useQuery<StorageDisplayProductType[]>("displayProducts", fetchDisplayProducts);
   return (
     <>
-		<AdminNavBar authentication={user} title="Inventory">
-					<VStack>
-							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>
-								INVENTORY
-							</Text>
-							<Tabs>
-								<TabList>
-									<Tab>Product List</Tab>
-									<Tab>Receiving</Tab>
-									<Tab>Stock</Tab>
-									<Tab>Display</Tab>
-								</TabList>
+			<AdminNavBar authentication={user} title="Inventory">
+						<VStack>
+								<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>
+									INVENTORY
+								</Text>
+								<Tabs>
+									<TabList>
+										<Tab>Product List</Tab>
+										<Tab>Receiving</Tab>
+										<Tab>Storage</Tab>
+										<Tab>Display</Tab>
+									</TabList>
 
-								<TabPanels>
-									<TabPanel>
-										<ListOfProducts products={products} refetchReceiving={refetchReceiving} refetchProducts={refetchProducts}/>
-									</TabPanel>
-									<TabPanel>
-										<Receiving receivingProducts={receivingProducts}/>
-									</TabPanel>
-									<TabPanel>
-										<p>two!</p>
-									</TabPanel>
-									<TabPanel>
-										<p>three!</p>
-									</TabPanel>
-								</TabPanels>
-							</Tabs>
-					</VStack>
-		</AdminNavBar>
+									<TabPanels>
+										<TabPanel>
+											<ListOfProducts products={products} refetchReceiving={refetchReceiving} refetchProducts={refetchProducts}/>
+										</TabPanel>
+										<TabPanel>
+											<Receiving receivingProducts={receivingProducts} refetch={() => {refetchStockProducts(), refetchReceiving()}}/>
+										</TabPanel>
+										<TabPanel>
+											<Storage storageProducts={stockProducts} refetch={() => {refetchDisplayProducts(), refetchStockProducts()}}/>
+										</TabPanel>
+										<TabPanel>
+											<Display displayProducts={displayProducts} refetch={refetchDisplayProducts}/>
+										</TabPanel>
+									</TabPanels>
+								</Tabs>
+						</VStack>
+			</AdminNavBar>
     </>
   );
 }

@@ -9,7 +9,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	const { id, point } = req.body;
 	try {
 		const customerId = new ObjectId(id);
-		const pointsRedeemed = parseFloat(point);
+		const pointsRedeemed = parseFloat(point).toFixed(2);
 		const test = await db.collection("orders").findOneAndUpdate(
 			{ customerId },
 			{ $set:

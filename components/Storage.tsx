@@ -7,15 +7,15 @@ import {
 	Tbody,
 	VStack,
 } from '@chakra-ui/react';
-import { ReceivedProducts } from '../interfaces';
-import ReceivingList from './ReceivingList';
+import { StorageDisplayProductType } from '../interfaces';
+import StorageList from './StorageList';
 
-interface ReceivingProps {
-	receivingProducts?: ReceivedProducts[];
+interface StorageProps {
+	storageProducts?: StorageDisplayProductType[];
 	refetch: () => void;
 }
 
-export default function Receiving({receivingProducts, refetch} : ReceivingProps) {
+export default function Storage({storageProducts, refetch} : StorageProps) {
   return (
 				<VStack spacing="0" width="100%">
 					<Table>
@@ -25,16 +25,15 @@ export default function Receiving({receivingProducts, refetch} : ReceivingProps)
 								<Th>Quantity</Th>
 								<Th>Product Family</Th>
 								<Th>Expiry Date</Th>
+								<Th>Stock Status</Th>
 								<Th>Expiry Status</Th>
 								<Th>Options</Th>
 							</Tr>
 						</Thead>
 						<Tbody>
-						{receivingProducts && receivingProducts
-						.sort((a, b) => new Date(b.expiryDate).getTime() - new Date(a.expiryDate).getTime())
-						.map((items) => {
+						{storageProducts && storageProducts.map((items) => {
 								return(
-									<ReceivingList product={items} key={items._id} refetch={refetch}/>
+									<StorageList product={items} refetch={refetch} key={items.product?._id}/ >
 								)
 							})}
 						</Tbody>

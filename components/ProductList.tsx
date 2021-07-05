@@ -42,7 +42,13 @@ export default function ProductList({ product, refetchReceiving, refetchProducts
 				{product.unitPrice}
 			</Td>
 			<Td>
-				{product.reorderingStock}
+				{product.reorderingStorageStock}
+			</Td>
+			<Td>
+				{product.reorderingDisplayStock}
+			</Td>
+			<Td>
+				{product.capacity}
 			</Td>
 			<Td>
 				<HStack>

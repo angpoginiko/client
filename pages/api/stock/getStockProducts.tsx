@@ -7,21 +7,14 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 {
 	try {
 		const { db } = await connect();
-		const products = await db.collection("receivingProducts").aggregate([
+		const products = await db.collection("stock").aggregate([
 			{"$lookup" : {
 				"from" : "products",
-				"localField" : "productId",
+				"localField" : "product",
 				"foreignField" : "_id",
 				"as" : "product"
 			}},
 			{"$unwind" : "$product"},
-			{"$lookup" : {
-				"from" : "unitOfMeasure",
-				"localField" : "unitOfMeasure",
-				"foreignField" : "_id",
-				"as" : "unitOfMeasure"
-			}},
-			{"$unwind" : "$unitOfMeasure"},
 			{"$lookup" : {
 				"from" : "unitOfMeasure",
 				"localField" : "product.unitOfMeasure",

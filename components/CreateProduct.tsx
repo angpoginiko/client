@@ -130,16 +130,40 @@ export default function CreateProduct({ modalClose, refresh } : CreateProductPro
 							<FormErrorMessage>Price Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="reorderingStock" isInvalid={errors.reorderingStock && errors.reorderingStock.type === "required"}>
-              <FormLabel>Minimum Stock</FormLabel>
+						<FormControl id="reorderingStorageStock" isInvalid={errors.reorderingStorageStock && errors.reorderingStorageStock.type === "required"}>
+              <FormLabel>Minimum Storage Stock</FormLabel>
 							<NumberInput>
-								<NumberInputField name="reorderingStock" ref={register({required:true})}/>
+								<NumberInputField name="reorderingStorageStock" ref={register({required:true})}/>
 								<NumberInputStepper>
 									<NumberIncrementStepper />
 									<NumberDecrementStepper />
 								</NumberInputStepper>
 							</NumberInput>
-							<FormErrorMessage>Minimum Stock</FormErrorMessage>
+							<FormErrorMessage>Minimum Storage Stock Required</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="reorderingDisplayStock" isInvalid={errors.reorderingDisplayStock && errors.reorderingDisplayStock.type === "required"}>
+              <FormLabel>Minimum Display Stock</FormLabel>
+							<NumberInput>
+								<NumberInputField name="reorderingDisplayStock" ref={register({required:true})}/>
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+							<FormErrorMessage>Minimum Display Stock Required</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="capacity" isInvalid={errors.capacity && errors.capacity.type === "required"}>
+              <FormLabel>Display Capacity</FormLabel>
+							<NumberInput>
+								<NumberInputField name="capacity" ref={register({required:true})}/>
+								<NumberInputStepper>
+									<NumberIncrementStepper />
+									<NumberDecrementStepper />
+								</NumberInputStepper>
+							</NumberInput>
+							<FormErrorMessage>Display Capacity Required</FormErrorMessage>
             </FormControl>
 
 						<FormControl id="productDesc">
