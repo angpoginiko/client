@@ -38,7 +38,6 @@ export default function EditProfile({ modalClose, refresh, defaultValues, id } :
 		await response.json();
 		onOpen();
 	}
-	console.log(defaultValues);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>

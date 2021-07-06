@@ -74,7 +74,8 @@ export type UserCart = {
 	customerId: string,
 	productData: ProductType[],
 	total?: number,
-	encashedPoints?: number
+	encashedPoints?: number,
+	unitOfMeasure: string,
 }
 
 export type Purchases = {
@@ -107,4 +108,5 @@ export type StorageDisplayProductType = {
 	product?: ProductType,
 	quantity?: number,
 	expiryDate: Date
+	_id: string
 }

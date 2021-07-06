@@ -15,10 +15,8 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			id,
 		} = req.body;
 		const _id = new ObjectId(id);
-		console.log(req.body)
 		const user = await db.collection("customers").findOne({_id: _id});
 		const isPasswordCorrect = await bcrypt.compare(oldpassword,user.profile.password);
-		console.log(isPasswordCorrect)
 		if(!isPasswordCorrect) return res.status(400).json({message: "Old Passwords does not match"});
 
 		const isSameAsOldPassword = await bcrypt.compare(newpassword,user.profile.password);
@@ -39,3 +37,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 })
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

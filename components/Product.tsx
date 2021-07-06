@@ -107,7 +107,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 								<Button onClick={() => increamentQuantity()}><Icon as={MdAddBox}/></Button>
 									{quantity}
 								<Button onClick={() => decrementQuantity()}><Icon as={MdRemove}/></Button>
-									{`${product?.quantity} remaining`}
+									{`${product?.quantity} ${product?.unitOfMeasure?.name} remaining`}
 								</Text>
 							</Stack>
 							<Stack>

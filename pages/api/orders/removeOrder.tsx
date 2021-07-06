@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from  '../../../utils/mongodb'
 import { authentication } from '../authentication';
 import { ObjectId } from 'mongodb'
-import { UserCart } from '../../../interfaces';
 
 export default authentication(async function (req: NextApiRequest, res: NextApiResponse) 
 {
@@ -10,25 +9,21 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	const {data, id, totalPrice, encashedPoints} = req.body;
 	const _id = new ObjectId(id);
 	try {
-		const userCart: UserCart[] = data;
-		userCart.map(async (cart) => {
+		const userCart = data;
+		userCart.map(async (cart: any) => {
 				const productId = new ObjectId(cart.product.productId)
 				const productQuantity = cart.product.quantity;
 				const customerId = new ObjectId(cart.customerId);
-				const newQuantity = await db.collection("products").aggregate([
-					{ $match: { _id: productId } },
-					{ $project: { quantity: { $subtract: [ "$quantity", productQuantity ] } } } 
-				]).toArray();
-					newQuantity.map(async (quantity) => {
-						await db.collection("products").findOneAndUpdate(
-							{ _id: productId},
-							{ $set:
-									{
-										quantity: quantity.quantity,
-									}
+				const display =  await db.collection("display").findOne({_id: productId});
+				const newQuantity = parseFloat(display.quantity) - productQuantity
+				await db.collection("display").findOneAndUpdate(
+					{ _id: productId},
+					{ $set:
+							{
+								quantity: newQuantity.toFixed(2),
 							}
-						);
-					});
+					}
+				);
 				await db.collection("cart").findOneAndUpdate(
 					{"customerId": customerId},
 					{ "$pull": { "product": { "productId" : productId } } }
@@ -39,7 +34,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				);	
 				await db.collection("customers").updateOne(
 					{ "_id" : customerId },
-					{ "$push" : { "point.encashed" :  { "points" : parseInt(encashedPoints), "dateCheckout": new Date()} } }
+					{ "$push" : { "point.encashed" :  { "points" : parseFloat(encashedPoints), "dateCheckout": new Date()} } }
 				)
 		});
 		const products = await db.collection("orders").findOneAndUpdate(

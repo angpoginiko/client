@@ -14,23 +14,29 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 	switch(method){
 		case 'GET' :
 			try {
-				const products = await db.collection("products").aggregate([
+				const products = await db.collection("display").aggregate([
 					{"$match" : {"_id" : _id}},
 					{"$lookup" : {
 						"from" : "productType",
 						"localField" : "productType",
 						"foreignField" : "_id",
 						"as" : "productType"
-					}}
+					}},
+					{"$lookup" : {
+						"from" : "unitOfMeasure",
+						"localField" : "unitOfMeasure",
+						"foreignField" : "_id",
+						"as" : "unitOfMeasure"
+					}},
+					{"$unwind" : "$unitOfMeasure"},
 				]).toArray();
-
 				if(!products){
 					return res.status(400).json({success: false})
 				}
 				res.status(201).send(products[0]);
 			} catch (error) {
 				res.status(500);
-				res.json({error: "Server error"})
+				res.json({error})
 			}
 			break;
 		case 'DELETE':
@@ -60,7 +66,6 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 					},
 					image,
 				} = req.body;
-				console.log(req.body)
 				const productTypeId = new ObjectId(productType);
 				const unitOfMeasureId = new ObjectId(unitOfMeasure);
 				const products = await db.collection("products").findOneAndUpdate({_id}, 
@@ -89,3 +94,9 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 	}
 	
 })
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

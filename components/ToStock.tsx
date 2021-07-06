@@ -101,7 +101,7 @@ export default function ToStock({
 							<FormLabel>Quantity to Add</FormLabel>
 							<NumberInput>
 								<NumberInputField name="quantity" ref={register({required:true})}/>
-								<FormHelperText>Stock Remaining: {quantity}</FormHelperText>
+								<FormHelperText>Stock Remaining: {quantity} {receivingUnitOfMeasure}</FormHelperText>
 								<NumberInputStepper>
 									<NumberIncrementStepper />
 									<NumberDecrementStepper />

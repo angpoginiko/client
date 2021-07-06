@@ -46,7 +46,16 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		});
 
 		await db.collection("display").insertOne({
-			product: products.ops[0]._id,
+			productId: products.ops[0]._id,
+			productName,
+			unitPrice: parseInt(unitPrice),
+			productType: productTypeId,
+			unitOfMeasure: unitOfMeasureId,
+			reorderingStorageStock: parseInt(reorderingStorageStock),
+			reorderingDisplayStock: parseInt(reorderingDisplayStock),
+			capacity: parseInt(capacity),
+			productDesc,
+			image,
 			quantity: 0
 		});
 		res.status(200).send(products.ops[0]);
@@ -56,3 +65,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 })
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

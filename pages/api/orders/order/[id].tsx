@@ -27,13 +27,10 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			break;
 		case 'GET' :
 			try {
-				await db.collection("orders").findOneAndUpdate(
-					{_id},
-					{ $set: { "isScanned": true } });
 				const order = await db.collection("orders").aggregate([
 					{"$unwind" : "$product"},
 					{"$lookup" : {
-						"from": 'products',
+						"from": 'display',
 						"localField": 'product.productId',
 						"foreignField": '_id',
 						"as": 'productData'
@@ -43,7 +40,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 					return res.status(400).json({success: false})
 				}
 				const customerId = order[0].customerId;
-				res.status(201).send({order, id, customerId});	
+				const unitOfMeasureId = order[0].productData.unitOfMeasure;
+				const unitOfMeasure = await db.collection("unitOfMeasure").findOne({_id: unitOfMeasureId});
+				res.status(201).send({order, id, customerId, unitOfMeasure: unitOfMeasure.name});	
 			} catch (error) {
 				res.status(500);
 				res.json({error: "Server error"})
@@ -54,3 +53,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 })
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

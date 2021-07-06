@@ -4,8 +4,12 @@ import {
   Td,
 	Circle,
 	Tooltip,
+	Icon
 } from "@chakra-ui/react"
 import useCase from "../hooks/useCase";
+import QRCode from 'qrcode';
+import { useState } from "react";
+import { MdPrint } from 'react-icons/md';
 
 interface DisplayListProps {
 	product: StorageDisplayProductType;
@@ -15,6 +19,16 @@ interface DisplayListProps {
 
 export default function DisplayList({ product } : DisplayListProps) {
 	const { toPascalCase } = useCase();
+	const [imageUrl, setImageUrl] = useState('');
+
+	const generateQrCode = async () => {
+		try {
+			const response = await QRCode.toDataURL(product._id!);
+			setImageUrl(response);
+		}catch (error) {
+			console.log(error);
+		}
+	}
 
 	let statusColor = "red";
 	const expiryDate = new Date(product.expiryDate);
@@ -60,6 +74,11 @@ export default function DisplayList({ product } : DisplayListProps) {
 				<Tooltip label={`${daysRemaining} days`}>
 					<Circle size="25px" bg={statusColor} />
 				</Tooltip>
+			</Td>
+			<Td>
+				<a href={imageUrl} download onClick={() => {generateQrCode(), imageUrl}} title="Download QR">
+						<Icon as={MdPrint} boxSize={{base: 2, md: 3, lg: 6}}/>
+				</a>
 			</Td>
 		</Tr>
   );

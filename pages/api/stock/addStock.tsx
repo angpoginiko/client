@@ -21,7 +21,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		const receiving =  await db.collection("receivingProducts").findOne({_id: receivingProduct});
 		const stock =  await db.collection("stock").findOne({product: product});
 		const newReceivingQuantity = receiving.quantity - parseFloat(receivingQuantity);
-		const stockQuantity: number = stock.quantity + parseFloat(quantity);
+		const stockQuantity: number = parseFloat(stock.quantity) + parseFloat(quantity);
 
 		if(newReceivingQuantity === 0){
 			await db.collection("receivingProducts").deleteOne({ _id: receivingProduct});
@@ -52,3 +52,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 })
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

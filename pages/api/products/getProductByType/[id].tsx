@@ -12,7 +12,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			query: { id },
 		} = req;
 		const productType = new ObjectId(id.toString());
-		const products = await db.collection("products").find(
+		const products = await db.collection("display").find(
 			{productType}
 		).toArray();
 		res.status(201).send(products);
@@ -21,3 +21,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		res.json({error: `Server error${req}`})
 	}
 });
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

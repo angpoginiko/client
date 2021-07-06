@@ -16,7 +16,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		} = req.body;
 		const product = new ObjectId(productId);
 
-		const display =  await db.collection("display").findOne({product: product});
+		const display =  await db.collection("display").findOne({productId: product});
 		const displayQuantity: number = display.quantity + parseFloat(quantity);
 		if(displayQuantity > capacity){
 			return res.status(400).json({message: "You will be over the capacity"});
@@ -35,7 +35,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			)
 	
 			await db.collection("display").findOneAndUpdate(
-				{product: product},
+				{productId: product},
 				{ $set:
 					{
 						quantity: displayQuantity.toFixed(2),
@@ -52,3 +52,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 })
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

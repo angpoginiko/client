@@ -53,3 +53,9 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		default:
 	}
 }
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

@@ -14,7 +14,6 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			}
 		} = req.body;
 		const id = new ObjectId(customerId);
-		console.log(req.body);
 		const point = await db.collection("earnedPoints").insertOne({
 			points,
 			dateAdded: new Date(),
@@ -32,3 +31,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 });
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

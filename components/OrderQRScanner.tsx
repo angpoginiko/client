@@ -22,6 +22,7 @@ type DataType = {
 	 id: string,
 	 customerId: string,
 	 encashedPoints: number,
+	 unitOfMeasure: string
 }
 
 export default function OrderQRScanner() { 
@@ -105,7 +106,6 @@ export default function OrderQRScanner() {
 							<Th>Quantity:</Th>
 							<Th>Description</Th>
 							<Th isNumeric>Price</Th>
-							<Th>Has Container</Th>
 						</Tr>
 					</Thead>
 					<Tbody>

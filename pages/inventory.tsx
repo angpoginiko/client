@@ -74,7 +74,7 @@ export default function Inventory({user, onStore} : any) {
 
 									<TabPanels>
 										<TabPanel>
-											<ListOfProducts products={products} refetchReceiving={refetchReceiving} refetchProducts={refetchProducts}/>
+											<ListOfProducts products={products} refetchReceiving={refetchReceiving} refetchProducts={()=>{refetchDisplayProducts(), refetchStockProducts(), refetchProducts()}}/>
 										</TabPanel>
 										<TabPanel>
 											<Receiving receivingProducts={receivingProducts} refetch={() => {refetchStockProducts(), refetchReceiving()}}/>

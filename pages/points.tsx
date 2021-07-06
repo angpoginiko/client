@@ -75,7 +75,7 @@ export default function Points({points, user, profile, onStore} : any) {
 							</Text>
 							<HStack>
 								<Text fontSize={{ base: "30px", md: "55px", lg: "75px" }} color="white">
-									{totalAvailablePoints}
+									{totalAvailablePoints ? totalAvailablePoints.toFixed(2) : totalAvailablePoints}
 								</Text>
 								<Text fontSize={{ base: "15px", md: "25px", lg: "30px" }} color="white">available points</Text>
 							</HStack>
@@ -88,7 +88,7 @@ export default function Points({points, user, profile, onStore} : any) {
 						<SimpleGrid gap={{ base: "35px", md: "50px", lg: "100px" }} columns={[1, null, 2]}>
 							<Container>
 								<Box w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290">
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEarnedPoints}</Text></Center>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEarnedPoints ? totalEarnedPoints.toFixed(2) : totalEarnedPoints}</Text></Center>
 								</Box>
 								<Center><Text>Earned Points</Text></Center>
 							</Container>

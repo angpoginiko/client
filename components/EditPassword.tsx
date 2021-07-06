@@ -44,7 +44,6 @@ export default function EditPassword({ id, modalClose } : EditPasswordProps) {
 			setErrorMessage(json.message);
 			onOpenError();
 		}
-		console.log(formData)
 	}
 	return(
 		<>

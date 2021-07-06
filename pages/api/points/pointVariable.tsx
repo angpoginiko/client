@@ -18,3 +18,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		res.json({error: `Server error${req}`})
 	}
 });
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}

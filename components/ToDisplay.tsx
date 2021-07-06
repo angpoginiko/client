@@ -64,7 +64,6 @@ export default function ToDisplay({
 			}
 		}
 	}
-	console.log(stock.product?.capacity)
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -82,7 +81,7 @@ export default function ToDisplay({
 							<FormLabel>Quantity to Add</FormLabel>
 							<NumberInput>
 								<NumberInputField name="quantity" ref={register({required:true})}/>
-								<FormHelperText>Stock Remaining: {stock.quantity?.toFixed(2)}</FormHelperText>
+								<FormHelperText>Stock Remaining: {stock.quantity}</FormHelperText>
 								<NumberInputStepper>
 									<NumberIncrementStepper />
 									<NumberDecrementStepper />

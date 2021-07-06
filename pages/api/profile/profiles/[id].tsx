@@ -61,7 +61,6 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				if(!profile){
 					return res.status(400).json({success: false})
 				}
-				console.log(gender);
 				res.status(201).send(profile);
 			} catch (error) {
 				res.status(500);
@@ -70,4 +69,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 			break;
 		default:
 	}
+}
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
 }

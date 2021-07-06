@@ -23,7 +23,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				const cart = await db.collection("cart").aggregate([
 					{"$unwind" : "$product"},
 					{"$lookup" : {
-						"from" : "products",
+						"from" : "display",
 						"localField" : "product.productId",
 						"foreignField" : "_id",
 						"as" : "productData"
@@ -90,3 +90,9 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	}
 	
 });
+
+export const config = {
+  api: {
+    externalResolver: true,
+  },
+}
