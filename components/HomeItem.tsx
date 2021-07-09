@@ -9,8 +9,8 @@ import {
 	useDisclosure,
 	VStack
 } from '@chakra-ui/react';
-import { CartProductType, ProductType } from '../interfaces';
-import React, { useState } from 'react';
+import { ProductType } from '../interfaces';
+import React from 'react';
 import ModalComp from './ModalComp';
 import HomeQuantity from './HomeQuantity';
 
