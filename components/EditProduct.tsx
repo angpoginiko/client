@@ -20,13 +20,13 @@ import { useQuery } from 'react-query';
 import { useState } from 'react';
 import useCase from '../hooks/useCase';
 
-interface AddCashierProps {
+interface EditProductProps {
 	modalClose: () => void;
 	refresh: () => void;
 	defaultValues: ProductType;
 }
 
-export default function AddCashier({ modalClose, refresh, defaultValues } : AddCashierProps) {
+export default function EditProduct({ modalClose, refresh, defaultValues } : EditProductProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const [image, setImage] = useState<string | ArrayBuffer | null>(defaultValues.image!.toString());
 	const { register, handleSubmit, errors } = useForm();
@@ -86,6 +86,7 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
     }
     reader.readAsDataURL(e.target.files![0])
   };
+	console.log(defaultValues);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
@@ -121,10 +122,16 @@ export default function AddCashier({ modalClose, refresh, defaultValues } : AddC
 							<FormErrorMessage>Price Required</FormErrorMessage>
             </FormControl>
 
-						<FormControl id="reorderingStock" isInvalid={errors.reorderingStock && errors.reorderingStock.type === "required"}>
-              <FormLabel>Minimum Stock</FormLabel>
-              <Input name="reorderingStock" ref={register({required:true})} defaultValue={defaultValues.reorderingStock}/>
-							<FormErrorMessage>Minimum Stock Required</FormErrorMessage>
+						<FormControl id="reorderingDisplayStock" isInvalid={errors.reorderingDisplayStock && errors.reorderingDisplayStock.type === "required"}>
+              <FormLabel>Minimum Display Stock</FormLabel>
+              <Input name="reorderingDisplayStock" ref={register({required:true})} defaultValue={defaultValues.reorderingDisplayStock}/>
+							<FormErrorMessage>Minimum Display Stock Required</FormErrorMessage>
+            </FormControl>
+
+						<FormControl id="reorderingStorageStock" isInvalid={errors.reorderingStorageStock && errors.reorderingStorageStock.type === "required"}>
+              <FormLabel>Minimum Storage Stock</FormLabel>
+              <Input name="reorderingStorageStock" ref={register({required:true})} defaultValue={defaultValues.reorderingStorageStock}/>
+							<FormErrorMessage>Minimum Storage Stock Required</FormErrorMessage>
             </FormControl>
 
 						<FormControl id="unitOfMeasure" isInvalid={errors.unitOfMeasure && errors.unitOfMeasure.type === "required"}>

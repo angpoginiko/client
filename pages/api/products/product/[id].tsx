@@ -61,7 +61,8 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 						productType,
 						unitOfMeasure,
 						unitPrice,
-						reorderingStock,
+						reorderingStorageStock,
+						reorderingDisplayStock,
 						productDesc,
 					},
 					image,
@@ -75,7 +76,8 @@ export default authentication (async function (req: NextApiRequest, res: NextApi
 							unitPrice: parseInt(unitPrice),
 							productType: productTypeId,
 							unitOfMeasure: unitOfMeasureId,
-							reorderingStock: parseInt(reorderingStock),
+							reorderingDisplayStock: parseInt(reorderingDisplayStock),
+							reorderingStorageStock: parseInt(reorderingStorageStock),
 							productDesc,
 							image
 						}
