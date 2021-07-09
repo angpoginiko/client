@@ -1,6 +1,8 @@
 import React from 'react'
 import {
-    Flex
+    Flex,
+		Divider,
+
 } from '@chakra-ui/react'
 import NavItem from './NavItem'
 import { useQuery } from 'react-query';
@@ -35,6 +37,8 @@ export default function Sidebar({setQuery} : SideBarProps) {
                 alignItems={"flex-start"}
                 as="nav"
             >
+							Product List
+							<Divider />
 							{productTypes && productTypes.map((productType) => {
 								 return(
 									<NavItem 

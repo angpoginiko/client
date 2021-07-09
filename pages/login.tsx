@@ -19,6 +19,7 @@ import { NextPageContext } from 'next';
 import { server } from '../config';
 import { formAuth } from './api/formAuth';
 import userRoles from '../constants/userRoles'
+import Footer from '../components/Footer';
 
 type FormData = {
   username: string;
@@ -99,6 +100,7 @@ export default function Login (){
         </Box>
       </Stack>
 	</Layout>
+	<Footer />
 	</>
 	);
 }

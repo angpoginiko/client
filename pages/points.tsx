@@ -15,6 +15,7 @@ import { server } from '../config'
 import { EncashedPoints, Point } from '../interfaces/index'
 import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
+import Footer from '../components/Footer';
 
 
 export default function Points({points, user, profile, onStore} : any) {
@@ -115,6 +116,7 @@ export default function Points({points, user, profile, onStore} : any) {
 				</Box>
 			</VStack>
 		</Layout>
+		<Footer />
     </>
   );
 }

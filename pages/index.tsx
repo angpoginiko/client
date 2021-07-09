@@ -11,8 +11,20 @@ import {
 import { NextPageContext } from 'next';
 import { formAuth } from './api/formAuth';
 import { server } from '../config';
+import Footer from '../components/Footer';
+import CarouselComp from '../components/CarouselComp';
+import { CarouselType } from '../interfaces';
+import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 
 export default function IndexPage({ user }: any) {
+	const fetchCarousel = async () => {
+		const res = await fetch(`api/carousel/getCarousel`);
+		return res.json();
+	}
+
+	const router = useRouter();
+	const { data: carousel } = useQuery<CarouselType>("carousel", fetchCarousel);
   return (
     <>
       <Head>
@@ -36,16 +48,7 @@ export default function IndexPage({ user }: any) {
             <Text as={'span'} color={'green.400'}>
             </Text>
           </Heading>
-          <Text color={'gray.500'}>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas venenatis lorem sit amet lectus tristique, 
-					venenatis varius nibh blandit. Fusce faucibus varius lorem. 
-					Ut consequat, lacus eu ultricies suscipit, purus sem convallis purus, 
-					et fringilla magna lectus in purus. 
-					Morbi mollis tempor dolor, in interdum mauris pharetra sit amet. 
-					Aliquam dictum viverra dui, in pellentesque urna dignissim quis. 
-					Nam commodo venenatis suscipit. Vestibulum imperdiet lorem nec ex hendrerit dapibus. 
-					Integer at nisl felis.
-          </Text>
+          <CarouselComp carousel={carousel!}/>
           <Stack
             direction={'column'}
             spacing={3}
@@ -60,7 +63,7 @@ export default function IndexPage({ user }: any) {
               _hover={{
                 bg: 'green.500',
               }}
-							href="/login"
+							onClick={() => router.push("/register")}
 							>
               Get Started
             </Button>
@@ -68,6 +71,7 @@ export default function IndexPage({ user }: any) {
         </Stack>
       </Container>
 		</Layout>
+		<Footer />
     </>
   );
 }

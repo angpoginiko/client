@@ -30,10 +30,16 @@ export type Token =
 }
 
 export type Point = {
-	_id?: string,
-  points: number,
-	dateAdded?: Date,
-  expiryDate?: Date
+	customerId: string;
+	dateAdded: Date;
+	expiryDate: Date;
+	points: number;
+	_id: string
+}
+
+export type Points = {
+	earned: Point[];
+	encashed: EncashedPoints[];
 }
 
 export type EncashedPoints = {
@@ -64,7 +70,10 @@ export type CartProductType = {
 	productId: string | undefined | ObjectId,
 	quantity: number,
 	isAdded?: boolean,
-	hasContainer?: boolean
+	hasContainer?: boolean,
+	image: FileList | string,
+	productName: string | undefined,
+	unitPrice: number
 }
 
 
@@ -72,7 +81,17 @@ export type UserCart = {
 	_id: string,
 	product:  CartProductType,
 	customerId: string,
-	productData: ProductType[],
+	productData: ProductType,
+	total?: number,
+	encashedPoints?: number,
+	unitOfMeasure: string,
+}
+
+export type UserList = {
+	_id: string,
+	product:  CartProductType,
+	customerId: string,
+	productData: ProductType,
 	total?: number,
 	encashedPoints?: number,
 	unitOfMeasure: string,
@@ -109,4 +128,11 @@ export type StorageDisplayProductType = {
 	quantity?: number,
 	expiryDate: Date
 	_id: string
+}
+
+export type CarouselType = {
+	_id: string,
+	image1: FileList | string,
+	image2: FileList | string,
+	image3: FileList | string
 }

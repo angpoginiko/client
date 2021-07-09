@@ -22,6 +22,7 @@ import EditPassword from '../components/EditPassword'
 import { useQuery } from 'react-query';
 import { Profile } from '../interfaces';
 import EditProfileImagePage from '../components/EditProfileImage';
+import Footer from '../components/Footer';
 
 export default function ProfilePage({ user, onStore } : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
@@ -42,6 +43,7 @@ export default function ProfilePage({ user, onStore } : any) {
 	}
 	const { data: profile, refetch } = useQuery<Profile>("profile", fetchProfile);
   return (
+		<>
 		<Layout title="Profile" authentication={user} onStore={onStore}>
     <Center py={6}>
       <Box
@@ -148,6 +150,8 @@ export default function ProfilePage({ user, onStore } : any) {
 				<EditProfileImagePage modalClose={onCloseImage} id={user.id} refresh={refetch}/>
 			</ModalComp>
 		</Layout>
+		<Footer />
+		</>
   );
 }
 

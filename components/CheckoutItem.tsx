@@ -6,19 +6,13 @@ import {
 	VStack,
 	Center,
 } from '@chakra-ui/react';
-import { ProductType, UserCart } from '../interfaces';
+import { CartProductType } from '../interfaces';
 
 interface CartProductProps{
-	userCart: UserCart,
+	userCart: CartProductType,
 }
 
 export default function CheckoutItem ({ userCart } : CartProductProps) {
-	let { productName, unitPrice, image  } : ProductType = {}
-	userCart.productData.map((data) => {
-		productName = data.productName
-		unitPrice = data.unitPrice
-		image = data?.image
-	});
 	return(
 		<>
 			<HStack 
@@ -33,17 +27,17 @@ export default function CheckoutItem ({ userCart } : CartProductProps) {
 				<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100}} width={{base: 97.5, sm: 175.5, md: 234, lg: 225.6}}>
 					<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
 						<Center>
-							<Image boxSize={{sm: 70, md: 90}} src={image?.toString()} />
+							<Image boxSize={{sm: 70, md: 90}} src={userCart.image?.toString()} />
 						</Center>
 					</Box>
 
 					<VStack width={{base: 97.5, sm: 175.5, md: 234}}>
 						<Text color="white" fontSize={{base: 10, sm: 15}}>
-							{productName}
+							{userCart.productName}
 						</Text>
 
 						<Text color="white" fontSize={{base: 9}}>
-							Php {unitPrice! * userCart.product.quantity}
+							Php {userCart.unitPrice! * userCart.quantity}
 						</Text>
 					</VStack>
 				</HStack>
@@ -54,7 +48,7 @@ export default function CheckoutItem ({ userCart } : CartProductProps) {
 						<Center>
 							<HStack width={{base: 5}}>
 								<Center><Text fontSize={{base: 'xs'}}>Qty: </Text></Center>
-								<Center><Text fontSize={{base: 'xs'}}>{userCart.product.quantity}</Text></Center>
+								<Center><Text fontSize={{base: 'xs'}}>{userCart.quantity}</Text></Center>
 							</HStack>
 						</Center>
 					</Center>

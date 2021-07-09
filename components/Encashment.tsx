@@ -18,42 +18,23 @@ import {
 	Text
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
-import { useQuery } from 'react-query';
-import { EncashedPoints, Point } from '../interfaces';
+import { Point, Points } from '../interfaces';
+
+
 
 interface EncashmentProps {
 	refresh?: () => void;
 	customerId: string | undefined;
 	onModalClose: () => void;
+	availablePoints: number;
+	totalEncashedPoints: number;
 }
 
-export default function Encashment({ customerId, onModalClose } : EncashmentProps) {
+export default function Encashment({ customerId, onModalClose, availablePoints, totalEncashedPoints, refresh } : EncashmentProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
-
-	const fetchPoints = async () => {
-		const res = await fetch(`api/points/point/${customerId}`);
-		return res.json();
-	}
 	
-	const { data: points } = useQuery("points", fetchPoints);
-
-	const earned = points?.earned as Array<Point>;
-	const encashed = points?.encashed as Array<EncashedPoints>;
-	let availablePoints = 0;
-	let totalEncashedPoints = 0;
-
-	earned?.map((points) => {
-		if(new Date() < new Date(points.expiryDate!)){
-			availablePoints += points.points;
-		} 
-		encashed?.map((encashed) => {
-			if(new Date() < new Date(points.expiryDate!)){
-				totalEncashedPoints += encashed.points
-			} 
-		});
-	});
 	const totalAvailablePoints = availablePoints - totalEncashedPoints;
 	const onSubmit = async (pointsUsed: Point) => {
 		if(pointsUsed.points > totalAvailablePoints){
@@ -98,7 +79,7 @@ export default function Encashment({ customerId, onModalClose } : EncashmentProp
 							<FormErrorMessage>Points Required</FormErrorMessage>
             </FormControl>
 						<Text>
-							Available Points: {totalAvailablePoints}
+							Available Points: {totalAvailablePoints && totalAvailablePoints.toFixed(2)}
 						</Text>
             <Stack spacing={10}>
               <Button

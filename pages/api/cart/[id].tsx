@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from '../../../utils/mongodb'
 import { ObjectId } from 'mongodb'
 import { authentication } from '../authentication';
+import { CartProductType } from '../../../interfaces';
 
 export default authentication(async function (req: NextApiRequest, res: NextApiResponse) 
 {
@@ -21,13 +22,29 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		case 'GET' :
 			try {
 				const cart = await db.collection("cart").aggregate([
+					{"$match" : {customerId}},
 					{"$unwind" : "$product"},
 					{"$lookup" : {
 						"from" : "display",
 						"localField" : "product.productId",
 						"foreignField" : "_id",
 						"as" : "productData"
-					}}
+					}},
+					{"$unwind" : "$productData"},
+					{"$lookup" : {
+						"from" : "unitOfMeasure",
+						"localField" : "productData.unitOfMeasure",
+						"foreignField" : "_id",
+						"as" : "productData.unitOfMeasure"
+					}},
+					{"$unwind" : "$productData.unitOfMeasure"},
+					{"$lookup" : {
+						"from" : "productType",
+						"localField" : "productData.productType",
+						"foreignField" : "_id",
+						"as" : "productData.productType"
+					}},
+					{"$unwind" : "$productData.productType"},
 				]).toArray();
 				if(!cart){
 					return res.status(400).json({success: false})
@@ -60,21 +77,26 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 
 		case 'PUT':
 			try {
-			const productIdFormatted = new ObjectId(productId.toString());
-			let cart;
-			 const exist = await db.collection("cart").findOne({"product.productId" : productIdFormatted });
-			 if(!exist) {
+				const productIdFormatted = new ObjectId(productId.toString());
+				const id = new ObjectId(customerId.toString())
+				let cart;
+				const exist = await db.collection("cart").findOne({customerId: id, "product.productId": productIdFormatted});
+				if(exist) {
+					cart = await db.collection("cart").findOneAndUpdate({customerId: id, "product.productId": productIdFormatted},
+						{
+							$set:
+								{
+									"product.$.quantity": parseFloat(quantity).toFixed(2)
+								}
+						}
+					)
+				} else {
 					cart = await db.collection("cart").findOneAndUpdate(
-						{ "customerId" : customerId },
-						{ "$push" : { "product" :  {"productId": productIdFormatted, "quantity": quantity} } }
+						{ "customerId" : id },
+						{ "$push" : { "product" :  {"productId": productIdFormatted, "quantity": parseInt(quantity)} } }
 				)
-			 } else {
-				cart = await db.collection("cart").findOneAndUpdate(
-					{ "customerId" : customerId , "product.productId": productIdFormatted },
-					{ $set: { "product.$.quantity" : quantity } }
-			 )
-				
-		 }
+				}
+	
 				if(!cart){
 					return res.status(400).json({success: false})
 				}

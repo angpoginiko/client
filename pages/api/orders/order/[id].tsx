@@ -28,24 +28,38 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		case 'GET' :
 			try {
 				const order = await db.collection("orders").aggregate([
+					{"$match" : {_id}},
 					{"$unwind" : "$product"},
 					{"$lookup" : {
 						"from": 'display',
 						"localField": 'product.productId',
 						"foreignField": '_id',
-						"as": 'productData'
-					}}
-				]).toArray();
+					"as": 'productData'
+					}},
+					{"$unwind" : "$productData"},
+					{"$lookup" : {
+						"from" : "unitOfMeasure",
+						"localField" : "productData.unitOfMeasure",
+						"foreignField" : "_id",
+						"as" : "productData.unitOfMeasure"
+					}},
+					{"$unwind" : "$productData.unitOfMeasure"},
+					{"$lookup" : {
+						"from" : "productType",
+						"localField" : "productData.productType",
+						"foreignField" : "_id",
+						"as" : "productData.productType"
+					}},
+					{"$unwind" : "$productData.productType"},
+				]).toArray()
 				if(!order){
 					return res.status(400).json({success: false})
 				}
-				const customerId = order[0].customerId;
-				const unitOfMeasureId = order[0].productData.unitOfMeasure;
-				const unitOfMeasure = await db.collection("unitOfMeasure").findOne({_id: unitOfMeasureId});
-				res.status(201).send({order, id, customerId, unitOfMeasure: unitOfMeasure.name});	
+				res.status(201).send({order, id});	
+				res.status(200).send(order);
 			} catch (error) {
 				res.status(500);
-				res.json({error: "Server error"})
+				res.json({error: error})
 			} 
 			break;
 		default:
@@ -54,8 +68,8 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	
 })
 
-export const config = {
-  api: {
-    externalResolver: true,
-  },
-}
+// export const config = {
+//   api: {
+//     externalResolver: true,
+//   },
+// }

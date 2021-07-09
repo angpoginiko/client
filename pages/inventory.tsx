@@ -20,6 +20,7 @@ import Display from '../components/Display';
 import ListOfProducts from '../components/ListOfProducts';
 import { useQuery } from 'react-query';
 import { ProductType, ReceivedProducts, StorageDisplayProductType } from '../interfaces';
+import Footer from '../components/Footer';
 
 export default function Inventory({user, onStore} : any) {
 	const router = useRouter();
@@ -89,6 +90,7 @@ export default function Inventory({user, onStore} : any) {
 								</Tabs>
 						</VStack>
 			</AdminNavBar>
+			<Footer />
     </>
   );
 }

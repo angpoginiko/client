@@ -10,27 +10,25 @@ import {
 } from '@chakra-ui/react';
 import { MdAddBox, MdRemove, MdDelete } from 'react-icons/md';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { ProductType, UserCart } from '../interfaces';
+import { CartProductType, UserCart } from '../interfaces';
 
 interface CartProductProps{
 	userCart: UserCart
 	modalOpen: () => void;
-	checkoutProduct: UserCart[];
-	setCheckoutProduct: (product: UserCart[]) => void;
-	refresh: () => void;
+	checkoutItems: CartProductType[];
+	setCheckoutItems: (checkoutItems: CartProductType[]) => void;
 	totalPrice: number;
 	setTotalPrice: (totalPrice: number) => void;
 }
 
 export default function CartProduct (
 	{ userCart, 
-		modalOpen, 
-		checkoutProduct, 
-		setCheckoutProduct, 
-		refresh,
+		modalOpen,
+		checkoutItems,
+		setCheckoutItems,  
 		totalPrice,
-		setTotalPrice } : CartProductProps) {
-	let { productName, unitPrice, productDesc, image  } : ProductType = {}
+		setTotalPrice
+	} : CartProductProps) {
 	const [quantity, setQuantity] = useState(userCart.product.quantity);
 	const [isAdded, setIsAdded] = useState(false);
 	const [hasContainer, setHasContainer] = useState(false);
@@ -45,44 +43,40 @@ export default function CartProduct (
 			setQuantity(1);
 		}
 	}
-	userCart.productData.map((data) => {
-		productName = data.productName
-		unitPrice = data.unitPrice
-		productDesc = data.productDesc
-		image = data.image
-	});
-	
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if(e.target.name === userCart.product.productId){
-			setIsAdded(!isAdded)
-			userCart.product.isAdded = e.target.checked;
-			userCart.product.hasContainer = hasContainer
-			if(userCart.product.isAdded == true){
-				checkoutProduct.push(userCart);
-				setCheckoutProduct(checkoutProduct);
-				totalPrice = totalPrice + (unitPrice! * quantity);
+		if(e.target.name === userCart.product.productId?.toString()){
+			setIsAdded(e.target.checked);
+			if(!isAdded){
+				let newProduct: CartProductType = {
+					isAdded: !isAdded,
+					productId: userCart.product.productId.toString(),
+					quantity,
+					hasContainer,
+					image: userCart.productData.image!,
+					productName: userCart.productData.productName?.toString(),
+					unitPrice: userCart.productData.unitPrice!
+				};
+				console.log(newProduct.isAdded)
+				checkoutItems.push(newProduct);
+				setCheckoutItems(checkoutItems);
+				totalPrice += (userCart.productData.unitPrice! * quantity);
 				setTotalPrice(totalPrice);
+			} else {
+					const index = checkoutItems.map((e) => {
+						return e.productId;
+					}).indexOf(userCart.product.productId);
+					
+					if (index > -1) {
+						checkoutItems.splice(index, 1);
+					}
+					totalPrice -= (userCart.productData.unitPrice! * quantity);
+					setTotalPrice(totalPrice);
 			}
-			else if(userCart.product.isAdded == false){
-				const index = checkoutProduct.map((e) => {
-					return e.product.productId;
-				}).indexOf(userCart.product.productId);
-				
-				if (index > -1) {
-					checkoutProduct.splice(index, 1);
-				}
-				setCheckoutProduct(checkoutProduct);
-
-				totalPrice = totalPrice - (unitPrice! * quantity);
-				setTotalPrice(totalPrice);
-			}
-			refresh();
 		}
 	}
 	const handleHasContainer = (e: ChangeEvent<HTMLInputElement>) => {
 		if(e.target.name === `${userCart.product.productId}hasContainer`){
 			setHasContainer(!hasContainer);
-			refresh();
 		}
 	}
 
@@ -101,23 +95,23 @@ export default function CartProduct (
 		>
 			
 			<Center borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{sm: 70, md: 90, lg: 120}}>
-				<Checkbox name={userCart.product.productId?.toString()} checked={userCart.product.isAdded} onChange={handleChange}></Checkbox>
+				<Checkbox name={userCart.product.productId?.toString()} checked={isAdded} onChange={handleChange}></Checkbox>
 			</Center>
 
 			<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
 				<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
 					<Center>
-						<Image boxSize={{sm: 70, md: 90, lg: 120}} src={image?.toString()} />
+						<Image boxSize={{sm: 70, md: 90, lg: 120}} src={userCart.productData.image?.toString()} />
 					</Center>
 				</Box>
 
 				<VStack width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
 					<Text color="white" fontSize={{base: 10, sm: 15, lg: 30}}>
-						{productName}
+						{userCart.productData.productName}
 					</Text>
 
 					<Text color="white" fontSize={{base: 5, sm: 10, md: 13, lg: 16}}>
-						Price: Php {unitPrice} / Kg
+						Price: Php {userCart.productData.unitPrice} / Kg
 					</Text>
 				</VStack>
 			</HStack>
@@ -128,7 +122,7 @@ export default function CartProduct (
 						Description:
 					</Text>	
 					<Text fontSize={{base: 4, sm: 8, md: 11, lg: 14}}> 
-						 {productDesc}
+						 {userCart.productData.productDesc}
 					</Text>
 				</Box>
 			</HStack>
@@ -165,7 +159,7 @@ export default function CartProduct (
 								<Text 
 								fontSize={{base: 'xs', sm: 'sm', lg: 'lg'}}
 								>
-									{quantity}
+									{parseFloat(quantity.toString()).toFixed(2)}
 								</Text>
 							</Center>
 						</Box>

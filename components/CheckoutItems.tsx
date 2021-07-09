@@ -7,14 +7,15 @@ import {
 	useDisclosure
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { UserCart } from '../interfaces';
+import { CartProductType, Points } from '../interfaces';
 import CheckoutItem from './CheckoutItem'
 import QRGenerator from './QRGenerator'
 import ModalComp from './ModalComp'
 import Encashment from './Encashment'
+import { useQuery } from 'react-query';
 
 interface CheckoutProductProps {
-	cart : UserCart[];
+	cart : CartProductType[];
 	orderId: string;
 	totalPrice: number;
 	isProfileComplete: boolean;
@@ -31,6 +32,28 @@ export default function CheckoutItems(
 	} : CheckoutProductProps) {
 	const [isCreated, setIsCreated] = useState(true);
 	const { onOpen: encashedPointsOpen, isOpen: isEncashedPointsOpen, onClose: encashedPointsClose } = useDisclosure();
+	const fetchPoints = async () => {
+		const res = await fetch(`api/points/point/${customerId}`);
+		return res.json();
+	}
+	const { data: points } = useQuery<Points>("points", fetchPoints);
+	const earned = points?.earned;
+	const encashed = points?.encashed;
+	let earnedPoints = 0;
+	let totalEncashedPoints = 0;
+
+	earned?.map((points) => {
+		if(new Date() < new Date(points.expiryDate!)){
+			earnedPoints += points.points;
+		} 
+		encashed?.map((encashed) => {
+			if(new Date() < new Date(points.expiryDate!)){
+				totalEncashedPoints += encashed.points
+			} 
+		});
+	});
+	const totalAvailablePoints = earnedPoints - totalEncashedPoints;
+	console.log(earned);
   return (
     <>
 			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
@@ -42,7 +65,7 @@ export default function CheckoutItems(
 							<VStack w="100%" h="100%">
 								{cart?.length ? cart.map((userCart) => {
 									return(
-											<div key={userCart.product.productId?.toString()}>
+											<div key={userCart.productId?.toString()}>
 													<CheckoutItem userCart={userCart}/>
 											</div>
 										);
@@ -60,7 +83,7 @@ export default function CheckoutItems(
 					<VStack>
 						<Text>Total: {totalPrice}</Text>
 						{isCreated && (
-							<Button onClick={encashedPointsOpen} disabled={!isProfileComplete}>
+							<Button onClick={encashedPointsOpen} disabled={!isProfileComplete || (totalAvailablePoints <= 0)}>
 								Use Points
 							</Button>
 						)}
@@ -69,7 +92,12 @@ export default function CheckoutItems(
 				</Center>
 			</VStack>
 			<ModalComp isModalOpen={isEncashedPointsOpen} onModalClose={encashedPointsClose} title="Redeem Points">
-				<Encashment customerId={customerId} onModalClose={encashedPointsClose} />
+				<Encashment 
+					customerId={customerId} 
+					onModalClose={encashedPointsClose} 
+					availablePoints={earnedPoints} 
+					totalEncashedPoints={totalEncashedPoints}
+				/>
 			</ModalComp>
     </>
   );

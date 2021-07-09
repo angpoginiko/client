@@ -10,10 +10,10 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 	const _id = new ObjectId(id);
 	try {
 		const userCart = data;
+		const customerId = new ObjectId(userCart[0].customerId);
 		userCart.map(async (cart: any) => {
 				const productId = new ObjectId(cart.product.productId)
 				const productQuantity = cart.product.quantity;
-				const customerId = new ObjectId(cart.customerId);
 				const display =  await db.collection("display").findOne({_id: productId});
 				const newQuantity = parseFloat(display.quantity) - productQuantity
 				await db.collection("display").findOneAndUpdate(
@@ -27,16 +27,19 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 				await db.collection("cart").findOneAndUpdate(
 					{"customerId": customerId},
 					{ "$pull": { "product": { "productId" : productId } } }
+					)	
+				if(parseInt(encashedPoints) != 0) {
+					await db.collection("customers").updateOne(
+						{ "_id" : customerId },
+						{ "$push" : { "point.encashed" :  { "points" : parseFloat(encashedPoints), "dateCheckout": new Date()} } }
 					)
-				await db.collection("purchaseHistory").findOneAndUpdate(
-					{ "customerId" : customerId },
-					{ "$push" : { "purchases" :  {"cart": data, dateCheckout: new Date(), totalPrice, encashedPoints} } }
-				);	
-				await db.collection("customers").updateOne(
-					{ "_id" : customerId },
-					{ "$push" : { "point.encashed" :  { "points" : parseFloat(encashedPoints), "dateCheckout": new Date()} } }
-				)
+				}
 		});
+		
+		await db.collection("purchaseHistory").findOneAndUpdate(
+			{ "customerId" : customerId },
+			{ "$push" : { "purchases" :  {"cart": data, dateCheckout: new Date(), totalPrice, encashedPoints} } }
+		);
 		const products = await db.collection("orders").findOneAndUpdate(
 			{ _id },
 			{ $set:

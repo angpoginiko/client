@@ -13,8 +13,10 @@ import { useRouter } from 'next/router';
 import Layout from '../components/Layout';
 import Sidebar from '../components/Sidebar';
 import { useQuery } from 'react-query';
-import { ProductType } from '../interfaces';
-import Product from '../components/Product'
+import { CarouselType, ProductType } from '../interfaces';
+import HomeItem from '../components/HomeItem'
+import CarouselComp from '../components/CarouselComp';
+import Footer from '../components/Footer';
 
 export default function AuthIndexPage({ user, onStore } : any) {
 	const [productTypeQuery, setProductTypeQuery] = useState("");
@@ -41,6 +43,12 @@ export default function AuthIndexPage({ user, onStore } : any) {
 			router.replace('/home-admin');
 		}
 	}, [user, onStore]);
+
+	const fetchCarousel = async () => {
+		const res = await fetch(`api/carousel/getCarousel`);
+		return res.json();
+	}
+	const { data: carousel } = useQuery<CarouselType>("carousel", fetchCarousel);
   return (
     <>
 			<Layout authentication={user} onStore={false}>
@@ -48,12 +56,14 @@ export default function AuthIndexPage({ user, onStore } : any) {
 			<Sidebar setQuery={setProductTypeQuery}/>
 				<HStack width={"100%"}>
 					{!isFetching && products && products.map((product) => {
-						return <Product product={product} customerId={user.id} key={product._id}/>
+						return <HomeItem product={product} customerId={user.id} key={product._id}/>
 					})}
 					{isFetching && (<Center width="100%"><Spinner size="xl"/></Center>)}
+					{productTypeQuery == "" && <CarouselComp carousel={carousel!}/>}
 				</HStack>
 			</Stack>
 			</Layout>
+			<Footer />
     </>
   );
 }

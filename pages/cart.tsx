@@ -21,12 +21,12 @@ import ModalComp from '../components/ModalComp';
 import CheckoutItems from '../components/CheckoutItems'
 import { useRouter } from 'next/router';
 import userRoles from '../constants/userRoles';
+import Footer from '../components/Footer';
 
 
 
 export default function Cart({user, profile, onStore} : any) {
-	const [checkoutItems, setCheckoutItems] = useState<UserCart[]>([])
-	const [hasItems, setHasItems] = useState(false);
+	const [checkoutItems, setCheckoutItems] = useState<CartProductType[]>([])
 	const [orderId, setOrderId] = useState('');
 	const [total, setTotal] = useState(0);
 	const { onOpen, isOpen, onClose } = useDisclosure();
@@ -37,7 +37,7 @@ export default function Cart({user, profile, onStore} : any) {
 	}
 	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
 	
-	const { data: cart, refetch } = useQuery<UserCart[]>("product", fetchCart);
+	const { data: cart, refetch } = useQuery<UserCart[]>("cart", fetchCart);
 	const handleDelete = async (productId: string | undefined) => {
     if (productId){
 				await fetch (`/api/cart/${user.id}`, {
@@ -53,32 +53,26 @@ export default function Cart({user, profile, onStore} : any) {
     }
   }
 
-	const onCheckout = async (checkoutItems : UserCart[]) => {
-		const productArray:CartProductType[] = [];
-		checkoutItems.map((checkoutItem) => {
-			productArray.push(checkoutItem.product);
-		});
+	const onCheckout = async (checkoutItems : CartProductType[]) => {
 		const response = await fetch("/api/orders/addOrders", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({id: user.id, items: productArray, total}),
+			body: JSON.stringify({id: user.id, items: checkoutItems, total}),
 		});
 		const orderId = await response.json();
 		setOrderId(orderId);
 	}
-	useEffect(() => {
-		checkoutItems.length > 0 ? setHasItems(true) : setHasItems(false);
-		refetch();
-	}, [cart, checkoutItems]);
 
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
-			router.replace('/home-cashier');
+			router.replace('/home-cashier')
 		} else if(userRoles.Admin == user.userRole){
-			router.replace('/home-admin');
+			router.replace('/home-admin')
+		} else if(!onStore){
+			router.replace('./home');
 		}
 	}, [user, onStore]);
   return (
@@ -108,12 +102,11 @@ export default function Cart({user, profile, onStore} : any) {
 										<div key={userCart.product.productId?.toString()}>
 											<CartProduct 
 												userCart={userCart} 
-												modalOpen={onOpen} 
-												checkoutProduct={checkoutItems} 
-												setCheckoutProduct={(product: UserCart[]) => setCheckoutItems(product)}
-												refresh={refetch}
-												setTotalPrice={setTotal}
+												modalOpen={onOpen}
+												checkoutItems={checkoutItems}
+												setCheckoutItems={setCheckoutItems}
 												totalPrice={total}
+												setTotalPrice={setTotal}
 											/>
 											<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
 												<Flex>
@@ -140,9 +133,9 @@ export default function Cart({user, profile, onStore} : any) {
 							}
 						</VStack>
 						<Text>
-							Total Price: {total}
+							Total Price: P{total}
 						</Text>
-						<Button disabled={hasItems ? false : true} onClick={() => {
+						<Button disabled={Boolean(total) ? false : true} onClick={() => {
 							onCheckout(checkoutItems),
 							checkoutOpen()
 						}}>
@@ -155,17 +148,18 @@ export default function Cart({user, profile, onStore} : any) {
 							title="Checkout Items?">
 
 							<CheckoutItems
-							customerId={user.id}
-							cart={checkoutItems} 
-							orderId={orderId} 
-							totalPrice={total} 
-							isProfileComplete={isProfileComplete}
+								customerId={user.id}
+								cart={checkoutItems} 
+								orderId={orderId} 
+								totalPrice={total} 
+								isProfileComplete={isProfileComplete}
 							/>
 
 						</ModalComp>
 					</Center>
 				</VStack>
 			</Layout>
+			<Footer />
     </>
   );
 }

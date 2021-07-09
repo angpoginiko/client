@@ -17,6 +17,7 @@ import userRoles from '../constants/userRoles';
 import { useRouter } from 'next/router';
 import { MdCenterFocusStrong } from 'react-icons/md';
 import { useState } from 'react';
+import Footer from '../components/Footer';
 
 export default function AuthIndexPage({ user, onStore} : any) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
@@ -68,6 +69,7 @@ export default function AuthIndexPage({ user, onStore} : any) {
         </Stack>
       </Container>
 		</Layout>
+		<Footer />
     </>
   );
 }

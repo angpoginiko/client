@@ -17,12 +17,10 @@ import ModalComp from './ModalComp';
 import ReceiptItem from './ReceiptItem';
 import { useQuery } from 'react-query';
 
+
 type DataType = {
-	 order: UserCart[],
-	 id: string,
-	 customerId: string,
-	 encashedPoints: number,
-	 unitOfMeasure: string
+ _id: string;
+ order: UserCart[];
 }
 
 export default function OrderQRScanner() { 
@@ -68,7 +66,7 @@ export default function OrderQRScanner() {
 		});
 		const body = {
 			points: addedPoints,
-			customerId: data?.customerId
+			customerId: data?.order[0].customerId
 		}
 		if (order){
 			const response = await fetch (`/api/orders/removeOrder`, {

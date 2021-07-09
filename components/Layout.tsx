@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 import { useRouter } from 'next/router'
 import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
+import { FaClipboardList } from "react-icons/fa";
 import Head from 'next/head';
 import {
 	Avatar,
@@ -158,7 +159,11 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					justify={'flex-end'}
 					direction={'row'}
 					spacing={6}>
+
+						{auth && <Button href="#" onClick={() => auth ? Router.push('/grocery-list') : Router.push('/login')}><Icon as={FaClipboardList} w={4} h={4}/></Button>}
+
 						{onStore && <Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>}
+						
 						
 						<Button href="#" onClick={() => auth ? openCartButton() : Router.push('/login')}>
 							<Icon as={MdAddShoppingCart} w={4} h={4}/>

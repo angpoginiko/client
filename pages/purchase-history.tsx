@@ -18,6 +18,7 @@ import userRoles from '../constants/userRoles';
 import { Purchases } from '../interfaces';
 import PurchaseItem from '../components/PurchaseItem';
 import Layout from '../components/Layout';
+import Footer from '../components/Footer';
 
 
 export default function Points({user, purchases, onStore} : any) {
@@ -60,6 +61,7 @@ export default function Points({user, purchases, onStore} : any) {
 					</Center>
 				</Box>	
 		</Layout>
+		<Footer />
     </>
   );
 }

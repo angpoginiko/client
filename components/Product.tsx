@@ -8,7 +8,8 @@ import {
   Image,
 	Button,
 	Icon,
-	useDisclosure, 
+	useDisclosure,
+	VStack
 } from '@chakra-ui/react';
 import { CartProductType, ProductType } from '../interfaces';
 import { MdAddBox,  MdRemove} from "react-icons/md";
@@ -97,19 +98,16 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 								{product?.productType?.name}
 							</Text>
 							<Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
-								{product?.productName}
+								{product?.productName}, P{product?.unitPrice! * quantity}
 							</Heading>
-							<Stack direction={'row'} align={'center'}>
-								<Text fontWeight={800} fontSize={'xl'}>
-									${product?.unitPrice! * quantity}
-								</Text>
+							<VStack align={'center'}>
 								<Text color={'gray.600'}>
-								<Button onClick={() => increamentQuantity()}><Icon as={MdAddBox}/></Button>
+								<Button onClick={() => increamentQuantity()} variant="ghost"><Icon as={MdAddBox}/></Button>
 									{quantity}
-								<Button onClick={() => decrementQuantity()}><Icon as={MdRemove}/></Button>
-									{`${product?.quantity} ${product?.unitOfMeasure?.name} remaining`}
+								<Button onClick={() => decrementQuantity()} variant="ghost"><Icon as={MdRemove}/></Button>
 								</Text>
-							</Stack>
+								<Text>{`${product?.quantity} ${product?.unitOfMeasure?.name} remaining`}</Text>
+							</VStack>
 							<Stack>
 								<Button onClick={()=>{
 									addProduct({

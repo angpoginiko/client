@@ -17,6 +17,7 @@ import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import userRoles from '../constants/userRoles';
+import Footer from '../components/Footer';
 
 const OrderQRScanner = dynamic(() => import('../components/OrderQRScanner'), {
 	ssr: false,
@@ -67,6 +68,7 @@ export default function CashierIndexPage({ user, onStore } : any) {
       </Container>
 		</CashierNavBar>
 		<ModalComp isModalOpen={isOrderOpen} onModalClose={closeOrder} title="Scan Item"><OrderQRScanner/></ModalComp>
+		<Footer />
     </>
   );
 }

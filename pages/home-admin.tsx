@@ -19,11 +19,14 @@ import ModalComp from '../components/ModalComp';
 import AddCashier from '../components/AddCashier';
 import AddAdmin from '../components/AddAdmin';
 import SetPointVariable from '../components/SetPointVariable';
+import Footer from '../components/Footer';
+import SetSocialLinks from '../components/SetSocialLinks'
 
 export default function HomeAdminPage({ user, onStore } : any) {
 	const {isOpen: isCashierOpen, onOpen: onCashierOpen, onClose: onCashierClose} = useDisclosure();
 	const {isOpen: isAdminOpen, onOpen: onAdminOpen, onClose: onAdminClose} = useDisclosure();
 	const {isOpen: isPointsOpen, onOpen: onPointsOpen, onClose: onPointsClose} = useDisclosure();
+	const {isOpen: isSocialsOpen, onOpen: onSocialsOpen, onClose: onSocialsClose} = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -77,6 +80,19 @@ export default function HomeAdminPage({ user, onStore } : any) {
 									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Inventory</Text></Center>
 								</Box>
 							</Container>
+
+							<Container>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={()=> router.push('/set-carousel')}>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Set Carousel Images</Text></Center>
+								</Box>
+							</Container>
+
+							<Container>
+								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onSocialsOpen}>
+									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Set Social Links</Text></Center>
+								</Box>
+							</Container>
+
 						</SimpleGrid>
 					</Center>
 				</Box>
@@ -91,7 +107,11 @@ export default function HomeAdminPage({ user, onStore } : any) {
 			<ModalComp isModalOpen={isPointsOpen} onModalClose={onPointsClose} title="Set Point Variable">
 				<SetPointVariable onModalClose={onPointsClose}/>
 			</ModalComp>
+			<ModalComp isModalOpen={isSocialsOpen} onModalClose={onSocialsClose} title="">
+				<SetSocialLinks modalClose={onSocialsClose}/>
+			</ModalComp>
 		</AdminNavBar>
+		<Footer />
     </>
   );
 }

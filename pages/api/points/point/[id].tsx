@@ -23,9 +23,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 						"as" : "point.earned"
 					}}
 				]).toArray();
-				point.map((points) => {
-					res.status(200).send(points.point);
-				});
+				res.status(200).send(point[0].point);
 			} catch(err) {
 				res.status(401).send({message: "youre not logged in"});
 			}

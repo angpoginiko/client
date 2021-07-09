@@ -12,9 +12,16 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			query: { id },
 		} = req;
 		const productType = new ObjectId(id.toString());
-		const products = await db.collection("display").find(
-			{productType}
-		).toArray();
+		const products = await db.collection("display").aggregate(
+			[{"$match" : {productType}},
+			{"$lookup" : {
+				"from" : "unitOfMeasure",
+				"localField" : "unitOfMeasure",
+				"foreignField" : "_id",
+				"as" : "unitOfMeasure"
+			}},
+			{"$unwind" : "$unitOfMeasure"},
+		]).toArray();
 		res.status(201).send(products);
 	} catch (error) {
 		res.status(500);

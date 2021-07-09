@@ -4,7 +4,6 @@ import {
     Text,
     Link,
     Menu,
-    MenuButton,
 } from '@chakra-ui/react'
 import useCase from '../hooks/useCase';
 
@@ -24,17 +23,8 @@ export default function NavItem({ title, typeId, setQuery }: NavItemProps) {
             alignItems={"flex-start"}
         >
             <Menu placement="right">
-                <Link
-                    p={3}
-                    borderRadius={8}
-                    _hover={{ textDecor: 'none', backgroundColor: "#AEC8CA" }}
-                    w={"100%"}
-                >
-                    <MenuButton w="100%" onClick={() => setQuery(typeId)}>
-                        <Flex>
-                            <Text ml={5} display={"flex"}>{toPascalCase(title)}</Text>
-                        </Flex>
-                    </MenuButton>
+                <Link onClick={() => setQuery(typeId)}>
+									<Text ml={5} display={"flex"}>{toPascalCase(title)}</Text>
                 </Link>
             </Menu>
         </Flex>
