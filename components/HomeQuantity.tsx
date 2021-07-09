@@ -17,7 +17,7 @@ import {
 	NumberInputField
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
-import { Point, ProductType } from '../interfaces';
+import { ProductType } from '../interfaces';
 
 interface HomeQuantityProps {
 	onModalClose: () => void;
