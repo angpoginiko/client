@@ -18,7 +18,7 @@ import {
 	Text
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
-import { Point, Points } from '../interfaces';
+import { Point } from '../interfaces';
 
 
 
