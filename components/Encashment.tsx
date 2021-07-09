@@ -23,14 +23,13 @@ import { Point } from '../interfaces';
 
 
 interface EncashmentProps {
-	refresh?: () => void;
 	customerId: string | undefined;
 	onModalClose: () => void;
 	availablePoints: number;
 	totalEncashedPoints: number;
 }
 
-export default function Encashment({ customerId, onModalClose, availablePoints, totalEncashedPoints, refresh } : EncashmentProps) {
+export default function Encashment({ customerId, onModalClose, availablePoints, totalEncashedPoints } : EncashmentProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
