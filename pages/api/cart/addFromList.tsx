@@ -1,6 +1,5 @@
 import { ObjectId } from 'mongodb';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { CartProductType } from '../../../interfaces';
 import { connect } from  '../../../utils/mongodb'
 import { authentication } from '../authentication';
 

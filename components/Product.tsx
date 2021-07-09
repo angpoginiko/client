@@ -11,7 +11,7 @@ import {
 	useDisclosure,
 	VStack
 } from '@chakra-ui/react';
-import { CartProductType, ProductType } from '../interfaces';
+import { ProductType } from '../interfaces';
 import { MdAddBox,  MdRemove} from "react-icons/md";
 import React, { useState } from 'react';
 import ModalComp from './ModalComp';
@@ -19,6 +19,11 @@ interface ProductProps {
 	product: ProductType | undefined
 	closeProduct?: () => void
 	customerId: string | undefined
+}
+
+type FormValues = {
+	productId: string;
+	quantity: number;
 }
 
 
@@ -38,7 +43,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 		}
 	}
 
-	const addProduct = async (product: CartProductType) => {
+	const addProduct = async (product: FormValues) => {
 		const response = await fetch (`/api/cart/${customerId}`, {
 			method: "PUT",
 			headers: {
@@ -111,7 +116,7 @@ export default function ProductPage({product, closeProduct, customerId} : Produc
 							<Stack>
 								<Button onClick={()=>{
 									addProduct({
-										productId: product?._id,
+										productId: product?._id!,
 										quantity: quantity,
 									})
 								}}>

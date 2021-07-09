@@ -71,9 +71,9 @@ export type CartProductType = {
 	quantity: number,
 	isAdded?: boolean,
 	hasContainer?: boolean,
-	image: FileList | string,
-	productName: string | undefined,
-	unitPrice: number
+	image?: FileList | string,
+	productName?: string | undefined,
+	unitPrice?: number
 }
 
 

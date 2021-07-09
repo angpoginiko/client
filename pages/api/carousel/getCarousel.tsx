@@ -1,9 +1,9 @@
 import { ObjectId } from 'mongodb';
-import { NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from  '../../../utils/mongodb'
 
 
-export default async function ( _, res: NextApiResponse) 
+export default async function (_:NextApiRequest, res: NextApiResponse) 
 {
 	try {
 		const { db } = await connect();

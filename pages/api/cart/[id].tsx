@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from '../../../utils/mongodb'
 import { ObjectId } from 'mongodb'
 import { authentication } from '../authentication';
-import { CartProductType } from '../../../interfaces';
 
 export default authentication(async function (req: NextApiRequest, res: NextApiResponse) 
 {

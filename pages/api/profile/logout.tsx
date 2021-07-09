@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import cookie from 'cookie';
 
 
-export default async function (req: NextApiRequest, res: NextApiResponse) 
+export default async function (_: NextApiRequest, res: NextApiResponse) 
 {	
 	try {
 		res.setHeader('Set-Cookie', cookie.serialize('auth', '', {
@@ -13,7 +13,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		res.status(200).json({message: "Logged Out"});
 
 	} catch (error) {
-		res.status(500).json({message: `Something went wrong${req}`});
+		res.status(500).json({message: `Something went wrong`});
 	}
 	
 }

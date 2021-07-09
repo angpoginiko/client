@@ -3,7 +3,7 @@ import { connect } from  '../../../utils/mongodb'
 import { authentication } from '../authentication';
 
 
-export default authentication(async function (req: NextApiRequest, res: NextApiResponse) 
+export default authentication(async function (_: NextApiRequest, res: NextApiResponse) 
 {
 	try {
 		const { db } = await connect();
@@ -26,7 +26,7 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 		res.status(200).send(products);
 	} catch (error) {
 		res.status(500);
-		res.json({error: `Server error${req}`})
+		res.json({error: `Server error`})
 	}
 })
 
