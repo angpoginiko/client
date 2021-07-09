@@ -136,3 +136,11 @@ export type CarouselType = {
 	image2: FileList | string,
 	image3: FileList | string
 }
+
+
+export type SocialMedia = {
+	_id: string,
+	facebook: string,
+	instagram: string,
+	twitter: string
+}

@@ -7,8 +7,10 @@ import {
   useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaInstagram, FaTwitter, FaFacebook } from 'react-icons/fa';
 import { ReactNode } from 'react';
+import { useQuery } from 'react-query';
+import { SocialMedia } from '../interfaces';
 
 const SocialButton = ({
   children,
@@ -42,6 +44,11 @@ const SocialButton = ({
 };
 
 export default function Footer() {
+	const fetchSocialMedia = async () => {
+		const res = await fetch(`api/socialMedia/getSocialMedia`);
+		return res.json();
+	}
+	const { data: socialMedia } = useQuery<SocialMedia>("socialMedia", fetchSocialMedia);
 	const dateToday = new Date();
   return (
     <Box
@@ -56,14 +63,14 @@ export default function Footer() {
         justify={{ base: 'center', md: 'space-between' }}
         align={{ base: 'center', md: 'center' }}>
         <Text>© {dateToday.getFullYear()} Pantry Corner. All rights reserved</Text>
-        <Stack direction={'row'} spacing={6}>
-          <SocialButton label={'Twitter'} href={'#'}>
+        <Stack direction={'row'} spacing={6}>	
+          <SocialButton label={'YouTube'} href={socialMedia?.facebook!}>
+            <FaFacebook />
+          </SocialButton>
+          <SocialButton label={'Twitter'} href={socialMedia?.twitter!}>
             <FaTwitter />
           </SocialButton>
-          <SocialButton label={'YouTube'} href={'#'}>
-            <FaYoutube />
-          </SocialButton>
-          <SocialButton label={'Instagram'} href={'#'}>
+          <SocialButton label={'Instagram'} href={socialMedia?.instagram!}>
             <FaInstagram />
           </SocialButton>
         </Stack>
