@@ -37,56 +37,56 @@ export default function HomeAdminPage({ user, onStore } : any) {
 	}, [user, onStore]);
   return (
     <>
-			<AdminNavBar>
-      <Container maxW={'3xl'}>
-        <Stack
-          as={Box}
-          textAlign={'center'}
-          spacing={{ base: 8, md: 14 }}
-          py={{ base: 20, md: 36 }}>
-          <Heading
-            fontWeight={600}
-            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
-            lineHeight={'110%'}>
-            Admin <br />
-            <Text as={'span'} color={'green.400'}>
-            </Text>
-          </Heading>
-					<Box w="100%" h="800px">
-					<Center>
-						<SimpleGrid gap="20px">
-							<Container>
-								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAddOpen1}>
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Image 1</Text></Center>
-								</Box>
-							</Container>
+			<AdminNavBar title="Set Carousel">
+				<Container maxW={'3xl'}>
+					<Stack
+						as={Box}
+						textAlign={'center'}
+						spacing={{ base: 8, md: 14 }}
+						py={{ base: 20, md: 36 }}>
+						<Heading
+							fontWeight={600}
+							fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
+							lineHeight={'110%'}>
+							Admin <br />
+							<Text as={'span'} color={'green.400'}>
+							</Text>
+						</Heading>
+						<Box w="100%" h="800px">
+						<Center>
+							<SimpleGrid gap="20px">
+								<Container>
+									<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAddOpen1}>
+										<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Image 1</Text></Center>
+									</Box>
+								</Container>
 
-							<Container>
-								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAddOpen2}>
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Image 2</Text></Center>
-								</Box>
-							</Container>
+								<Container>
+									<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAddOpen2}>
+										<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Image 2</Text></Center>
+									</Box>
+								</Container>
 
-							<Container>
-								<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAddOpen3}>
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Image 3</Text></Center>
-								</Box>
-							</Container>
-							
-						</SimpleGrid>
-					</Center>
-				</Box>
-        </Stack>
-      </Container>
-			<ModalComp isModalOpen={isAddOpen1} onModalClose={onAddClose1} title="Add Admin">
-				<AddCarouselImage1 modalClose={onAddClose1}/>
-			</ModalComp>
-			<ModalComp isModalOpen={isAddOpen2} onModalClose={onAddClose2} title="Add Cashier">
-				<AddCarouselImage2 modalClose={onAddClose2}/>
-			</ModalComp>
-			<ModalComp isModalOpen={isAddOpen3} onModalClose={onAddClose3} title="Set Point Variable">
-				<AddCarouselImage3 modalClose={onAddClose3}/>
-			</ModalComp>
+								<Container>
+									<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onAddOpen3}>
+										<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Image 3</Text></Center>
+									</Box>
+								</Container>
+								
+							</SimpleGrid>
+						</Center>
+					</Box>
+					</Stack>
+				</Container>
+				<ModalComp isModalOpen={isAddOpen1} onModalClose={onAddClose1} title="Add Admin">
+					<AddCarouselImage1 modalClose={onAddClose1}/>
+				</ModalComp>
+				<ModalComp isModalOpen={isAddOpen2} onModalClose={onAddClose2} title="Add Cashier">
+					<AddCarouselImage2 modalClose={onAddClose2}/>
+				</ModalComp>
+				<ModalComp isModalOpen={isAddOpen3} onModalClose={onAddClose3} title="Set Point Variable">
+					<AddCarouselImage3 modalClose={onAddClose3}/>
+				</ModalComp>
 		</AdminNavBar>
 		<Footer />
     </>

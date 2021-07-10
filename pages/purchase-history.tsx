@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Box,
   Text,
@@ -19,9 +19,11 @@ import { Purchases } from '../interfaces';
 import PurchaseItem from '../components/PurchaseItem';
 import Layout from '../components/Layout';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 
 export default function Points({user, purchases, onStore} : any) {
+	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -32,8 +34,8 @@ export default function Points({user, purchases, onStore} : any) {
 	}, [user, onStore]);
   return (
     <>
-		<Layout authentication={user} onStore={onStore} title="Purchase History">
-				<Box w="100%" h="100%" bg="#36B290">
+		<Layout authentication={user} onStore={onStore} title="Purchase History" setIsLoading={setIsLoading}>
+				{!isLoading ? <Box w="100%" h="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
 							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }} color="white">
@@ -59,9 +61,9 @@ export default function Points({user, purchases, onStore} : any) {
 							}
 						</VStack>
 					</Center>
-				</Box>	
+				</Box> : <PageLoader size="xl"/>}	
 		</Layout>
-		<Footer />
+		{!isLoading && <Footer />}
     </>
   );
 }

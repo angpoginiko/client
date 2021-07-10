@@ -53,7 +53,6 @@ export default function CheckoutItems(
 		});
 	});
 	const totalAvailablePoints = earnedPoints - totalEncashedPoints;
-	console.log(earned);
   return (
     <>
 			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>

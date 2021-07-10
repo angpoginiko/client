@@ -21,12 +21,14 @@ import Flatpickr from 'react-flatpickr'
 import "flatpickr/dist/themes/confetti.css";
 import ModalComp from '../components/ModalComp';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 
 const Register : React.FC = () => {
 	const { register, handleSubmit, errors, watch, control } = useForm();
 	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
 	const [errorMessage, setErrorMessage] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 	const [date, setDate] = useState(new Date());
 	const Router = useRouter();
 	const onSubmit = async (formData: Profile) => {
@@ -49,8 +51,8 @@ const Register : React.FC = () => {
 	password.current = watch("password", "");
 	return(
 		<>
-		<Layout title="Register" onStore={false}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+		<Layout title="Register" onStore={false} setIsLoading={setIsLoading}>
+      {!isLoading ? <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign up</Heading>
         </Stack>
@@ -152,12 +154,12 @@ const Register : React.FC = () => {
           </Stack>
 				</form>	
         </Box>
-      </Stack>
+      </Stack>: <PageLoader size="xl"/>}
 			<ModalComp isModalOpen={isOpenError} onModalClose={onCloseError} title="Registration Error">
 				{errorMessage}
 			</ModalComp>
 	</Layout>
-	<Footer />
+	{!isLoading && <Footer />}
 		</>
 	);
 }

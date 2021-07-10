@@ -1,7 +1,5 @@
 import {
-	Spinner,
 	HStack,
-	Center,
 	Stack
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
@@ -17,8 +15,10 @@ import { CarouselType, ProductType } from '../interfaces';
 import HomeItem from '../components/HomeItem'
 import CarouselComp from '../components/CarouselComp';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 export default function AuthIndexPage({ user, onStore } : any) {
+	const [isLoading, setIsLoading] = useState(false);
 	const [productTypeQuery, setProductTypeQuery] = useState("");
 	
 	const fetchProducts = async () => {
@@ -51,19 +51,19 @@ export default function AuthIndexPage({ user, onStore } : any) {
 	const { data: carousel } = useQuery<CarouselType>("carousel", fetchCarousel);
   return (
     <>
-			<Layout authentication={user} onStore={false}>
-			<Stack direction="row" spacing="5%">
-			<Sidebar setQuery={setProductTypeQuery}/>
-				<HStack width={"100%"}>
-					{!isFetching && products && products.map((product) => {
-						return <HomeItem product={product} customerId={user.id} key={product._id}/>
-					})}
-					{isFetching && (<Center width="100%"><Spinner size="xl"/></Center>)}
-					{productTypeQuery == "" && <CarouselComp carousel={carousel!}/>}
-				</HStack>
-			</Stack>
+			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading}>
+				{!isLoading ? <Stack direction="row" spacing="5%">
+				<Sidebar setQuery={setProductTypeQuery}/>
+					<HStack width={"100%"}>
+						{!isFetching && products && products.map((product) => {
+							return <HomeItem product={product} customerId={user.id} key={product._id}/>
+						})}
+						{isFetching && (<PageLoader size="xl"/>)}
+						{productTypeQuery == "" && <CarouselComp carousel={carousel!}/>}
+					</HStack>
+				</Stack> : <PageLoader size="xl"/>}
 			</Layout>
-			<Footer />
+			{!isLoading && <Footer />}
     </>
   );
 }

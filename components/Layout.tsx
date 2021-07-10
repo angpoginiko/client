@@ -40,16 +40,27 @@ type Props = {
 	onModalClose?: () => void;
 	frontPageClick?: boolean;
 	onStore: boolean;
+	setIsLoading: (isLoading: boolean) => void;
 }
 
 
-const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModalClose, frontPageClick, onStore }: Props) => {
+const Layout = ({ 
+	children, 
+	title = 'Home', 
+	authentication, 
+	isModalOpen, 
+	onModalClose, 
+	frontPageClick, 
+	onStore,
+	setIsLoading
+}: Props) => {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: onStoreOpen, isOpen: isStoreOpen, onClose: onStoreClose } = useDisclosure();
 	const Router = useRouter();
 	const [auth, setAuth] = useState(!!authentication);
 
 	const onLogout = async () =>{ 
+		setIsLoading(true);
 		await fetch("api/profile/logout",{
 			method: "POST",
 			headers: {
@@ -61,7 +72,8 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 		setAuth(false);
 	}
 
-	const onExit = async () => { 
+	const onExit = async () => {
+		setIsLoading(true);
 		const id = authentication!.id
 		await fetch("api/profile/onExit",{
 			method: "POST",
@@ -160,12 +172,12 @@ const Layout = ({ children, title = 'Home', authentication, isModalOpen, onModal
 					direction={'row'}
 					spacing={6}>
 
-						{auth && <Button href="#" onClick={() => auth ? Router.push('/grocery-list') : Router.push('/login')}><Icon as={FaClipboardList} w={4} h={4}/></Button>}
+						{auth && <Button href="#" onClick={() => {(auth ? Router.push('/grocery-list') : Router.push('/login')), setIsLoading(true)}}><Icon as={FaClipboardList} w={4} h={4}/></Button>}
 
-						{onStore && <Button href="#" onClick={() => auth ? Router.push('/cart') : Router.push('/login')}><Icon as={MdShoppingCart} w={4} h={4}/></Button>}
+						{onStore && <Button href="#" onClick={() => {(auth ? Router.push('/cart') : Router.push('/login')), setIsLoading(true)}}><Icon as={MdShoppingCart} w={4} h={4}/></Button>}
 						
 						
-						<Button href="#" onClick={() => auth ? openCartButton() : Router.push('/login')}>
+						<Button href="#" onClick={() => {auth ? openCartButton() : Router.push('/login')}}>
 							<Icon as={MdAddShoppingCart} w={4} h={4}/>
 						</Button>
 						

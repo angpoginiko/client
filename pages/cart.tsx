@@ -22,10 +22,12 @@ import CheckoutItems from '../components/CheckoutItems'
 import { useRouter } from 'next/router';
 import userRoles from '../constants/userRoles';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 
 
 export default function Cart({user, profile, onStore} : any) {
+	const [isLoading, setIsLoading] = useState(false)
 	const [checkoutItems, setCheckoutItems] = useState<CartProductType[]>([])
 	const [orderId, setOrderId] = useState('');
 	const [total, setTotal] = useState(0);
@@ -83,8 +85,8 @@ export default function Cart({user, profile, onStore} : any) {
           rel="stylesheet"
         />
       </Head>
-			<Layout authentication={user} onStore={onStore}>
-				<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
+			<Layout authentication={user} onStore={onStore} setIsLoading={setIsLoading}>
+				{!isLoading ? <VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
 						<Center>
 							<VStack spacing="0">
@@ -157,9 +159,9 @@ export default function Cart({user, profile, onStore} : any) {
 
 						</ModalComp>
 					</Center>
-				</VStack>
+				</VStack> : <PageLoader size="xl"/>}
 			</Layout>
-			<Footer />
+			{!isLoading && <Footer />}
     </>
   );
 }

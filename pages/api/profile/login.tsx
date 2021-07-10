@@ -3,6 +3,7 @@ import { connect } from  '../../../utils/mongodb'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import cookie from 'cookie';
+import { ObjectId } from 'mongodb';
 
 
 export default async function (req: NextApiRequest, res: NextApiResponse) 
@@ -23,7 +24,15 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		const isPasswordCorrect = await bcrypt.compare(userPassword,existingUser.profile.password);
 		if(!isPasswordCorrect) return res.status(400).json({message: "Invalid Password"});
 		const token = jwt.sign({email: existingUser.email, id: existingUser._id}, jwtSecretKey!, {expiresIn: "1h"});
-
+		const _id = new ObjectId(existingUser._id);
+		await db.collection("customers").findOneAndUpdate(
+			{_id},
+			{ $set:
+				{
+					onStore: false
+				}
+			}
+		)
 		res.setHeader('Set-Cookie', cookie.serialize('auth', token, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV !== 'development',
@@ -34,7 +43,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 		const { password, ...user } = existingUser.profile;
 		res.status(200).send(user);
 	} catch (error) {
-		res.status(500).json({message: "Something went wrong"});
+		res.status(500).json(error);
 	}
 	
 }

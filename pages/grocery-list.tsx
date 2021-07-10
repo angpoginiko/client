@@ -10,15 +10,17 @@ import { frontEndAuthentication } from './api/frontEndAuthentication';
 import { server } from '../config';
 import { useQuery } from 'react-query';
 import { UserList } from '../interfaces';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import userRoles from '../constants/userRoles';
 import GrocercyProduct from '../components/GroceryProduct';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 
 
 export default function GroceryList({user, onStore} : any) {
+	const [isLoading, setIsLoading] = useState(false);
 	const fetchList = async () => {
 		const res = await fetch(`api/list/lists/${user.id}`);
 		return res.json();
@@ -36,8 +38,8 @@ export default function GroceryList({user, onStore} : any) {
 	}, [user, onStore]);
   return (
     <>
-			<Layout authentication={user} onStore={onStore} title="Grocery List">
-				<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
+			<Layout authentication={user} onStore={onStore} title="Grocery List" setIsLoading={setIsLoading}>
+				{!isLoading ? <VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
 						<Center>
 							<VStack spacing="0">
@@ -69,9 +71,9 @@ export default function GroceryList({user, onStore} : any) {
 							}
 						</VStack>
 					</Center>
-				</VStack>
+				</VStack> : <PageLoader size="xl"/>}
 			</Layout>
-			<Footer />
+			{!isLoading && <Footer />}
     </>
   );
 }

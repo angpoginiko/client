@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import {
   Box,
@@ -16,13 +16,15 @@ import { EncashedPoints, Point } from '../interfaces/index'
 import { useRouter } from 'next/router'
 import userRoles from '../constants/userRoles';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 
 export default function Points({points, user, profile, onStore} : any) {
+	const [isLoading, setIsLoading] = useState(false);
 
 	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
 	if(!isProfileComplete) {
-		return <Layout authentication={user} title="Points" onStore={onStore}>
+		return <Layout authentication={user} title="Points" onStore={onStore} setIsLoading={setIsLoading}>
 			You need to complete profile first
 		</Layout>
 	}
@@ -66,8 +68,8 @@ export default function Points({points, user, profile, onStore} : any) {
 	}, [user, onStore]);
   return (
     <>
-		<Layout authentication={user} title="Points" onStore={onStore}>
-			<VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
+		<Layout authentication={user} title="Points" onStore={onStore} setIsLoading={setIsLoading}>
+			{!isLoading ? <VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
 					<Center>
 						<VStack spacing="0">
@@ -114,9 +116,9 @@ export default function Points({points, user, profile, onStore} : any) {
 						</SimpleGrid>
 					</Center>
 				</Box>
-			</VStack>
+			</VStack> : <PageLoader size="xl"/>}
 		</Layout>
-		<Footer />
+		{!isLoading && <Footer />}
     </>
   );
 }

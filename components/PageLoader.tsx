@@ -1,7 +1,14 @@
-import { Icon } from "@chakra-ui/react";
-import { BiLoaderCircle } from "react-icons/bi";
+import {
+	Spinner,
+	Center
+} from '@chakra-ui/react'
 
+interface PageLoaderProps {
+	size: string;
+}
 
-export default function PageLoader() {
-	return <Icon as={BiLoaderCircle} />
+export default function PageLoader({size}: PageLoaderProps) {
+	return (
+		<Center width="100%"><Spinner size={size}/></Center>
+	)
 }

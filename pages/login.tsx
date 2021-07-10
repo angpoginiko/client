@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form'
 import Layout from '../components/Layout';
 import {
@@ -20,6 +20,7 @@ import { server } from '../config';
 import { formAuth } from './api/formAuth';
 import userRoles from '../constants/userRoles'
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 type FormData = {
   username: string;
@@ -30,8 +31,10 @@ type FormData = {
 export default function Login (){
 	const { register, handleSubmit, errors } = useForm();
 	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onSubmit = async (formData: FormData) => {
+		setIsLoading(true);
 		const response = await fetch ("/api/profile/login", {
 			method: "POST",
 			headers: {
@@ -53,8 +56,8 @@ export default function Login (){
 	}
 	return(
 		<>
-		<Layout title="Login" onStore={false}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+		<Layout title="Login" onStore={false} setIsLoading={setIsLoading}>
+      {!isLoading ? <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'}>Sign in to your account</Heading>
         </Stack>
@@ -98,9 +101,9 @@ export default function Login (){
           </Stack>
 				</form>	
         </Box>
-      </Stack>
+      </Stack> : <PageLoader size="xl"/>}
 	</Layout>
-	<Footer />
+	{!isLoading && <Footer />}
 	</>
 	);
 }

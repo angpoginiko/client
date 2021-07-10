@@ -16,8 +16,11 @@ import CarouselComp from '../components/CarouselComp';
 import { CarouselType } from '../interfaces';
 import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import PageLoader from '../components/PageLoader';
 
 export default function IndexPage({ user }: any) {
+	const [isLoading, setIsLoading] = useState(false);
 	const fetchCarousel = async () => {
 		const res = await fetch(`api/carousel/getCarousel`);
 		return res.json();
@@ -33,8 +36,8 @@ export default function IndexPage({ user }: any) {
           rel="stylesheet"
         />
       </Head>
-			<Layout authentication={user} onStore={false}>
-      <Container maxW={'3xl'}>
+			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading}>
+      {!isLoading ? <Container maxW={'3xl'}>
         <Stack
           as={Box}
           textAlign={'center'}
@@ -69,9 +72,9 @@ export default function IndexPage({ user }: any) {
             </Button>
           </Stack>
         </Stack>
-      </Container>
+      </Container> : <PageLoader size="xl"/>}
 		</Layout>
-		<Footer />
+		{!isLoading && <Footer />}
     </>
   );
 }

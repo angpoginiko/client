@@ -18,8 +18,10 @@ import { useRouter } from 'next/router';
 import { MdCenterFocusStrong } from 'react-icons/md';
 import { useState } from 'react';
 import Footer from '../components/Footer';
+import PageLoader from '../components/PageLoader';
 
 export default function AuthIndexPage({ user, onStore} : any) {
+	const [isLoading, setIsLoading] = useState(false);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const [frontPageClicker, setFrontPageClicker] = useState(false);
 	const router = useRouter();
@@ -39,8 +41,15 @@ export default function AuthIndexPage({ user, onStore} : any) {
 	}
   return (
     <>
-			<Layout authentication={user} isModalOpen={isOpen} onModalClose={onModalClose} frontPageClick={frontPageClicker} onStore title="Store">
-      <Container maxW={'3xl'}>
+			<Layout 
+				authentication={user} 
+				isModalOpen={isOpen} 
+				onModalClose={onModalClose} 
+				frontPageClick={frontPageClicker} 
+				onStore title="Store"
+				setIsLoading={setIsLoading}
+			>
+      {!isLoading ? <Container maxW={'3xl'}>
         <Stack
           as={Box}
           textAlign={'center'}
@@ -67,9 +76,9 @@ export default function AuthIndexPage({ user, onStore} : any) {
             position={'relative'}>
           </Stack>
         </Stack>
-      </Container>
+      </Container> : <PageLoader size="xl"/>}
 		</Layout>
-		<Footer />
+		{!isLoading && <Footer />}
     </>
   );
 }
