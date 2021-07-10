@@ -20,14 +20,16 @@ import AddProductType from './AddProductType';
 import CreateProduct from './CreateProduct';
 import AddUnitOfMeasure from './AddUnitOfMeasure';
 import { MdMenu } from 'react-icons/md';
+import PageLoader from './PageLoader';
 
 interface ListOfProductsProps {
 	products?: ProductType[];
 	refetchProducts: () => void;
 	refetchReceiving: () => void;
+	isFetching: boolean;
 }
 
-export default function ListOfProducts({products, refetchProducts, refetchReceiving}: ListOfProductsProps) {
+export default function ListOfProducts({products, refetchProducts, refetchReceiving, isFetching}: ListOfProductsProps) {
 	const {isOpen , onOpen, onClose} = useDisclosure();
 	const {isOpen: isProductTypeOpen , onOpen: onProductTypeOpen, onClose: onProductTypeClose} = useDisclosure();
 	const {isOpen: isUnitOfMeasureOpen , onOpen: onUnitOfMeasureOpen, onClose: onUnitOfMeasureClose} = useDisclosure();
@@ -62,11 +64,11 @@ export default function ListOfProducts({products, refetchProducts, refetchReceiv
 				</Tr>
 			</Thead>
 			<Tbody>
-			{products && products.map((items: ProductType) => {
+			{!isFetching ? products && products.map((items: ProductType) => {
 					return(
 						<ProductList product={items} key={items._id} refetchProducts={refetchProducts} refetchReceiving={refetchReceiving}/>
 					)
-				})}
+				}): <PageLoader size="xl"/>}
 			</Tbody>
 		</Table>
 

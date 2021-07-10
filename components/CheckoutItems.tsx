@@ -36,7 +36,7 @@ export default function CheckoutItems(
 		const res = await fetch(`api/points/point/${customerId}`);
 		return res.json();
 	}
-	const { data: points } = useQuery<Points>("points", fetchPoints);
+	const { data: points, isFetching } = useQuery<Points>("points", fetchPoints);
 	const earned = points?.earned;
 	const encashed = points?.encashed;
 	let earnedPoints = 0;
@@ -96,6 +96,7 @@ export default function CheckoutItems(
 					onModalClose={encashedPointsClose} 
 					availablePoints={earnedPoints} 
 					totalEncashedPoints={totalEncashedPoints}
+					isFetching={isFetching}
 				/>
 			</ModalComp>
     </>

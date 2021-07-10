@@ -9,13 +9,15 @@ import {
 } from '@chakra-ui/react';
 import { StorageDisplayProductType } from '../interfaces';
 import StorageList from './StorageList';
+import PageLoader from './PageLoader';
 
 interface StorageProps {
 	storageProducts?: StorageDisplayProductType[];
 	refetch: () => void;
+	isStockFetching: boolean;
 }
 
-export default function Storage({storageProducts, refetch} : StorageProps) {
+export default function Storage({storageProducts, refetch, isStockFetching} : StorageProps) {
   return (
 				<VStack spacing="0" width="100%">
 					<Table>
@@ -31,11 +33,11 @@ export default function Storage({storageProducts, refetch} : StorageProps) {
 							</Tr>
 						</Thead>
 						<Tbody>
-						{storageProducts && storageProducts.map((items) => {
+						{!isStockFetching ? storageProducts && storageProducts.map((items) => {
 								return(
 									<StorageList product={items} refetch={refetch} key={items.product?._id}/ >
 								)
-							})}
+							}): <PageLoader size="xl"/>}
 						</Tbody>
 					</Table>
 				</VStack>

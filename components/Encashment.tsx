@@ -27,9 +27,10 @@ interface EncashmentProps {
 	onModalClose: () => void;
 	availablePoints: number;
 	totalEncashedPoints: number;
+	isFetching: boolean;
 }
 
-export default function Encashment({ customerId, onModalClose, availablePoints, totalEncashedPoints } : EncashmentProps) {
+export default function Encashment({ customerId, onModalClose, availablePoints, totalEncashedPoints, isFetching } : EncashmentProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const {isOpen: isOpenError, onOpen: onOpenError, onClose: onCloseError} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
@@ -78,7 +79,7 @@ export default function Encashment({ customerId, onModalClose, availablePoints, 
 							<FormErrorMessage>Points Required</FormErrorMessage>
             </FormControl>
 						<Text>
-							Available Points: {totalAvailablePoints && totalAvailablePoints.toFixed(2)}
+							Available Points: {!isFetching && totalAvailablePoints && totalAvailablePoints.toFixed(2)}
 						</Text>
             <Stack spacing={10}>
               <Button

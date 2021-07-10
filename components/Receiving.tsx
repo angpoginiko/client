@@ -9,13 +9,15 @@ import {
 } from '@chakra-ui/react';
 import { ReceivedProducts } from '../interfaces';
 import ReceivingList from './ReceivingList';
+import PageLoader from './PageLoader';
 
 interface ReceivingProps {
 	receivingProducts?: ReceivedProducts[];
 	refetch: () => void;
+	isReceivingFetching: boolean;
 }
 
-export default function Receiving({receivingProducts, refetch} : ReceivingProps) {
+export default function Receiving({receivingProducts, refetch, isReceivingFetching} : ReceivingProps) {
   return (
 				<VStack spacing="0" width="100%">
 					<Table>
@@ -30,13 +32,13 @@ export default function Receiving({receivingProducts, refetch} : ReceivingProps)
 							</Tr>
 						</Thead>
 						<Tbody>
-						{receivingProducts && receivingProducts
+						{!isReceivingFetching ? receivingProducts && receivingProducts
 						.sort((a, b) => new Date(b.expiryDate).getTime() - new Date(a.expiryDate).getTime())
 						.map((items) => {
 								return(
 									<ReceivingList product={items} key={items._id} refetch={refetch}/>
 								)
-							})}
+							}) : <PageLoader size="xl"/>}
 						</Tbody>
 					</Table>
 				</VStack>

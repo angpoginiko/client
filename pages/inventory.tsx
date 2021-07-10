@@ -39,25 +39,25 @@ export default function Inventory({user, onStore} : any) {
 		const res = await fetch("api/products/getProducts");
 		return res.json();
 	}
-	const { data: products, refetch: refetchProducts } = useQuery<ProductType[]>("product", fetchProducts);
+	const { data: products, refetch: refetchProducts, isFetching } = useQuery<ProductType[]>("product", fetchProducts);
 	
 	const fetchReceivedProducts = async () => {
 		const res = await fetch("api/receivingProducts/getReceivingProducts");
 		return res.json();
 	}
-	const { data: receivingProducts, refetch: refetchReceiving } = useQuery<ReceivedProducts[]>("receivingProducts", fetchReceivedProducts);
+	const { data: receivingProducts, refetch: refetchReceiving, isFetching: isReceivingFetching } = useQuery<ReceivedProducts[]>("receivingProducts", fetchReceivedProducts);
 
 	const fetchStockProducts = async () => {
 		const res = await fetch("api/stock/getStockProducts");
 		return res.json();
 	}
-	const { data: stockProducts, refetch: refetchStockProducts } = useQuery<StorageDisplayProductType[]>("stockProducts", fetchStockProducts);
+	const { data: stockProducts, refetch: refetchStockProducts, isFetching: isStockFetching } = useQuery<StorageDisplayProductType[]>("stockProducts", fetchStockProducts);
 
 	const fetchDisplayProducts = async () => {
 		const res = await fetch("api/display/getDisplayProducts");
 		return res.json();
 	}
-	const { data: displayProducts, refetch: refetchDisplayProducts } = useQuery<StorageDisplayProductType[]>("displayProducts", fetchDisplayProducts);
+	const { data: displayProducts, refetch: refetchDisplayProducts, isFetching: isDisplayRefetching } = useQuery<StorageDisplayProductType[]>("displayProducts", fetchDisplayProducts);
   return (
     <>
 			<AdminNavBar authentication={user} title="Inventory">
@@ -75,16 +75,33 @@ export default function Inventory({user, onStore} : any) {
 
 									<TabPanels>
 										<TabPanel>
-											<ListOfProducts products={products} refetchReceiving={refetchReceiving} refetchProducts={()=>{refetchDisplayProducts(), refetchStockProducts(), refetchProducts()}}/>
+											<ListOfProducts 
+												products={products} 
+												refetchReceiving={refetchReceiving} 
+												refetchProducts={()=>{refetchDisplayProducts(), refetchStockProducts(), refetchProducts()}} 
+												isFetching={isFetching}
+											/>
 										</TabPanel>
 										<TabPanel>
-											<Receiving receivingProducts={receivingProducts} refetch={() => {refetchStockProducts(), refetchReceiving()}}/>
+											<Receiving 
+												receivingProducts={receivingProducts} 
+												refetch={() => {refetchStockProducts(), refetchReceiving()}}
+												isReceivingFetching={isReceivingFetching}
+											/>
 										</TabPanel>
 										<TabPanel>
-											<Storage storageProducts={stockProducts} refetch={() => {refetchDisplayProducts(), refetchStockProducts()}}/>
+											<Storage 
+												storageProducts={stockProducts} 
+												refetch={() => {refetchDisplayProducts(), refetchStockProducts()}}
+												isStockFetching={isStockFetching}
+											/>
 										</TabPanel>
 										<TabPanel>
-											<Display displayProducts={displayProducts} refetch={refetchDisplayProducts}/>
+											<Display 
+												displayProducts={displayProducts} 
+												refetch={refetchDisplayProducts}
+												isDisplayRefetching={isDisplayRefetching}
+											/>
 										</TabPanel>
 									</TabPanels>
 								</Tabs>
