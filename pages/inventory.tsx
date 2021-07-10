@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   Text,
   VStack,
@@ -23,7 +23,6 @@ import { ProductType, ReceivedProducts, StorageDisplayProductType } from '../int
 import Footer from '../components/Footer';
 
 export default function Inventory({user, onStore} : any) {
-	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
