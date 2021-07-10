@@ -15,7 +15,8 @@ import {
   useColorModeValue,
 	Input,
 	FormErrorMessage,
-	useDisclosure
+	useDisclosure,
+	FormHelperText
 } from '@chakra-ui/react';
 import Flatpickr from 'react-flatpickr'
 import "flatpickr/dist/themes/confetti.css";
@@ -82,6 +83,7 @@ const Register : React.FC = () => {
 							})} 
 							/>
 							<FormErrorMessage>{errors.username && errors.username.message}</FormErrorMessage>
+							<FormHelperText>Username requires 5-20 characters</FormHelperText>
             </FormControl>
 
 						<FormControl id="birthday" isInvalid={errors.birthday && errors.birthday.type === "required"}>
@@ -114,7 +116,8 @@ const Register : React.FC = () => {
 								}
 							})} 
 							type="password"/>
-							<FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
+							<FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>		
+							<FormHelperText>Password requires 8-20 characters, an uppercase letter, a lowercase letter, and a number</FormHelperText>
             </FormControl>
 
 						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword}>

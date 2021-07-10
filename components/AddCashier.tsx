@@ -11,7 +11,8 @@ import {
   useColorModeValue,
 	Input,
 	FormErrorMessage,
-	useDisclosure
+	useDisclosure,
+	FormHelperText
 } from '@chakra-ui/react';
 import ModalComp from './ModalComp';
 
@@ -58,6 +59,7 @@ export default function AddCashier({ modalClose } : AddCashierProps) {
               <FormLabel>Username</FormLabel>
               <Input name="username" ref={register({required:true})} />
 							<FormErrorMessage>Username Required</FormErrorMessage>
+							<FormHelperText>Username requires 5-20 characters</FormHelperText>
             </FormControl>
 
 						<FormControl id="email" isInvalid={errors.email && errors.email.type === "required"}>
@@ -83,6 +85,7 @@ export default function AddCashier({ modalClose } : AddCashierProps) {
 							})} 
 							type="password"/>
 							<FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
+							<FormHelperText>Password requires 8-20 characters, an uppercase letter, a lowercase letter, and a number</FormHelperText>
             </FormControl>
 
 						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword}>
