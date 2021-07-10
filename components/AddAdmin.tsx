@@ -66,21 +66,36 @@ export default function AddCashier({ modalClose } : AddCashierProps) {
 							<FormErrorMessage>Email Required</FormErrorMessage>
             </FormControl>
 
-            <FormControl id="password" isInvalid={errors.password && errors.password.type === "required"}>
+            <FormControl id="password" isInvalid={errors.password}>
               <FormLabel>Password</FormLabel>
-              <Input name="password" ref={register({required:true})} type="password"/>
-							<FormErrorMessage>Password Required</FormErrorMessage>
+              <Input 
+							name="password" 
+							ref={register({
+								required: "Password is required",
+								minLength: {
+									value: 8,
+									message: "Password requires 8-20 characters"
+								},
+								pattern: {
+									value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])^[a-zA-Z0-9]{8,20}$/,
+									message: "Password needs an uppercase letter, a lowercase letter, and a number"
+								}
+							})} 
+							type="password"/>
+							<FormErrorMessage>{errors.password && errors.password.message}</FormErrorMessage>
             </FormControl>
 
 						<FormControl id="repeatpassword" isInvalid={errors.repeatpassword}>
               <FormLabel>Repeat Password</FormLabel>
-              <Input name="repeatpassword" 
+              <Input 
+							name="repeatpassword"
+							type="password"
 							ref={register({
 								required: "Repeat Password is required",
 								validate: value =>
 								value === password.current || "The passwords do not match"
 							})}
-							type="password"/>
+							/>
 							<FormErrorMessage>{errors.repeatpassword && errors.repeatpassword.message}</FormErrorMessage>
             </FormControl>
 
