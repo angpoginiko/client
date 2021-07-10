@@ -26,7 +26,7 @@ export default function GroceryList({user, onStore} : any) {
 		return res.json();
 	}
 	
-	const { data: list, refetch } = useQuery<UserList[]>("list", fetchList);
+	const { data: list, refetch, isFetching } = useQuery<UserList[]>("list", fetchList);
 
 	const router = useRouter();
 	useEffect(() => {
@@ -52,7 +52,7 @@ export default function GroceryList({user, onStore} : any) {
 					
 					<Center>
 						<VStack w="100%" h="800px">
-							{list?.length ? list.map((userList) => {
+							{!isFetching ? list?.length ? list.map((userList) => {
 								return(
 									<GrocercyProduct 
 										userList={userList} 
@@ -67,7 +67,8 @@ export default function GroceryList({user, onStore} : any) {
 								(<Text key={user}>
 									You have no item on your List
 								</Text>
-									)
+									) :
+								<PageLoader size="xl"/>
 							}
 						</VStack>
 					</Center>

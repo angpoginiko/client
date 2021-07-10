@@ -39,7 +39,7 @@ export default function Cart({user, profile, onStore} : any) {
 	}
 	const isProfileComplete = Boolean(profile?.email && profile.gender 	&& profile.mobilenumber && profile.tin && profile.address);
 	
-	const { data: cart, refetch } = useQuery<UserCart[]>("cart", fetchCart);
+	const { data: cart, refetch, isFetching } = useQuery<UserCart[]>("cart", fetchCart);
 	const handleDelete = async (productId: string | undefined) => {
     if (productId){
 				await fetch (`/api/cart/${user.id}`, {
@@ -99,7 +99,7 @@ export default function Cart({user, profile, onStore} : any) {
 					
 					<Center>
 						<VStack w="100%" h="800px">
-							{cart?.length ? cart.map((userCart) => {
+							{!isFetching ? cart?.length ? cart.map((userCart) => {
 								return(
 										<div key={userCart.product.productId?.toString()}>
 											<CartProduct 
@@ -131,7 +131,7 @@ export default function Cart({user, profile, onStore} : any) {
 								(<Text key={user}>
 									You have no item on your Cart
 								</Text>
-									)
+									) : <PageLoader size="xl"/>
 							}
 						</VStack>
 						<Text>

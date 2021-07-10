@@ -27,7 +27,7 @@ export default function IndexPage({ user }: any) {
 	}
 
 	const router = useRouter();
-	const { data: carousel } = useQuery<CarouselType>("carousel", fetchCarousel);
+	const { data: carousel, isFetching } = useQuery<CarouselType>("carousel", fetchCarousel);
   return (
     <>
       <Head>
@@ -51,7 +51,7 @@ export default function IndexPage({ user }: any) {
             <Text as={'span'} color={'green.400'}>
             </Text>
           </Heading>
-          <CarouselComp carousel={carousel!}/>
+          <CarouselComp carousel={carousel!} isFetching={isFetching}/>
           <Stack
             direction={'column'}
             spacing={3}

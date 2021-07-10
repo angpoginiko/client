@@ -43,11 +43,11 @@ export default function ProfilePage({ user, onStore } : any) {
 		const res = await fetch(`api/profile/GetUser`);
 		return res.json();
 	}
-	const { data: profile, refetch } = useQuery<Profile>("profile", fetchProfile);
+	const { data: profile, refetch, isFetching } = useQuery<Profile>("profile", fetchProfile);
   return (
 		<>
 		<Layout title="Profile" authentication={user} onStore={onStore} setIsLoading={setIsLoading}>
-			{!isLoading ? <Center py={6}>
+			{!isLoading || !isFetching ? <Center py={6}>
 				<Box
 					maxW={'320px'}
 					w={'full'}

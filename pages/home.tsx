@@ -48,7 +48,7 @@ export default function AuthIndexPage({ user, onStore } : any) {
 		const res = await fetch(`api/carousel/getCarousel`);
 		return res.json();
 	}
-	const { data: carousel } = useQuery<CarouselType>("carousel", fetchCarousel);
+	const { data: carousel, isFetching: isCarouselFetching } = useQuery<CarouselType>("carousel", fetchCarousel);
   return (
     <>
 			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading}>
@@ -59,7 +59,7 @@ export default function AuthIndexPage({ user, onStore } : any) {
 							return <HomeItem product={product} customerId={user.id} key={product._id}/>
 						})}
 						{isFetching && (<PageLoader size="xl"/>)}
-						{productTypeQuery == "" && <CarouselComp carousel={carousel!}/>}
+						{productTypeQuery == "" && <CarouselComp carousel={carousel!} isFetching={isCarouselFetching}/>}
 					</HStack>
 				</Stack> : <PageLoader size="xl"/>}
 			</Layout>
