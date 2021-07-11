@@ -1,18 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Flex,
 		Divider,
-
+		IconButton,
+		HStack,
+		Text,
+		Icon
 } from '@chakra-ui/react'
 import NavItem from './NavItem'
 import { useQuery } from 'react-query';
 import { ProductTypeType } from '../interfaces';
+import { FiMenu } from "react-icons/fi";
 
 interface SideBarProps {
 	setQuery: (query: string) => void;
 }
 
 export default function Sidebar({setQuery} : SideBarProps) {
+		const [navSizeClose, setNavSize] = useState(true);
 		const fetchProductTypes = async () => {
 			const res = await fetch(`api/productType/getProductTypes`);
 			return res.json();
@@ -26,7 +31,7 @@ export default function Sidebar({setQuery} : SideBarProps) {
             h="100%"
             marginTop="2.5vh"
             borderRadius={"30px"}
-            w={"10%"}
+            w={navSizeClose ? "2em": "15%"}
             flexDir="column"
             justifyContent="space-between"
         >
@@ -37,8 +42,18 @@ export default function Sidebar({setQuery} : SideBarProps) {
                 alignItems={"flex-start"}
                 as="nav"
             >
-							Product List
-							<Divider />
+							<HStack>	
+								<IconButton
+									background="none"
+									icon={<Icon as={FiMenu} boxSize="1.5em"/>}
+									aria-label="menu"
+									onClick={() => setNavSize(!navSizeClose)}
+								/>
+								<Text fontSize={{base: "xs", md: "md"}} align={"center"} display={navSizeClose ? "none" : "flex"}>
+									Product List
+								</Text>
+							</HStack>
+							<Divider display={navSizeClose ? "none" : "flex"}/>
 							{productTypes && productTypes.map((productType) => {
 								 return(
 									<NavItem 
@@ -46,6 +61,7 @@ export default function Sidebar({setQuery} : SideBarProps) {
 										title={productType.name} 
 										setQuery={setQuery} 
 										typeId={productType._id!}
+										navSizeClose={navSizeClose}
 									/>
 								 )
 							})}

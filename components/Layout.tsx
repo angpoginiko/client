@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import { MdShoppingCart,MdAddShoppingCart } from "react-icons/md";
 import { FaClipboardList } from "react-icons/fa";
 import Head from 'next/head';
@@ -41,6 +41,7 @@ type Props = {
 	frontPageClick?: boolean;
 	onStore: boolean;
 	setIsLoading: (isLoading: boolean) => void;
+	setProductTypeQuery?: (productTypeQuery: string) => void;
 }
 
 
@@ -52,7 +53,8 @@ const Layout = ({
 	onModalClose, 
 	frontPageClick, 
 	onStore,
-	setIsLoading
+	setIsLoading,
+	setProductTypeQuery
 }: Props) => {
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: onStoreOpen, isOpen: isStoreOpen, onClose: onStoreClose } = useDisclosure();
@@ -139,6 +141,17 @@ const Layout = ({
 		else
 			onStoreOpen();
 	}
+	const homeButton = () => {
+		if(auth){
+			if(onStore){
+				router.push("/store");
+			} else {
+				router.push("/home");
+			}
+		} else {
+			router.push("/")
+		}
+	}
 	return(
 		<>
 		<Head>
@@ -147,7 +160,7 @@ const Layout = ({
 		<Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
 			<Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
 				<HStack spacing={8} alignItems={'center'}>
-					<Box>Logo</Box>
+					<Box as={"button"} onClick={() => {setProductTypeQuery ? setProductTypeQuery("") : homeButton()}}>Logo</Box>
 					<HStack
 						as={'nav'}
 						spacing={4}

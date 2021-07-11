@@ -1,6 +1,7 @@
 import {
-	HStack,
-	Stack
+	Grid,
+	Stack,
+	HStack
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -51,16 +52,16 @@ export default function AuthIndexPage({ user, onStore } : any) {
 	const { data: carousel, isFetching: isCarouselFetching } = useQuery<CarouselType>("carousel", fetchCarousel);
   return (
     <>
-			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading}>
+			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading} setProductTypeQuery={setProductTypeQuery}>
 				{!isLoading ? <Stack direction="row" spacing="5%">
 				<Sidebar setQuery={setProductTypeQuery}/>
-					<HStack width={"100%"}>
+					<Stack width={"100%"} direction={{"base": "column", "md": "row"}} spacing={2} py={{base: 12, md: 40}}>
 						{!isFetching && products && products.map((product) => {
 							return <HomeItem product={product} customerId={user.id} key={product._id}/>
 						})}
 						{isFetching && (<PageLoader size="xl"/>)}
 						{productTypeQuery == "" && <CarouselComp carousel={carousel!} isFetching={isCarouselFetching}/>}
-					</HStack>
+					</Stack>
 				</Stack> : <PageLoader size="xl"/>}
 			</Layout>
 			{!isLoading && <Footer />}

@@ -28,7 +28,7 @@ export default function PurchaseItem({ item } : PurchaseItemProps) {
 				</Link>
 			</Td>
 		</Tr>
-		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Add to Cart">
+		<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="Receipt">
 			<>
 				<Table>
 					<Thead>

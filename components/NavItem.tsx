@@ -11,9 +11,10 @@ interface NavItemProps {
 	title: string;
 	typeId: string;
 	setQuery: (query: string) => void;
+	navSizeClose: boolean;
 }
 
-export default function NavItem({ title, typeId, setQuery }: NavItemProps) {
+export default function NavItem({ title, typeId, setQuery, navSizeClose }: NavItemProps) {
 	const { toPascalCase } = useCase();
     return (
         <Flex
@@ -24,7 +25,7 @@ export default function NavItem({ title, typeId, setQuery }: NavItemProps) {
         >
             <Menu placement="right">
                 <Link onClick={() => setQuery(typeId)}>
-									<Text ml={5} display={"flex"}>{toPascalCase(title)}</Text>
+									<Text fontSize={{base: "xs", md: "md"}} ml={5} display={navSizeClose ? "none" : "flex"}>{toPascalCase(title)}</Text>
                 </Link>
             </Menu>
         </Flex>

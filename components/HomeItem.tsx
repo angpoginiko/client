@@ -25,27 +25,26 @@ export default function HomeItem({product, customerId} : HomeItemProps) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
   return (
 		<>
-			<Center py={12}>
+			<Center>
 				<Box
 					role={'group'}
 					p={6}
 					maxW={'330px'}
-					w={'full'}
+					w={{ base: "50%", 'sm': "full"}}
 					bg={useColorModeValue('white', 'gray.800')}
 					boxShadow={'2xl'}
 					rounded={'lg'}
 					pos={'relative'}
-					zIndex={1}>
+				>
 					
 					<VStack>
 						<Image
 							rounded={'lg'}
-							height={100}
-							width={100}
 							src={product?.image!.toString()}
+							boxSize={{ base: "70%", 'sm': 100}}
 						/>
 						<Stack align={'center'}>
-							<Text>
+							<Text fontSize="sm">
 								{product?.productName}, P{product?.unitPrice!}/ {product?.unitOfMeasure?.name}
 							</Text>
 							<Stack>
