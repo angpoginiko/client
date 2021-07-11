@@ -7,7 +7,8 @@ import {
   Image,
 	Button,
 	useDisclosure,
-	VStack
+	VStack,
+	GridItem
 } from '@chakra-ui/react';
 import { ProductType } from '../interfaces';
 import React from 'react';
@@ -24,17 +25,18 @@ interface HomeItemProps {
 export default function HomeItem({product, customerId} : HomeItemProps) {
 	const { onOpen, isOpen, onClose } = useDisclosure();
   return (
-		<>
+		<GridItem w={{base: 120, md: 150}}>
 			<Center>
 				<Box
 					role={'group'}
 					p={6}
 					maxW={'330px'}
-					w={{ base: "50%", 'sm': "full"}}
+					maxH={'330px'}
 					bg={useColorModeValue('white', 'gray.800')}
 					boxShadow={'2xl'}
 					rounded={'lg'}
 					pos={'relative'}
+					h={{base: 210, sm: 250}}
 				>
 					
 					<VStack>
@@ -62,6 +64,6 @@ export default function HomeItem({product, customerId} : HomeItemProps) {
 					</ModalComp>
 				</Box>
 			</Center>
-		</>
+		</GridItem>
   );
 }

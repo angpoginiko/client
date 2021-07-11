@@ -11,7 +11,7 @@ interface NavItemProps {
 	title: string;
 	typeId: string;
 	setQuery: (query: string) => void;
-	navSizeClose: boolean;
+	navSizeClose?: boolean;
 }
 
 export default function NavItem({ title, typeId, setQuery, navSizeClose }: NavItemProps) {

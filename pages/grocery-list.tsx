@@ -4,8 +4,6 @@ import {
   Text,
   VStack,
 	Center,
-	Stack,
-	Grid,
 	SimpleGrid
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
@@ -54,17 +52,17 @@ export default function GroceryList({user, onStore} : any) {
 					</Box>
 					
 					<Center margin="0">
-						<SimpleGrid w="100%" h="100%" paddingBottom="25%" gap={2} columns={{base: 1, md: 2}}>
+						<SimpleGrid w="100%" h="100%" paddingBottom="25%" gap={2} columns={{base: 1, sm: 2}}>
 							{!isFetching ? list?.length ? list.map((userList) => {
 								return(
 									<>
 										<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
+											userList={userList} 
+											user={user.id} 
+											refetch={refetch}
+											onStore={onStore}
+											customerId={user.id}
+											key={userList.product.quantity}
 									/>
 									<GrocercyProduct 
 										userList={userList} 
