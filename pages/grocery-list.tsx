@@ -3,7 +3,10 @@ import {
   Box,
   Text,
   VStack,
-	Center
+	Center,
+	Stack,
+	Grid,
+	SimpleGrid
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -40,20 +43,29 @@ export default function GroceryList({user, onStore} : any) {
     <>
 			<Layout authentication={user} onStore={onStore} title="Grocery List" setIsLoading={setIsLoading}>
 				{!isLoading ? <VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
-					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
+					<Box w="100%" h={{ base: "70px", md: "100px", lg: "120px" }}>
 						<Center>
 							<VStack spacing="0">
-								<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>
+								<Text fontSize={{ base: "30px", md: "45px", lg: "65px" }}>
 									Grocery List
 								</Text>
 							</VStack>
 						</Center>
 					</Box>
 					
-					<Center>
-						<VStack w="100%" h="800px">
+					<Center margin="0">
+						<SimpleGrid w="100%" h="100%" paddingBottom="25%" gap={2} columns={{base: 1, md: 2}}>
 							{!isFetching ? list?.length ? list.map((userList) => {
 								return(
+									<>
+										<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
 									<GrocercyProduct 
 										userList={userList} 
 										user={user.id} 
@@ -62,6 +74,63 @@ export default function GroceryList({user, onStore} : any) {
 										customerId={user.id}
 										key={userList.product.quantity}
 									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									<GrocercyProduct 
+										userList={userList} 
+										user={user.id} 
+										refetch={refetch}
+										onStore={onStore}
+										customerId={user.id}
+										key={userList.product.quantity}
+									/>
+									</>
 									);
 							}):
 								(<Text key={user}>
@@ -70,7 +139,7 @@ export default function GroceryList({user, onStore} : any) {
 									) :
 								<PageLoader size="xl"/>
 							}
-						</VStack>
+						</SimpleGrid>
 					</Center>
 				</VStack> : <PageLoader size="xl"/>}
 			</Layout>

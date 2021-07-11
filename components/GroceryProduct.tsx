@@ -9,7 +9,8 @@ import {
 	Center,
 	Button,
 	Flex,
-	useDisclosure
+	useDisclosure,
+	GridItem
 } from '@chakra-ui/react';
 import { MdAddBox, MdDelete, MdRemove } from "react-icons/md";
 import { useEffect, useState } from "react";
@@ -59,7 +60,7 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 	const handleQuantity = async (productId: string | undefined) => {
     if (productId){
 				await fetch (`/api/list/setQuantity`, {
-					method: "DELETE",
+					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -70,12 +71,12 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 				onClose();
     }
   }
-	const debounceQuantity = useDebounce(quantity, 5000)
- 	useEffect(() => {
-    handleQuantity(userList.product.productId?.toString());
-  }, [debounceQuantity]);
+	const debounceQuantity = useDebounce(quantity, 10000)
+ 	// useEffect(() => {
+  //   handleQuantity(userList.product.productId?.toString());
+  // }, [debounceQuantity]);
 	return(
-		<>
+		<GridItem row={2}>
 		<HStack 
 			borderWidth="1px" 
 			borderColor="black" 
@@ -85,30 +86,30 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 			width="400"
 		>
 
-			<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100, lg: 180}} width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
-				<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
+			<HStack borderRight="1px" height={{base: 100, sm: 90, md: 100, lg: 180}} width={{base: 234, lg: 312, xl: 440}}>
+				<Box width={{base: 234, lg: 312, xl: 440}} color="white">
 					<Center>
-						<Image boxSize={{sm: 70, md: 90, lg: 120}} src={userList.productData.image?.toString()} />
+						<Image boxSize={{base: 70, md: 90, lg: 120}} src={userList.productData.image?.toString()} />
 					</Center>
 				</Box>
 
-				<VStack width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}}>
-					<Text color="white" fontSize={{base: 10, sm: 15, lg: 30}}>
+				<VStack width={{base: 234, lg: 312, xl: 440}}>
+					<Text color="white" fontSize={{base: 15, lg: 30}}>
 						{userList.productData.productName}
 					</Text>
 
-					<Text color="white" fontSize={{base: 5, sm: 10, md: 13, lg: 16}}>
+					<Text color="white" fontSize={{base: 10, md: 13, lg: 16}}>
 						Price: Php {userList.productData.unitPrice} / Kg
 					</Text>
 				</VStack>
 			</HStack>
 
 			{!onStore && <VStack 
-				width={{base: 35, sm: 63, md: 84, lg: 112, xl: 160}} 
+				width={{base: 50, sm: 63, md: 84, lg: 112, xl: 160}} 
 			>
 				<HStack 
-					border={{base: '0', md: '1px'}} 
-					borderRadius={{md: '2xl', lg: '3xl'}} 
+					border={"1px"} 
+					borderRadius={{base: '2xl', lg: '3xl'}} 
 					width={{ md: 84, lg: 112, xl: 160}} 
 					spacing={0}
 				>
@@ -127,7 +128,7 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 						</Box>
 					</Center>
 
-					<Center  id="69">
+					<Center>
 						<Box 
 							width={{base: 5, sm: 8, lg: 37, xl: 53}}
 						>
@@ -159,7 +160,9 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 				<Center>
 					<Box 
 						as="button" 
-						boxSize={10}><Icon 
+						boxSize={{base: 4, md: 10}} 
+					>
+					<Icon 
 						boxSize={{base: 4, md: 5, lg: 6}} 
 						as={MdDelete}
 						onClick={onOpen}
@@ -207,6 +210,6 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 				refetch={refetch}
 			/>
 		</ModalComp>
-		</>
+		</GridItem>
 	)
 }
