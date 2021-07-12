@@ -54,7 +54,7 @@ export default function AuthIndexPage({ user, onStore } : any) {
   return (
     <>
 			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading} setProductTypeQuery={setProductTypeQuery}>
-				{!isLoading ? <Stack direction="row" spacing={{base: "20%", sm: "10%"}}>
+				{!isLoading ? <Stack direction="row" spacing={productTypeQuery === "" ? "20%" : "10"}>
 				<Sidebar setQuery={setProductTypeQuery}/>
 					<SimpleGrid columns={{base: 1, sm: 2, md: 3, lg: 6}} gap={2} spacing={"10px"} py={{base: 12, md: 40}}>
 						{!isFetching && products && products.map((product) => {
@@ -69,8 +69,8 @@ export default function AuthIndexPage({ user, onStore } : any) {
 								</>
 							)
 						})}
+						{productTypeQuery == "" && <CarouselComp carousel={carousel!} isFetching={isCarouselFetching} onHome={true}/>}
 						{isFetching && (<PageLoader size="xl"/>)}
-						{productTypeQuery == "" && <CarouselComp carousel={carousel!} isFetching={isCarouselFetching}/>}
 					</SimpleGrid>
 				</Stack> : <PageLoader size="xl"/>}
 			</Layout>

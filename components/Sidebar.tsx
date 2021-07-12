@@ -12,60 +12,30 @@ import NavItem from './NavItem'
 import { useQuery } from 'react-query';
 import { ProductTypeType } from '../interfaces';
 import { FiMenu } from "react-icons/fi";
-import { createBreakpoints } from "@chakra-ui/theme-tools"
 
-const breakpoints = createBreakpoints({
-  sm: "30em",
-  md: "48em",
-  lg: "62em",
-  xl: "80em",
-  "2xl": "96em",
-})
 
 interface SideBarProps {
 	setQuery: (query: string) => void;
 }
 
 export default function Sidebar({setQuery} : SideBarProps) {
-		const fetchProductTypes = async () => {
-			const res = await fetch(`api/productType/getProductTypes`);
-			return res.json();
-		}
-		const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchProductTypes);
-		const [isSmall] = useMediaQuery("(min-width: 48em)")
-
-    return (
-        <>
-					{isSmall ? <DefaultNav setQuery={setQuery} productType={productTypes} display={{base: "none", md: "flex"}}/> :
-					<MobileNav setQuery={setQuery} productType={productTypes} display={{base: "flex", md: "none"}} show={isSmall}/>}
-				</>
-    )
-}
-
-interface DefaultNavProps {
-	setQuery: (query: string) => void;
-	productType: ProductTypeType[] | undefined;
-	display: object;
-}
-
-function DefaultNav({setQuery, ...rest} : DefaultNavProps) {
 	const fetchProductTypes = async () => {
 		const res = await fetch(`api/productType/getProductTypes`);
 		return res.json();
 	}
 	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchProductTypes);
-
+	const [isSmall] = useMediaQuery("(min-width: 48em)")
 	return (
-			<Flex
+		<>
+			{isSmall ? <Flex
 					pos="sticky"
 					left="5"
 					h="100%"
 					marginTop="2.5vh"
 					borderRadius={"30px"}
-					w={"20%"}
+					w={"10%"}
 					flexDir="column"
 					justifyContent="space-between"
-					{...rest}
 			>
 					<Flex
 							p="5%"
@@ -90,72 +60,62 @@ function DefaultNav({setQuery, ...rest} : DefaultNavProps) {
 								/>
 							 )
 						})}
-						 
 					</Flex>
-			</Flex>
+			</Flex> : <MobileNav productTypes={productTypes} setQuery={setQuery}/>}
+		</>
 	)
 }
-
 
 interface MobileNavProps {
+	productTypes: ProductTypeType[] | undefined;
 	setQuery: (query: string) => void;
-	productType: ProductTypeType[] | undefined;
-	display: object;
-	show: boolean;
 }
 
-function MobileNav({setQuery, productType, show, ...rest} : MobileNavProps) {
+const MobileNav = ({productTypes, setQuery} : MobileNavProps) => {
 	const [navSizeClose, setNavSize] = useState(true);
-	const fetchProductTypes = async () => {
-		const res = await fetch(`api/productType/getProductTypes`);
-		return res.json();
-	}
-	const { data: productTypes } = useQuery<ProductTypeType[]>("productTypes", fetchProductTypes);
-
 	return (
-			<Flex
-					pos="sticky"
-					left="5"
-					h="100%"
-					marginTop="2.5vh"
-					borderRadius={"30px"}
-					w={navSizeClose ? "4em": "20%"}
-					flexDir="column"
-					justifyContent="space-between"
-			>
-					<Flex
-							p="5%"
-							flexDir="column"
-							w="100%"
-							alignItems={"flex-start"}
-							as="nav"
-					>
-						<HStack>	
-							<IconButton
-								background="none"
-								icon={<Icon as={FiMenu} boxSize="1.5em"/>}
-								aria-label="menu"
-								onClick={() => setNavSize(!navSizeClose)}
-								{...rest}
+		<Flex
+				pos="sticky"
+				left="5"
+				h="100%"
+				marginTop="2.5vh"
+				borderRadius={"30px"}
+				w={navSizeClose ? "2em": "25%"}
+				flexDir="column"
+				justifyContent="space-between"
+		>
+				<Flex
+						p="5%"
+						flexDir="column"
+						w="100%"
+						alignItems={"flex-start"}
+						as="nav"
+				>
+					<HStack>	
+						<IconButton
+							background="none"
+							icon={<Icon as={FiMenu} boxSize="1.5em"/>}
+							aria-label="menu"
+							onClick={() => setNavSize(!navSizeClose)}
+						/>
+						<Text fontSize={{base: "xs", md: "md"}} align={"center"} display={navSizeClose ? "none" : "flex"}>
+							Product List
+						</Text>
+					</HStack>
+					<Divider display={navSizeClose ? "none" : "flex"}/>
+					{productTypes && productTypes.map((productType) => {
+						 return(
+							<NavItem 
+								key={productType._id!} 
+								title={productType.name} 
+								setQuery={setQuery} 
+								typeId={productType._id!}
+								navSizeClose={navSizeClose}
 							/>
-							<Text fontSize={{base: "xs", md: "md"}} align={"center"} display={navSizeClose ? "none" : "flex"}>
-								Product List
-							</Text>
-						</HStack>
-						<Divider display={navSizeClose ? "none" : "flex"}/>
-						{productTypes && productTypes.map((productType) => {
-							 return(
-								<NavItem 
-									key={productType._id!} 
-									title={productType.name} 
-									setQuery={setQuery} 
-									typeId={productType._id!}
-									navSizeClose={navSizeClose}
-								/>
-							 )
-						})}
-						 
-					</Flex>
-			</Flex>
-	)
+						 )
+					})}
+					 
+				</Flex>
+		</Flex>
+)
 }
