@@ -1,7 +1,5 @@
 import {
-	Grid,
 	Stack,
-	HStack,
 	SimpleGrid
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
@@ -54,17 +52,13 @@ export default function AuthIndexPage({ user, onStore } : any) {
   return (
     <>
 			<Layout authentication={user} onStore={false} setIsLoading={setIsLoading} setProductTypeQuery={setProductTypeQuery}>
-				{!isLoading ? <Stack direction="row" spacing={productTypeQuery === "" ? "20%" : "10"}>
+				{!isLoading ? 
+				<Stack direction="row" spacing={productTypeQuery === "" ? "20%" : "10%"} height="200%">
 				<Sidebar setQuery={setProductTypeQuery}/>
-					<SimpleGrid columns={{base: 1, sm: 2, md: 3, lg: 6}} gap={2} spacing={"10px"} py={{base: 12, md: 40}}>
+					<SimpleGrid columns={{base: 1, sm: 2, md: 3, lg: 6}} gap={2} spacing={"10px"} py={{base: 12, md: 40}} height="100%">
 						{!isFetching && products && products.map((product) => {
 							return (
 								<>
-									<HomeItem product={product} customerId={user.id} key={product._id}/>
-									<HomeItem product={product} customerId={user.id} key={product._id}/>
-									<HomeItem product={product} customerId={user.id} key={product._id}/>
-									<HomeItem product={product} customerId={user.id} key={product._id}/>
-									<HomeItem product={product} customerId={user.id} key={product._id}/>
 									<HomeItem product={product} customerId={user.id} key={product._id}/>
 								</>
 							)

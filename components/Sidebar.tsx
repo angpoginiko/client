@@ -27,51 +27,55 @@ export default function Sidebar({setQuery} : SideBarProps) {
 	const [isSmall] = useMediaQuery("(min-width: 48em)")
 	return (
 		<>
-			{isSmall ? <Flex
-					pos="sticky"
-					left="5"
-					h="100%"
-					marginTop="2.5vh"
-					borderRadius={"30px"}
-					w={"10%"}
-					flexDir="column"
-					justifyContent="space-between"
-			>
-					<Flex
-							p="5%"
-							flexDir="column"
-							w="100%"
-							alignItems={"flex-start"}
-							as="nav"
-					>
-						<HStack>
-							<Text fontSize={{base: "xs", md: "md"}} align={"center"}>
-								Product List
-							</Text>
-						</HStack>
-						<Divider/>
-						{productTypes && productTypes.map((productType) => {
-							 return(
-								<NavItem 
-									key={productType._id!} 
-									title={productType.name} 
-									setQuery={setQuery} 
-									typeId={productType._id!}
-								/>
-							 )
-						})}
-					</Flex>
-			</Flex> : <MobileNav productTypes={productTypes} setQuery={setQuery}/>}
+			{isSmall ? 
+				<MainNav productTypes={productTypes} setQuery={setQuery}/>
+			: <MobileNav productTypes={productTypes} setQuery={setQuery}/>}
 		</>
 	)
 }
 
-interface MobileNavProps {
+interface NavProps {
 	productTypes: ProductTypeType[] | undefined;
 	setQuery: (query: string) => void;
 }
 
-const MobileNav = ({productTypes, setQuery} : MobileNavProps) => {
+const MainNav = ({productTypes, setQuery} : NavProps) => {
+	return(
+		<Flex
+			pos="sticky"
+			left="5"
+			h="100%"
+			marginTop="2.5vh"
+			borderRadius={"30px"}
+			w="20%"
+			flexDir="column"
+			justifyContent="space-between"
+			marginRight="20px"
+		>
+			<Flex
+				p="5%"
+				flexDir="column"
+				w="100%"
+				alignItems={"flex-start"}
+				as="nav"
+			>
+				Product List
+					{productTypes && productTypes.map((productType) => {
+							return(
+							<NavItem 
+								key={productType._id!} 
+								title={productType.name} 
+								setQuery={setQuery} 
+								typeId={productType._id!}
+							/>
+							)
+					})}
+				</Flex>
+			</Flex> 
+	)
+}
+
+const MobileNav = ({productTypes, setQuery} : NavProps) => {
 	const [navSizeClose, setNavSize] = useState(true);
 	return (
 		<Flex

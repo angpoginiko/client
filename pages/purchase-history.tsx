@@ -41,10 +41,11 @@ export default function Points({user, purchases, onStore} : any) {
 							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }} color="white">
 								PURCHASE HISTORY
 							</Text>
-							{purchases?.purchases.length > 0 ? <Table>
+							{purchases?.purchases.length > 0 ? 
+							<Table variant="unstyled">
 								<Thead>
 									<Tr>
-										<Th>Date</Th>
+										<Th>Date:</Th>
 									</Tr>
 								</Thead>
 								<Tbody>

@@ -24,26 +24,26 @@ export default function CheckoutItem ({ userCart } : CartProductProps) {
 				width="200"
 			>
 
-				<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100}} width={{base: 97.5, sm: 175.5, md: 234, lg: 225.6}}>
-					<Box width={{base: 97.5, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
+				<HStack borderRight="1px" height={{base: 75, sm: 90, md: 100}} width={{base: 150, sm: 175.5, md: 234, lg: 225.6}}>
+					<Box width={{base: 150, sm: 175.5, md: 234, lg: 312, xl: 440}} color="white">
 						<Center>
-							<Image boxSize={{sm: 70, md: 90}} src={userCart.image?.toString()} />
+							<Image boxSize={{base: 50, sm: 70, md: 90}} src={userCart.image?.toString()} />
 						</Center>
 					</Box>
 
-					<VStack width={{base: 97.5, sm: 175.5, md: 234}}>
-						<Text color="white" fontSize={{base: 10, sm: 15}}>
+					<VStack width={{base: 150, sm: 175.5, md: 234}}>
+						<Text color="white" fontSize={{base: 15}}>
 							{userCart.productName}
 						</Text>
 
-						<Text color="white" fontSize={{base: 9}}>
+						<Text color="white" fontSize="9">
 							Php {userCart.unitPrice! * userCart.quantity}
 						</Text>
 					</VStack>
 				</HStack>
 
 
-				<Center width={{base: 35, sm: 63, md: 84}} id="test">
+				<Center width={{base: 50, sm: 63, md: 84}} id="test">
 					<Center border={{base: '0'}} spacing={0}>
 						<Center>
 							<HStack width={{base: 5}}>

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
 import {
   Box,
-  Container,
   Text,
   VStack,
 	Center,
-	SimpleGrid,
-	HStack,
+	Circle,
+	Wrap,
+	WrapItem,
+	Stack
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -70,52 +71,63 @@ export default function Points({points, user, profile, onStore} : any) {
     <>
 		<Layout authentication={user} title="Points" onStore={onStore} setIsLoading={setIsLoading}>
 			{!isLoading ? <VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
-				<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }} bg="#36B290">
+				<Box w="100%" h="100%" bg="#36B290">
 					<Center>
 						<VStack spacing="0">
 							<Text fontSize={{ base: "20px", md: "45px", lg: "65px" }} color="white">
 								REWARDS
-							</Text>
-							<HStack>
-								<Text fontSize={{ base: "30px", md: "55px", lg: "75px" }} color="white">
-									{totalAvailablePoints ? totalAvailablePoints.toFixed(2) : totalAvailablePoints}
-								</Text>
-								<Text fontSize={{ base: "15px", md: "25px", lg: "30px" }} color="white">available points</Text>
-							</HStack>
+							</Text>	
 						</VStack>
 					</Center>
 				</Box>
-				
-				<Box w="100%" h="800px">
-					<Center>
-						<SimpleGrid gap={{ base: "35px", md: "50px", lg: "100px" }} columns={[1, null, 2]}>
-							<Container>
-								<Box w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290">
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEarnedPoints ? totalEarnedPoints.toFixed(2) : totalEarnedPoints}</Text></Center>
-								</Box>
-								<Center><Text>Earned Points</Text></Center>
-							</Container>
+				<Stack spacing="25px">
+					<Box w="100%" h="100%">
+						<Center>
+							<Wrap spacing={{ base: "35px", md: "50px", lg: "120px" }} justify="center">
+								<WrapItem>
+									<VStack>
+										<Circle size={{ base: "100px", md: "200px", lg: "300px" }} bg="#36B290">
+											<Center><Text fontSize={{ base: "40px", md: "60px", lg: "100px" }}>{totalEarnedPoints ? totalEarnedPoints.toFixed(2) : totalEarnedPoints}</Text></Center>
+										</Circle>
+										<Center><Text>Earned Points</Text></Center>
+									</VStack>
+								</WrapItem>
 
-							<Container>
-								<Box w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290" >
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalExpiredPoints}</Text></Center>
-								</Box>
-								<Center>
-									<Text>Expired Points</Text>
-								</Center>
-							</Container>
+								<WrapItem>
+									<VStack>
+										<Circle size={{ base: "100px", md: "200px", lg: "300px" }} bg="#36B290" >
+											<Center><Text fontSize={{ base: "40px", md: "60px", lg: "100px" }}>{totalExpiredPoints}</Text></Center>
+										</Circle>
+										<Center>
+											<Text>Expired Points</Text>
+										</Center>
+									</VStack>
+								</WrapItem>
 
-							<Container>
-								<Box w={{ base: "200px", md: "300px", lg: "400px", xl: "515px" }} h="98px" bg="#36B290">
-									<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>{totalEncashedPoints}</Text></Center>
-								</Box>
-								<Center>
-									<Text>Used Points</Text>
-								</Center>
-							</Container>
-						</SimpleGrid>
-					</Center>
-				</Box>
+								<WrapItem>
+									<VStack>
+										<Circle size={{ base: "100px", md: "200px", lg: "300px" }} bg="#36B290">
+											<Center><Text fontSize={{ base: "40px", md: "60px", lg: "100px" }}>{totalEncashedPoints}</Text></Center>
+										</Circle>
+										<Center>
+											<Text>Used Points</Text>
+										</Center>
+									</VStack>
+								</WrapItem>
+							</Wrap>
+						</Center>
+					</Box>
+					<Box>
+						<VStack>
+							<Circle size={{ base: "100px", md: "200px", lg: "300px" }} bg="#36B290">
+								<Center><Text fontSize={{ base: "40px", md: "60px", lg: "100px" }}>{totalAvailablePoints ? totalAvailablePoints.toFixed(2) : totalAvailablePoints}</Text></Center>
+							</Circle>
+							<Center>
+								<Text fontSize={{ base: "15px", md: "25px", lg: "30px" }} >Available Points</Text>
+							</Center>
+						</VStack>
+					</Box>
+				</Stack>
 			</VStack> : <PageLoader size="xl"/>}
 		</Layout>
 		{!isLoading && <Footer />}

@@ -19,7 +19,7 @@ import {
 import ModalComp from './ModalComp';
 import { ProductType } from '../interfaces';
 
-interface HomeQuantityProps {
+interface AddGroceryProductToCartProps {
 	onModalClose: () => void;
 	product: ProductType;
 	customerId: string;
@@ -32,18 +32,17 @@ type quantity = {
 }
 
 
-export default function HomeQuantity({ onModalClose, product, customerId, defaultQuantity,refetch } : HomeQuantityProps) {
+export default function AddGroceryProductToCart({ onModalClose, product, customerId, defaultQuantity,refetch } : AddGroceryProductToCartProps) {
 	const {isOpen, onOpen, onClose} = useDisclosure();
 	const { register, handleSubmit, errors } = useForm();
 	const [quantity, setQuantity] = useState(0);
 	const onSubmit = async (quantity: quantity) => {
-		const response = await fetch (`/api/list/setQuantity`, {
+		const response = await fetch("/api/cart/addFromList", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			credentials: 'include',
-			body: JSON.stringify({productId: product._id, quantity, customerId}),
+			body: JSON.stringify({customerId, productId: product._id, quantity: quantity.quantity})
 		});
 		await response.json();
 		onOpen();

@@ -10,13 +10,14 @@ import {
 	Button,
 	Flex,
 	useDisclosure,
-	GridItem
+	GridItem,
+	useMediaQuery
 } from '@chakra-ui/react';
-import { MdAddBox, MdDelete, MdRemove } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { MdAddBox, MdDelete } from "react-icons/md";
 import ModalComp from "./ModalComp";
 import SetListQuantity from "./SetListQuantity";
-import useDebounce from "../hooks/useDebounce";
+import { MdShoppingCart } from "react-icons/md";
+import AddGroceryProductToCart from "./AddGroceryProductToCart";
 
 interface GroceryProductProps{
 	userList: UserList;
@@ -29,18 +30,9 @@ interface GroceryProductProps{
 export default function GroceryProduct ({ userList, user, refetch, onStore, customerId } : GroceryProductProps) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const { isOpen: isToCartOpen, onOpen: onToCartOpen, onClose: onToCartClose } = useDisclosure();
-	const [quantity, setQuantity] = useState(userList.product.quantity);
-	const increamentQuantity = () => {
-		setQuantity(prevQuantity => prevQuantity + 1);
-	}
+	const { isOpen: isQuantityOpen, onOpen: onQuantityOpen, onClose: onQuantityClose } = useDisclosure();
+	const [isSmall] = useMediaQuery("(min-width: 48em)");
 
-	const decrementQuantity = () => {
-		if(quantity != 1) {
-			setQuantity(prevQuantity => prevQuantity - 1);
-		} else {
-			setQuantity(1);
-		}
-	}
 
 	const handleDelete = async (productId: string | undefined) => {
     if (productId){
@@ -56,25 +48,6 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 				onClose();
     }
   }
-
-	const handleQuantity = async (productId: string | undefined) => {
-    if (productId){
-				await fetch (`/api/list/setQuantity`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					credentials: 'include',
-					body: JSON.stringify({productId, quantity, customerId: user}),
-				})
-				refetch();
-				onClose();
-    }
-  }
-	const debounceQuantity = useDebounce(quantity, 10000)
- 	// useEffect(() => {
-  //   handleQuantity(userList.product.productId?.toString());
-  // }, [debounceQuantity]);
 	return(
 		<GridItem row={2}>
 		<HStack 
@@ -99,7 +72,7 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 					</Text>
 
 					<Text color="white" fontSize={{base: 10, md: 13, lg: 16}}>
-						Price: Php {userList.productData.unitPrice} / Kg
+						Price: Php {userList.productData.unitPrice} / {userList.productData.unitOfMeasure?.name}
 					</Text>
 				</VStack>
 			</HStack>
@@ -107,67 +80,38 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 			{!onStore && <VStack 
 				width={{base: 50, sm: 63, md: 84, lg: 112, xl: 160}} 
 			>
-				<HStack 
-					border={"1px"} 
-					borderRadius={{base: '2xl', lg: '3xl'}} 
-					width={{ md: 84, lg: 112, xl: 160}} 
-					spacing={0}
-				>
-
-					<Center>
-						<Box 
-						as="button" 
-						width={{base: 12, sm: 21, md: 28, lg: 37, xl: 53}} 
-						onClick={() => decrementQuantity()} 
-						boxSize={{base: 3, sm: 4, md: 5, lg: 7}} 
-						borderRight={{base: '0', md: '1px'}}
-						>
-							<Center>
-								<Icon as={MdRemove} boxSize={{base: 2, md: 3, lg: 6}}/>
-							</Center>
-						</Box>
-					</Center>
-
-					<Center>
-						<Box 
-							width={{base: 5, sm: 8, lg: 37, xl: 53}}
-						>
-							<Center>
-								<Text 
-								fontSize={{base: 'xs', sm: 'sm', lg: 'lg'}}
-								>
-									{quantity}
-								</Text>
-							</Center>
-						</Box>
-					</Center>
-
-					<Center>
-						<Box 
-						as="button" 
-						width={{base: 12, sm: 21, md: 28, lg: 37, xl: 53}} 
-						onClick={() => increamentQuantity()} 
-						boxSize={{base: 3, sm: 4, md: 5, lg: 7}} 
-						borderLeft={{base: '0', md: '1px'}}
-						>
-							<Center>
-								<Icon as={MdAddBox} boxSize={{base: 2, md: 3, lg: 6}}/>
-							</Center>
-						</Box>
-					</Center>
-				</HStack>
-				
+				<Center>
+					<Text fontSize={{base: 8, md: 11, lg: 14}}>
+						Currently Added: {userList.product.quantity} {userList.productData.unitOfMeasure?.name}
+					</Text>
+				</Center>
 				<Center>
 					<Box 
 						as="button" 
-						boxSize={{base: 4, md: 10}} 
+						boxSize={{base: 3, md: 10}} 
 					>
 					<Icon 
-						boxSize={{base: 4, md: 5, lg: 6}} 
-						as={MdDelete}
-						onClick={onOpen}
+						boxSize={{base: 3, md: 5, lg: 6}} 
+						as={MdAddBox}
+						onClick={onQuantityOpen}
+						color="White"
 					/>
 					</Box>
+					<Text onClick={onQuantityOpen} color="White" fontSize={{base: 10, md: 12, lg: 16}}>Add More</Text>
+				</Center>	
+				<Center>
+					<Box 
+						as="button" 
+						boxSize={{base: 3, md: 10}} 
+					>
+					<Icon 
+						boxSize={{base: 3, md: 5, lg: 6}} 
+						as={MdDelete}
+						onClick={onOpen}
+						color="White"
+					/>
+					</Box>
+					<Text onClick={onOpen} color="White" fontSize={{base: 10, md: 12, lg: 16}}>Delete Item</Text>
 				</Center>	
 			</VStack>}
 
@@ -177,9 +121,9 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 					width={{base: 35, sm: 63, md: 84, lg: 112, xl: 160}} bgGradient="linear(to-r, #D7A462, #374D76)" 
 					onClick={onToCartOpen}
 				>
-					Add to Cart
+					{isSmall ? "Add to Cart" : <Icon as={MdShoppingCart} />}
 				</Button >
-				<Text>
+				<Text fontSize={{base: "xs", md: "md" }}>
 					Current Quantity Added: {userList.product.quantity}
 				</Text>
 			</VStack>}	
@@ -201,8 +145,17 @@ export default function GroceryProduct ({ userList, user, refetch, onStore, cust
 				</HStack>
 			</Flex>
 		</ModalComp>
-		<ModalComp isModalOpen={isToCartOpen} onModalClose={onToCartClose} title="">
+		<ModalComp isModalOpen={isQuantityOpen} onModalClose={onQuantityClose} title="">
 			<SetListQuantity 
+				customerId={customerId} 
+				onModalClose={onQuantityClose} 
+				product={userList.productData}
+				defaultQuantity={userList.product.quantity}
+				refetch={refetch}
+			/>
+		</ModalComp>
+		<ModalComp isModalOpen={isToCartOpen} onModalClose={onToCartClose} title="">
+			<AddGroceryProductToCart 
 				customerId={customerId} 
 				onModalClose={onToCartClose} 
 				product={userList.productData}

@@ -52,7 +52,6 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 			}
 		)
 		} else {
-			console.log("hello?")
 			await db.collection("list").findOneAndUpdate(
 				{"customerId": id},
 				{ "$pull": { "product": { "productId": productIdFormatted } } }

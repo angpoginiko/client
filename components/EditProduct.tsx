@@ -86,7 +86,6 @@ export default function EditProduct({ modalClose, refresh, defaultValues } : Edi
     }
     reader.readAsDataURL(e.target.files![0])
   };
-	console.log(defaultValues);
 	return(
 		<>
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>

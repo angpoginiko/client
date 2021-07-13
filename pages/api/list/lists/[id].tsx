@@ -26,7 +26,21 @@ export default authentication(async function (req: NextApiRequest, res: NextApiR
 						"foreignField" : "_id",
 						"as" : "productData"
 					}},
-					{"$unwind" : "$productData"}
+					{"$unwind" : "$productData"},
+					{"$lookup" : {
+						"from" : "unitOfMeasure",
+						"localField" : "productData.unitOfMeasure",
+						"foreignField" : "_id",
+						"as" : "productData.unitOfMeasure"
+					}},
+					{"$unwind" : "$productData.unitOfMeasure"},
+					{"$lookup" : {
+						"from" : "productType",
+						"localField" : "productData.productType",
+						"foreignField" : "_id",
+						"as" : "productData.productType"
+					}},
+					{"$unwind" : "$productData.productType"},
 				]).toArray();
 				if(!cart){
 					return res.status(400).json({success: false})

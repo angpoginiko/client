@@ -4,7 +4,8 @@ import {
   Text,
   VStack,
 	Center,
-	SimpleGrid
+	SimpleGrid,
+	useMediaQuery
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { frontEndAuthentication } from './api/frontEndAuthentication';
@@ -14,9 +15,10 @@ import { UserList } from '../interfaces';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import userRoles from '../constants/userRoles';
-import GrocercyProduct from '../components/GroceryProduct';
+import GroceryProduct from '../components/GroceryProduct';
 import Footer from '../components/Footer';
 import PageLoader from '../components/PageLoader';
+import GroceryMobileProduct from '../components/GroceryMobileProduct'
 
 
 
@@ -28,6 +30,7 @@ export default function GroceryList({user, onStore} : any) {
 	}
 	
 	const { data: list, refetch, isFetching } = useQuery<UserList[]>("list", fetchList);
+	const [isVerySmall] = useMediaQuery("(min-width: 302px)")
 
 	const router = useRouter();
 	useEffect(() => {
@@ -52,82 +55,26 @@ export default function GroceryList({user, onStore} : any) {
 					</Box>
 					
 					<Center margin="0">
-						<SimpleGrid w="100%" h="100%" paddingBottom="25%" gap={2} columns={{base: 1, sm: 2}}>
+						<SimpleGrid w="100%" h="100%" paddingBottom="25%" gap={2} columns={{base: 1, sm: 2}} alignItems="center" justifyItems="center">
 							{!isFetching ? list?.length ? list.map((userList) => {
 								return(
 									<>
-										<GrocercyProduct 
+										{isVerySmall ? <GroceryProduct 
 											userList={userList} 
 											user={user.id} 
 											refetch={refetch}
 											onStore={onStore}
 											customerId={user.id}
 											key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
-									<GrocercyProduct 
-										userList={userList} 
-										user={user.id} 
-										refetch={refetch}
-										onStore={onStore}
-										customerId={user.id}
-										key={userList.product.quantity}
-									/>
+										/> :
+										<GroceryMobileProduct
+											userList={userList} 
+											user={user.id} 
+											refetch={refetch}
+											onStore={onStore}
+											customerId={user.id}
+											key={userList.product.quantity}
+										/>}
 									</>
 									);
 							}):

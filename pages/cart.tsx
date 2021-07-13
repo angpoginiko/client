@@ -1,5 +1,4 @@
 import Layout from '../components/Layout'
-import Head from 'next/head';
 import {
   Box,
   Text,
@@ -8,7 +7,8 @@ import {
 	useDisclosure,
 	Button,
 	HStack,
-	Flex
+	Flex,
+	useMediaQuery
 } from '@chakra-ui/react';
 import CartProduct from '../components/CartProduct'
 import { NextPageContext } from 'next';
@@ -23,6 +23,7 @@ import { useRouter } from 'next/router';
 import userRoles from '../constants/userRoles';
 import Footer from '../components/Footer';
 import PageLoader from '../components/PageLoader';
+import CartMobileProduct from '../components/CartMobileProduct';
 
 
 
@@ -67,6 +68,8 @@ export default function Cart({user, profile, onStore} : any) {
 		setOrderId(orderId);
 	}
 
+	const [isSmall] = useMediaQuery("(min-width: 30em)")
+
 	const router = useRouter();
 	useEffect(() => {
 		if(userRoles.Cashier == user.userRole){
@@ -79,12 +82,6 @@ export default function Cart({user, profile, onStore} : any) {
 	}, [user, onStore]);
   return (
     <>
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
 			<Layout authentication={user} onStore={onStore} setIsLoading={setIsLoading}>
 				{!isLoading ? <VStack spacing={{ base: "35px", md: "50px", lg: "100px" }}>
 					<Box w="100%" h={{ base: "100px", md: "150px", lg: "200px" }}>
@@ -98,10 +95,12 @@ export default function Cart({user, profile, onStore} : any) {
 					</Box>
 					
 					<Center>
-						<VStack w="100%" h="800px">
+						<VStack w="100%" h="800px" spacing="20px">
 							{!isFetching ? cart?.length ? cart.map((userCart) => {
 								return(
-										<div key={userCart.product.productId?.toString()}>
+									<>
+											{isSmall ? (
+											<>
 											<CartProduct 
 												userCart={userCart} 
 												modalOpen={onOpen}
@@ -109,7 +108,23 @@ export default function Cart({user, profile, onStore} : any) {
 												setCheckoutItems={setCheckoutItems}
 												totalPrice={total}
 												setTotalPrice={setTotal}
+												key={userCart.product.productId?.toString()}
 											/>
+											</>
+											)
+											:
+											(<>
+											<CartMobileProduct
+												userCart={userCart} 
+												modalOpen={onOpen}
+												checkoutItems={checkoutItems}
+												setCheckoutItems={setCheckoutItems}
+												totalPrice={total}
+												setTotalPrice={setTotal}
+												key={userCart.product.productId?.toString()}
+											/>
+											</>
+											)}
 											<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
 												<Flex>
 													<Text>
@@ -125,7 +140,7 @@ export default function Cart({user, profile, onStore} : any) {
 													</HStack>
 												</Flex>
 											</ModalComp>
-										</div>
+										</>
 									);
 							}):
 								(<Text key={user}>
@@ -133,8 +148,7 @@ export default function Cart({user, profile, onStore} : any) {
 								</Text>
 									) : <PageLoader size="xl"/>
 							}
-						</VStack>
-						<Text>
+							<Text>
 							Total Price: P{total}
 						</Text>
 						<Button disabled={Boolean(total) ? false : true} onClick={() => {
@@ -143,6 +157,7 @@ export default function Cart({user, profile, onStore} : any) {
 						}}>
 							Checkout
 						</Button>
+						</VStack>
 						<ModalComp
 						 isModalOpen={isCheckoutOpen}
 						  onModalClose={() => {
