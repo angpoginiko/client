@@ -66,8 +66,20 @@ export default function HomeAdminPage({ user, onStore } : any) {
 								</Container>
 
 								<Container>
+									<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={()=> {router.push('/admin-list'), setIsLoading(true)}}>
+										<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Edit Admin</Text></Center>
+									</Box>
+								</Container>
+
+								<Container>
 									<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={onCashierOpen}>
 										<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Add Cashier</Text></Center>
+									</Box>
+								</Container>
+
+								<Container>
+									<Box w="120%" h="98px" borderRadius="3xl" border="1px" as="button" onClick={()=> {router.push('/cashier-list'), setIsLoading(true)}}>
+										<Center><Text fontSize={{ base: "20px", md: "45px", lg: "65px" }}>Edit Cashier</Text></Center>
 									</Box>
 								</Container>
 

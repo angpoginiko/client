@@ -24,11 +24,13 @@ import { Profile } from '../interfaces';
 import EditProfileImagePage from '../components/EditProfileImage';
 import Footer from '../components/Footer';
 import PageLoader from '../components/PageLoader';
+import AnswerChallengeQuestion from '../components/AnswerChallengeQuestion';
 
 export default function ProfilePage({ user, onStore } : any) {
 	const [isLoading, setIsLoading] = useState(false);
 	const { onOpen, isOpen, onClose } = useDisclosure();
 	const { onOpen: onOpenPassword, isOpen: isOpenPassword, onClose: onClosePassword } = useDisclosure();
+	const { onOpen: onOpenQuestion, isOpen: isOpenQuestion, onClose: onCloseQuestion } = useDisclosure();
 	const { onOpen: onOpenImage, isOpen: isOpenImage, onClose: onCloseImage } = useDisclosure();
 	const router = useRouter();
 	useEffect(() => {
@@ -132,7 +134,7 @@ export default function ProfilePage({ user, onStore } : any) {
 							_focus={{
 								bg: 'blue.500',
 							}}
-							onClick={onOpen}
+							onClick={onOpenQuestion}
 							>
 							Edit Profile
 						</Button>
@@ -140,6 +142,10 @@ export default function ProfilePage({ user, onStore } : any) {
 				</Box>
 			</Center> : <PageLoader size="xl"/>}
 			
+				<ModalComp isModalOpen={isOpenQuestion} onModalClose={onCloseQuestion} title="">
+					<AnswerChallengeQuestion customerId={user.id} modalClose={onCloseQuestion} onOpen={onOpen} />
+				</ModalComp>
+
 				<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
 					<EditProfile modalClose={onClose} refresh={refetch} defaultValues={profile} id={user.id}/>
 				</ModalComp>

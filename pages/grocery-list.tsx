@@ -65,7 +65,7 @@ export default function GroceryList({user, onStore} : any) {
 											refetch={refetch}
 											onStore={onStore}
 											customerId={user.id}
-											key={userList.product.quantity}
+											key={userList.productData._id}
 										/> :
 										<GroceryMobileProduct
 											userList={userList} 
@@ -73,7 +73,7 @@ export default function GroceryList({user, onStore} : any) {
 											refetch={refetch}
 											onStore={onStore}
 											customerId={user.id}
-											key={userList.product.quantity}
+											key={`${userList.productData._id}mobile`}
 										/>}
 									</>
 									);

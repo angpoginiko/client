@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { connect } from  '../../../utils/mongodb'
 import bcrypt from 'bcryptjs'
+import { ObjectId } from 'mongodb';
 
 
 export default async function (req: NextApiRequest, res: NextApiResponse) 
@@ -13,9 +14,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				username,
 				birthday,
 				password,
-				repeatpassword
+				repeatpassword,
+				challengeQuestion,
+				answer
 			}
 		} = req.body;
+		const challengeId = new ObjectId(challengeQuestion);
 		const existingUserName = await db.collection("customers").findOne({"profile.username" : username});
 		const existingName = await db.collection("customer").findOne({"profile.name" : name});
 		if(existingUserName || existingName) return res.status(400).json({message: "User already exist"});
@@ -37,7 +41,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse)
 				redeemed: [],
 				encashed: [],
 			},
-			onStore: false
+			onStore: false,
+			challengeQuestionAnswer: {
+				challengeQuestion: challengeId,
+				answer
+			}
 		});
 		const id = customer.ops[0]._id;
 

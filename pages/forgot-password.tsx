@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form'
 import Layout from '../components/Layout';
@@ -7,13 +6,13 @@ import {
   FormControl,
   FormLabel,
   Stack,
-  Link,
   Button,
   Heading,
-  Text,
   useColorModeValue,
 	Input,
 	FormErrorMessage,
+	useDisclosure,
+	Text
 } from '@chakra-ui/react';
 import { NextPageContext } from 'next';
 import { server } from '../config';
@@ -21,45 +20,48 @@ import { formAuth } from './api/formAuth';
 import userRoles from '../constants/userRoles'
 import Footer from '../components/Footer';
 import PageLoader from '../components/PageLoader';
+import ModalComp from '../components/ModalComp';
+import AnswerChallengeQuestion from '../components/AnswerChallengeQuestion';
+import EditPassword from '../components/EditPassword';
 
 type FormData = {
   username: string;
-  userPassword: string;
 };
 
 
 export default function Login (){
 	const { register, handleSubmit, errors } = useForm();
-	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
+	const { onOpen, isOpen, onClose } = useDisclosure();
+	const { onOpen: onOpenPassword, isOpen: isOpenPassword, onClose: onClosePassword } = useDisclosure();
+	const { onOpen: onOpenQuestion, isOpen: isOpenQuestion, onClose: onCloseQuestion } = useDisclosure();
+	const [userId, setUserId] = useState("")
 
 	const onSubmit = async (formData: FormData) => {
-		setIsLoading(true);
-		const response = await fetch ("/api/profile/login", {
+		const response = await fetch ("/api/profile/forgot-password", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			credentials: 'include',
-			body: JSON.stringify({profile: formData}),
+			body: JSON.stringify({username: formData.username}),
 		})
 		const user = await response.json();
-		
+		console.log(user.id)
 		if(user.userRole == userRoles.Customer){
-			await router.push("/home");
-		} else if (user.userRole == userRoles.Admin){
-			await router.push("/home-admin");
-		} else if (user.userRole == userRoles.Cashier){
-			await router.push("/home-cashier");
+			setUserId(user.id);
+			onOpenQuestion();
+		} else {
+			onOpen();
 		}
 
 	}
 	return(
 		<>
-		<Layout title="Login" onStore={false} setIsLoading={setIsLoading}>
+		<Layout title="Forgot Password" onStore={false} setIsLoading={setIsLoading}>
       {!isLoading ? <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+          <Heading fontSize={'4xl'}>Forgot Password</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -73,23 +75,7 @@ export default function Login (){
               <Input name="username" ref={register({required:true})}/>
 							<FormErrorMessage>Username Required</FormErrorMessage>
             </FormControl>
-            <FormControl id="password" isInvalid={errors.password && errors.password.type === "required"}>
-              <FormLabel>Password</FormLabel>
-              <Input name="userPassword" ref={register({required:true})} type="password"/>
-							<FormErrorMessage>Password Required</FormErrorMessage>
-            </FormControl>
             <Stack spacing={10}>
-						<Stack
-							direction={{ base: 'column', sm: 'row' }}
-							align={'start'}
-							justify={'space-between'}>
-								<Text color={'gray.600'}>
-									Don't have an account? <Link color={'blue.400'} href="/register">Register</Link>
-								</Text>
-								<Text color={'gray.600'}>
-									<Link color={'blue.400'} href="/forgot-password">Forgot Password</Link>
-								</Text>
-						</Stack>
               <Button
                 bg={'blue.400'}
                 color={'white'}
@@ -107,6 +93,17 @@ export default function Login (){
       </Stack> : <PageLoader size="xl"/>}
 	</Layout>
 	{!isLoading && <Footer />}
+	<ModalComp isModalOpen={isOpenQuestion} onModalClose={onCloseQuestion} title="">
+		<AnswerChallengeQuestion customerId={userId} modalClose={onCloseQuestion} onOpen={onOpenPassword} />
+	</ModalComp>
+
+	<ModalComp isModalOpen={isOpenPassword} onModalClose={onClosePassword} title="">
+		<EditPassword modalClose={onClosePassword} id={userId}/>
+	</ModalComp>
+
+	<ModalComp isModalOpen={isOpen} onModalClose={onClose} title="">
+		<Text>Please contact an Admin to change your password</Text>
+	</ModalComp>
 	</>
 	);
 }

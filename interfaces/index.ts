@@ -20,6 +20,8 @@ export type Profile = {
 	userRole?: number
 	image?: FileList | string
 	birthday?: Date
+	challengeQuestion?: string,
+	answer?: string
 }
 
 export type Token = 
@@ -143,4 +145,23 @@ export type SocialMedia = {
 	facebook: string,
 	instagram: string,
 	twitter: string
+}
+
+export type ChallengeQuestions = {
+	_id: string,
+	question: string
+}
+
+export type ChallengeQuestionAnswer = {
+	challengeQuestion: ChallengeQuestions,
+	answer: string
+}
+
+export type Answer = {
+	answer: string
+}
+
+export type EditType = {
+	_id: string,
+	name: string
 }
